@@ -42,3 +42,9 @@ Mehr Kopfrechen-Tricks: Kanal abonnieren.
 
 Kapitelzeiten = Szenenanfänge aus `regel.py` (aufgerundet auf volle Sekunden): regel 9,9 s, warum 40,9 s, andersrum 78,5 s,
 sonderfall 98,8 s, vorsicht 127,0 s, merke 145,5 s. Bei jedem neuen Render prüfen.
+
+## Tags und KI-Angabe (06.11.)
+
+- **Tags:** Kopfrechnen, Kopfrechnen Trick, großes Einmaleins, im Kopf multiplizieren, Zehner-Trick, Mathe Trick, schneller rechnen, Kopfrechnen Tipps
+- **„Verwendung von KI“:** Ja angeben (Sprecherstimme ist synthetisch, ElevenLabs). Grauzone laut YouTube-Hilfe; offen
+  angeben kostet nichts, der Hinweis steht bei nicht heiklen Themen nur in der erweiterten Beschreibung.
