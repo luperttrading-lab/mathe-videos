@@ -84,7 +84,10 @@ nachziehen.
   (Zeile 2) und im angepinnten Kommentar. Die App führt zurück: „▶ Video zum Trick“, „Nächster Trick“ = erst Video, dann
   Übung. Später gratis die Übung je Video, bezahlt Mischtraining/Statistik. **Bezahlen erst nach einem Umzug** (jetzt
   Testphase auf GitHub Pages, öffentlich: eine Bezahlsperre im Browser ist umgehbar). Abspann und Infokarten gibt es
-  nicht bei „für Kinder gemacht“. Offen: Clip mit App-Satz und QR-Code, App → Video einbauen.
+  nicht bei „für Kinder gemacht“. Gebaut 06.11.: App 2.12 („▶ Video“ an der Trick-Karte, „Nächster Trick“ nach
+  der Runde, Direktlink `#zehner`, Feld `video` in `aufgaben.js` nach dem Hochladen füllen); im Video Szene `app` vor dem
+  Abspann (Handy mit `bilder/app_start.png`) und QR-Code `bilder/qr_zehner.png` links unten im Abspann. Je neue Folge:
+  eigenen QR-Code (`segno`, Adresse `…/uebung/#<kurz>`) und App-Bild erzeugen.
 - **Ziel vier Sekunden** (Nutzerentscheidung 05.11.): Video und App-Stufe „Alle Zahlen“ sagen „in vier Sekunden“ (Uhr
   `UHR = 4` in `regel.py`), „Einer ergeben 10“ und „Mal 11“ drei, „Quadrate“ vier (`ziel` je Stufe in
   `uebung/aufgaben.js`). Grund: Drei Sekunden mit Rechnen frustrieren; die meistgesehenen Videos nennen 3–5 s.

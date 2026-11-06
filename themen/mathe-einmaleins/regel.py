@@ -86,6 +86,11 @@ SZENEN = [
     dict(id='schluss', kicker='Merke', anhang=True, pause=1.0, text=(   # gehört zum Kapitel „Merke“, läuft nach der Lösung
         'Hat es bei dir länger als vier Sekunden gedauert? Ganz normal. Mit ein bisschen Übung schaffst du das auch '
         'so schnell. ' + SPRUCH)),
+    # Ein Satz zur App direkt vor dem Abspann (Nutzer 06.11., strategie/video_app_vernetzung.pdf): erst nach dem Inhalt,
+    # gleich danach „Noch ein Trick?“ – wer nicht üben will, bleibt im Video-Kreislauf. Eigene Szene, damit der
+    # abgenommene Ton von „schluss“ unverändert bleibt.
+    dict(id='app', kicker='Merke', anhang=True, pause=1.0, text=(
+        'Zehn Übungsaufgaben dazu findest du kostenlos unter dem Video.')),
     # Endbildschirm (Nutzer 05.11.): für jede Folge gleich, ohne bestimmtes Video anzukündigen
     dict(id='abspann', kicker='Kopfrechnen', anhang=True, pause=ABSPANN, text=(
         'Noch ein Trick? Hier geht\'s weiter. Und damit du nichts verpasst: Abonnier den Kanal.')),   # Nutzerwahl 05.11.: „Trick“ nur einmal
@@ -991,7 +996,8 @@ def klangspur(n_samples):
 
 ZEICHNER = {'hook': s_hook, 'regel': s_regel, 'warum': s_warum, 'andersrum': s_andersrum, 'sonderfall': s_sonderfall,
             'vorsicht': s_vorsicht, 'merke': s_merke, 'schluss': s_schluss,
-            'abspann': lambda b, sc, t: s_abspann(b, sc, t)}   # s_abspann steht weiter unten
+            'app': lambda b, sc, t: s_app(b, sc, t),
+            'abspann': lambda b, sc, t: s_abspann(b, sc, t)}   # s_abspann und s_app stehen weiter unten
 
 
 # ---------------------------------------------------------------- Rahmen: Kapitelname und Fortschritt
@@ -1037,6 +1043,58 @@ def szene_bei(t):
     return len(SZENEN) - 1
 
 
+APP_BILD = os.path.join(HIER, 'bilder', 'app_start.png')    # Startseite der App (Stand 2.12), Bild aus dem Browser
+QR_BILD = os.path.join(HIER, 'bilder', 'qr_zehner.png')     # https://luperttrading-lab.github.io/mathe-videos/uebung/#zehner
+_sprites_app = {}
+
+
+def handy(hoehe, alpha=1.0):
+    """App-Startseite in einem schlichten Handy-Rahmen, hoehe = Höhe des Bildschirms in Zeichenkoordinaten."""
+    key = ('handy', hoehe)
+    if key not in _sprites_app:
+        bild_ = Image.open(APP_BILD).convert('RGB')
+        h = int(hoehe * K)
+        w = int(bild_.width * h / bild_.height)
+        bild_ = bild_.resize((w, h), Image.LANCZOS)
+        rand, r = int(10 * K), int(30 * K)
+        sp = Image.new('RGBA', (w + 2 * rand, h + 2 * rand), (0, 0, 0, 0))
+        ImageDraw.Draw(sp).rounded_rectangle([0, 0, sp.width - 1, sp.height - 1], radius=r + rand, fill=INK)
+        maske = Image.new('L', (w, h), 0)
+        ImageDraw.Draw(maske).rounded_rectangle([0, 0, w - 1, h - 1], radius=r, fill=255)
+        sp.paste(bild_, (rand, rand), maske)
+        _sprites_app[key] = sp
+    sp = _sprites_app[key]
+    if alpha < 1:
+        sp = sp.copy()
+        sp.putalpha(sp.getchannel('A').point(lambda v: int(v * alpha)))
+    return sp
+
+
+def qr(groesse, alpha=1.0):
+    key = ('qr', groesse)
+    if key not in _sprites_app:
+        _sprites_app[key] = Image.open(QR_BILD).convert('RGBA').resize((int(groesse * K),) * 2, Image.NEAREST)
+    sp = _sprites_app[key]
+    if alpha < 1:
+        sp = sp.copy()
+        sp.putalpha(sp.getchannel('A').point(lambda v: int(v * alpha)))
+    return sp
+
+
+def s_app(b, sc, t):
+    """Satz vor dem Abspann: links drei Zeilen zum Wort, rechts das Handy mit der App (Nutzer 06.11.)."""
+    a = ein(t, 0.05, 0.6)
+    b.text('10 Übungsaufgaben', 110, 300 + 12 * (1 - a), 54, INK, INTER_X, anker='l', alpha=a)
+    a2 = ein(t, C(sc, 'kostenlos'))
+    b.text('kostenlos in der App', 110, 368 + 10 * (1 - a2), 36, TEAL, INTER_X, anker='l', alpha=a2)
+    a3 = ein(t, C(sc, 'unter dem Video'))
+    b.text('Link unter dem Video ↓', 110, 440 + 10 * (1 - a3), 30, GRAU, INTER_X, anker='l', alpha=a3)
+    ah = ein(t, 0.15, 0.7)
+    if ah > 0:
+        sp = handy(540, ah)
+        einfuegen(b.img, sp, 960 * K - sp.width / 2, (112 + 40 * (1 - ah)) * K)
+
+
 def s_abspann(b, sc, t):
     """Endbildschirm: Platz für zwei Video-Empfehlungen und „Abonnieren“, die YouTube Studio darüberlegt
     (Nutzerwunsch 05.11.). Welche Videos empfohlen werden, lässt sich nach dem Hochladen jederzeit ändern."""
@@ -1051,6 +1109,14 @@ def s_abspann(b, sc, t):
         b.d.polygon([((x + 230 - 18) * K, (y + 129 - 22) * K), ((x + 230 - 18) * K, (y + 129 + 22) * K),
                      ((x + 230 + 24) * K, (y + 129) * K)], fill=farbe(HELL, 255 * q))
         b.text(wort, x + 230, y + 259 + 34, 26, GRAU, INTER_X, alpha=q)
+    # QR-Code zur Übung (Nutzer 06.11.): für Fernseh-Zuschauer, die keinen Link anklicken können – mit dem Handy scannen,
+    # der Fernseher läuft weiter. Links unten, wo YouTube Studio keine Elemente hinlegt.
+    qa = ein(t, t_kacheln + 0.45)
+    if qa > 0:
+        karte(b, 110, 522, 136, 136, alpha=qa, r=14)
+        einfuegen(b.img, qr(116, qa), 120 * K, 532 * K)
+        b.text('Übung zum Video', 266, 572, 24, INK, INTER_X, anker='l', alpha=qa)
+        b.text('QR-Code scannen', 266, 606, 20, GRAU, INTER, anker='l', alpha=qa)
     # Abo-Zeile (Nutzer 05.11.): links ein gezeichneter Knopf „Abonnieren“, den beim Wort „Abonnier“ eine Hand von links
     # drückt (mit Klick; ein Finger passt zu Handy und Fernseher besser als ein Mauszeiger), danach „Abonniert“.
     # Rechts daneben bleibt Platz frei: Dorthin legt YouTube Studio das echte, anklickbare Abo-Element (Kanalbild).
