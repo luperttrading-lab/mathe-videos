@@ -37,6 +37,11 @@ für die ganze Adresse `luperttrading-lab.github.io`). Eine App auf dem iPhone-H
 Speicher; nach dem Neu-Hinzufügen beginnt der Verlauf dort leer (nicht am Gerät geprüft). `sw.js` löscht seitdem nur noch eigene
 Caches (`kopfrechnen…`), nicht die der Würfel-App auf derselben Adresse.
 
+**Ende-Seite ohne Scrollen (v2.5, Nutzer 06.11.):** Schrift und Abstände hängen an `--s`; `passeEndeEin()` sucht das
+größte `--s` zwischen 0,78 und 1, bei dem nichts überläuft (auch nach Drehen und wenn Safari seine Leisten ein- oder
+ausblendet). Die Knöpfe „Übersicht“ und „Nochmal“ stehen fest unten. Gemessen: iPhone 15 und Pro Max immer ohne
+Scrollen, auch mit Fehlern und mit 110 % Schrift; nur das kleine iPhone SE scrollt mit zwei Fehlern noch ≈ 30 px.
+
 **Versionen:** nach 0.6 folgt 1.7 (Nutzerwunsch 04.11.). Die Update-Prüfung vergleicht nur auf Gleichheit, der Sprung ist unkritisch.
 
 ## Sprechen

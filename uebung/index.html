@@ -125,29 +125,39 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .c1 { color: var(--c1); } .c2 { color: var(--c2); } .c3 { color: var(--c3); } .c10 { color: var(--c10); } .cok { color: var(--ok); }
 
 /* ---------- Ende ---------- */
-#ende .inhalt { flex: 1; display: flex; flex-direction: column; gap: 14px; padding-top: 6px; overflow-y: auto; }
+/* Ganze Seite ohne Scrollen (Nutzerwunsch 06.11.): Größen hängen an --s; passeEndeEin() verkleinert sie, bis alles
+   passt (höchstens auf 78 %). Die Knöpfe stehen außerhalb des Scrollbereichs und bleiben immer sichtbar. */
+#ende { --s: 1; }
+#ende .kopf { min-height: calc(var(--s) * 40px); }
+#ende .kopf h1 { font-size: calc(var(--s) * 22px); }
+#ende .inhalt { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: calc(var(--s) * 10px);
+  padding-top: calc(var(--s) * 4px); overflow-y: auto; }
+#ende .karte { padding: calc(var(--s) * 12px) 16px; }
 .ergebnis { text-align: center; }
-.ergebnis .gross { font-size: 40px; font-weight: 850; margin: 4px 0 0; }
-.ergebnis .zeit { font-size: 22px; font-weight: 700; margin: 6px 0 0; }
+.ergebnis .gross { font-size: min(calc(var(--s) * 34px), 8.4vw); font-weight: 850; margin: 0; line-height: 1.15; white-space: nowrap; }
+.ergebnis .zeit { font-size: calc(var(--s) * 17px); font-weight: 700; margin: calc(var(--s) * 4px) 0 0; line-height: 1.3; }
 .nobr { white-space: nowrap; }
 .ergebnis .zeit b { color: var(--c10); }
-.ergebnis .ziel { color: var(--grau); margin: 6px 0 0; font-size: 15px; }
-.spruch { text-align: center; background: var(--c10); color: #fff; border-radius: 18px; padding: 14px; font-weight: 700; font-size: 17px; }
-.spruch b { display: block; font-size: 21px; margin-top: 2px; }
-#liste { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 17px; }
+.ergebnis .ziel { color: var(--grau); margin: calc(var(--s) * 3px) 0 0; font-size: calc(var(--s) * 14px); }
+.spruch { text-align: center; background: var(--c10); color: #fff; border-radius: 16px; padding: calc(var(--s) * 10px) 12px;
+  font-weight: 700; font-size: calc(var(--s) * 15px); line-height: 1.3; }
+.spruch b { display: block; font-size: calc(var(--s) * 19px); margin-top: 2px; }
+#liste { display: grid; gap: calc(var(--s) * 3px); margin: 0; padding: 0; list-style: none; font-size: calc(var(--s) * 17px); line-height: 1.25; }
 #liste li { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: baseline; }
 #liste li .m { font-weight: 800; color: var(--ok); }
 #liste li.nein .m { color: var(--falsch); }
 #liste li .z { color: var(--grau); }
 #liste li.nein s { color: var(--falsch); }
 #liste li.nein .r { color: var(--ok); font-weight: 800; }
-#liste .weg { grid-column: 2 / 4; font-size: 14px; color: var(--grau); margin: -2px 0 4px; line-height: 1.35; }
+#liste .weg { grid-column: 2 / 4; font-size: calc(var(--s) * 14px); color: var(--grau); margin: -2px 0 4px; line-height: 1.35; }
 #liste .weg b { color: var(--ink); }
-#liste .hoerfehler { grid-column: 2 / 4; justify-self: start; font-size: 14px; font-weight: 700; padding: 6px 10px; border-radius: 10px;
+#liste .hoerfehler { grid-column: 2 / 4; justify-self: start; font-size: calc(var(--s) * 14px); font-weight: 700; padding: calc(var(--s) * 6px) 10px; border-radius: 10px;
   background: #f3efe7; color: var(--ink); margin-bottom: 4px; }
 .knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .knoepfe button { padding: 16px; border-radius: 16px; font-weight: 800; font-size: 18px; background: var(--karte); box-shadow: 0 3px 0 #ded6c8; }
 .knoepfe .los { margin: 0; box-shadow: none; background: var(--c10); color: #fff; }
+#ende .knoepfe { margin-top: 10px; }
+#ende .knoepfe button { padding: calc(var(--s) * 14px); font-size: 17px; }
 
 /* ---------- Banner (Update, Hinweise) ---------- */
 .update {
@@ -224,13 +234,13 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
     </div>
     <div class="spruch" id="e-spruch"></div>
     <div class="karte"><ul id="liste"></ul></div>
-    <div class="knoepfe"><button id="uebersicht">Übersicht</button><button class="los" id="nochmal">Nochmal</button></div>
   </div>
+  <div class="knoepfe"><button id="uebersicht">Übersicht</button><button class="los" id="nochmal">Nochmal</button></div>
 </section>
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.4';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.5';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -440,7 +450,7 @@ function zeigeEnde(neu) {
   schreib(RUNDEN, alle.slice(-200));
   $('#e-richtig').textContent = `${richtig} von ${e.length} richtig`;
   // Nur die Hauptzahl (Nutzerwunsch 04.11.: Erklärtext und Kontrollzeilen sind zu viel); die Kontrollwerte stehen im Verlauf
-  $('#e-zeit').innerHTML = `Ø <b>${sek(schnitt)}</b> je Aufgabe · schnellste ${sek(schnellste)}`;
+  $('#e-zeit').innerHTML = `<span class="nobr">Ø <b>${sek(schnitt)}</b> je Aufgabe ·</span> <span class="nobr">schnellste ${sek(schnellste)}</span>`;
   // Ziel nur mit mindestens 8 von 10 richtigen: 0 von 10 in 0,1 s ist kein „Ziel geschafft“ (Nutzer 05.11.)
   const zs = ziel(), zwort = ZAHLWORT[zs] || zs, schnell = schnitt <= zs * 1000 && richtig >= 0.8 * e.length, fehlerfrei = richtig === e.length;
   $('#e-ziel').textContent = rekord ? '🏆 Neuer bester Schnitt!' :
@@ -468,7 +478,24 @@ function zeigeEnde(neu) {
     const x = runde.ergebnisse[Number(b.dataset.k)]; x.ok = true; x.korrigiert = true; x.wert = x.loesung; zeigeEnde(false);
   });
   zeigeSeite('ende');
+  if (neu) $('#ende .inhalt').scrollTop = 0;
+  passeEndeEin();
 }
+// Ende-Seite ohne Scrollen (Nutzerwunsch 06.11.): größtes --s zwischen 0,78 und 1, bei dem nichts überläuft. Reicht auch
+// 0,78 nicht (viele Fehler mit Lösungsweg, kleines Handy), bleibt der Rest scrollbar; die Knöpfe stehen ohnehin fest unten.
+function passeEndeEin() {
+  const seite = $('#ende'), inhalt = $('#ende .inhalt'), passt = () => inhalt.scrollHeight <= inhalt.clientHeight;
+  seite.style.setProperty('--s', '1');
+  if (passt()) return;
+  let lo = 0.78, hi = 1;
+  for (let k = 0; k < 7; k++) {
+    const m = (lo + hi) / 2;
+    seite.style.setProperty('--s', m.toFixed(3));
+    if (passt()) lo = m; else hi = m;
+  }
+  seite.style.setProperty('--s', lo.toFixed(3));
+}
+addEventListener('resize', () => { if (!$('#ende').hidden) passeEndeEin(); });   // Safari-Leisten, Drehen
 $('#los').addEventListener('click', starteRunde);
 $('#nochmal').addEventListener('click', starteRunde);
 $('#uebersicht').addEventListener('click', () => { baueStart(); zeigeSeite('start'); });
