@@ -54,6 +54,9 @@ Laden (mit Sekunden) oder bei einem Fehler.
 v2.9 (Nutzer 06.11.): Zeile „Ergebnis  eintippen ⟷ sprechen“ mit Schieberegler (`#schalter`, role=switch). Antippen
 eines Worts wählt, Antippen des Reglers schaltet um, Wischen nach rechts = sprechen, nach links = eintippen. Die Bahn ist
 in beiden Stellungen grün (eine Wahl, kein An/Aus); das gewählte Wort ist dunkel und fett.
+v2.10 (Nutzer 06.11.): Verlauf als Balken ganz von der Startseite entfernt (Bestzeit steht auf den Kacheln). Laden der
+Sprache steht im Start-Knopf („Start · Sprache lädt … 12 s“, Knopf heller), nicht in einer Zeile darüber: Der Bildschirm
+springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leicht teal eingefärbt mit feinem Rand.
 Zwei Entwürfe: `?stil=b` = wie das YouTube-Vorschaubild (Aufgabe groß mit „= ?“, grüne Leiste); Standard `a` = Karten.
 Nach der Wahl des Nutzers den anderen Stil entfernen.
 

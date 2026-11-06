@@ -64,22 +64,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .zielmarke { font-size: 12px; font-weight: 700; color: var(--grau); background: #efe9de; border-radius: 8px; padding: 2px 6px; white-space: nowrap; }
 .bestmarke { font-size: 12px; font-weight: 700; color: var(--grau); white-space: nowrap; }
 .bestmarke.erreicht { color: var(--ok); }
-#verlauf { padding: 14px 16px 12px; }
-#verlauf .vkopf { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-#verlauf h3 { margin: 0; font-size: 13px; font-weight: 800; color: var(--grau); letter-spacing: .06em; text-transform: uppercase; }
-#verlauf .legende { font-size: 12px; font-weight: 700; color: var(--grau); white-space: nowrap; }
-#verlauf .legende i { display: inline-block; width: 16px; border-top: 2px dashed var(--grau); vertical-align: middle; margin-right: 4px; }
-#verlauf .bester { font-size: 15px; margin: 4px 0 4px; }
-#balken { display: block; width: 100%; height: auto; }
-#balken .b { fill: var(--c10); }
-#balken .b.zaehlt-nicht { fill: #b9d6d2; }
-#balken .b.an { fill: #0a4d47; }
-#balken .zl { stroke: var(--grau); stroke-width: 1.5; stroke-dasharray: 4 4; }
-#balken .grund { stroke: var(--hell); stroke-width: 1.5; }
-#balken text { font: 700 11px system-ui, -apple-system, sans-serif; fill: var(--ink); paint-order: stroke; stroke: var(--karte); stroke-width: 4px; stroke-linejoin: round; }
-#balken .treffer { fill: transparent; cursor: pointer; }
-#balken-info { margin: 4px 0 0; font-size: 14px; color: var(--grau); min-height: 1.3em; }
-#balken-info b { color: var(--ink); }
 /* Noch keine Runde in der Stufe: statt des Verlaufs die drei Schritte am Beispiel der Stufe */
 #anleitung { padding: 12px 16px; }
 #anleitung h3 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: var(--grau); letter-spacing: .06em; text-transform: uppercase; }
@@ -93,14 +77,16 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .los { width: 100%; padding: 16px; border-radius: 18px; background: var(--c10); color: #fff; font-size: 22px; font-weight: 800; margin-top: 8px;
   box-shadow: 0 6px 18px rgba(15,118,110,.28); }
 /* Start-Knopf im Fluss unter Tippen/Sprechen (Nutzer 06.11.: fest unten verdeckte er zu viel) */
-#start .los { margin-top: 0; padding: 14px; font-size: 20px; }
+#start .los { margin-top: 0; padding: 14px; font-size: min(20px, 5.2vw); white-space: nowrap; }
+#start .los.laedt { background: #3f8f87; }
 #start .sprachstatus { margin: -4px 0 0; padding: 0 4px; font-size: 13px; background: none; text-align: center; }
-#start .sprachstatus.bereit { display: none; }
+#start .sprachstatus:not(.fehler) { display: none; }   /* nur ein Fehler bekommt eine eigene Zeile */
 /* Ergebnis eintippen oder sprechen: Schieberegler links/rechts (Nutzer 06.11.). Beide Seiten sind eine Wahl, kein
    An/Aus: die Bahn bleibt in beiden Stellungen gleich, das gewählte Wort ist dunkel und fett. */
-.eingabewahl { display: flex; align-items: center; gap: 8px; background: #ebe4d6; border-radius: 14px; padding: 5px 12px; }
-.ew-titel { font-weight: 800; font-size: 15px; margin-right: auto; }
-.eingabewahl button[data-e] { font-weight: 600; font-size: 15px; color: var(--grau); padding: 8px 0; }
+.eingabewahl { display: flex; align-items: center; gap: 8px; background: #d8ede8; border-radius: 14px; padding: 5px 12px;
+  box-shadow: inset 0 0 0 1.5px #b9ddd5; }
+.ew-titel { font-weight: 800; font-size: 15px; margin-right: auto; color: var(--c10); }
+.eingabewahl button[data-e] { font-weight: 600; font-size: 15px; color: #4d6b66; padding: 8px 0; }
 .eingabewahl button[data-e][aria-pressed="true"] { color: var(--ink); font-weight: 800; }
 .schalter { position: relative; flex: none; width: 54px; height: 32px; border-radius: 16px; background: var(--c10); touch-action: none; }
 .schalter i { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff;
@@ -257,12 +243,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
       <h3>So geht der Trick</h3>
       <ol id="schritte"></ol>
     </div>
-    <div class="karte" id="verlauf" hidden>
-      <div class="vkopf"><h3 id="verlauf-titel">Deine Runden</h3><span class="legende" id="verlauf-ziel"></span></div>
-      <p class="bester" id="bester"></p>
-      <svg id="balken" viewBox="0 0 300 62" role="img" aria-label="Schnitt je Runde"></svg>
-      <p id="balken-info"></p>
-    </div>
     <div class="fuss"><button id="version"></button></div>
   </div>
 </section>
@@ -307,7 +287,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.9';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.10';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -359,7 +339,6 @@ $('#start').dataset.stil = new URLSearchParams(location.search).get('stil') || '
 function baueStart() {
   const u = uebung(), r = lies(RUNDEN, []).filter(x => x.uebung === u.id);
   const st = u.stufen.find(s => s.id === stand.stufe) || u.stufen[0];
-  const wie = stand.eingabe === 'sprechen' ? 'beim Sprechen' : 'beim Tippen';
   // Bestwert je Stufe: nur Runden mit mindestens 8 richtig und gleicher Eingabe (vergleichbar)
   const bestVon = id => { const g = r.filter(x => stufeVon(x) === id && x.richtig >= 8 && vergleichbar(x, stand.eingabe)).map(x => x.schnitt);
     return g.length ? Math.min(...g) : null; };
@@ -382,46 +361,11 @@ function baueStart() {
   $('#los').textContent = 'Start · 10 Aufgaben';
   zeigeSprachstatus();
   $('#ton').textContent = stand.ton ? '🔊' : '🔇';
-  // Verlauf der gewählten Stufe: letzte 10 Runden als Balken (Ø je Aufgabe), Ziel als gestrichelte Linie
-  // „So geht der Trick“ immer direkt unter Start, am Beispiel der Stufe (Nutzer 06.11.: auch beim Sprechen den Tipp,
-  // nicht den Verlauf); der Verlauf der Stufe folgt darunter
+  // „So geht der Trick“ immer direkt unter Start, am Beispiel der Stufe (Nutzer 06.11.: den Tipp statt des Verlaufs;
+  // der Verlauf als Balken ist seit v2.10 ganz weg, die Bestzeit steht auf den Kacheln)
   const [x, y] = st.info.match(/\d+/g).map(Number);
   $('#schritte').innerHTML = u.weg(u.aufgabe(x, y)).map(w => `<li><span class="nr${w.nr === '=' ? ' gleich' : ''}">${w.nr}</span>`
     + `<span>${w.titel ? `<span class="t">${w.titel}:</span> ` : ''}<span class="r">${w.text}</span></span></li>`).join('');
-  const rs = r.filter(x => stufeVon(x) === st.id && vergleichbar(x, stand.eingabe)).slice(-10);
-  $('#verlauf').hidden = !rs.length;
-  if (!rs.length) return;
-  const best = bestVon(st.id);
-  $('#verlauf-titel').textContent = 'Deine Runden · ' + st.name;
-  $('#verlauf-ziel').innerHTML = rs.length ? `<i></i>Ziel ${st.ziel} s` : '';
-  // Der Bestwert steht auf der Kachel; hier nur ein Hinweis, solange es keinen gibt
-  $('#bester').hidden = best !== null;
-  $('#bester').textContent = `Noch keine Runde ${wie} mit 8 oder mehr richtig`;
-  zeichneBalken(rs, st.ziel);
-}
-function zeichneBalken(rs, ziel) {
-  const svg = $('#balken'), info = $('#balken-info');
-  svg.style.display = rs.length ? '' : 'none';
-  if (!rs.length) { svg.innerHTML = ''; info.textContent = ''; return; }
-  const W = 300, H = 62, oben = 14, unten = 2, platz = W / 10, bw = 18;
-  const ymax = Math.max(ziel * 1.5, ...rs.map(x => x.schnitt / 1000)) * 1.05;
-  const y = v => oben + (H - oben - unten) * (1 - v / ymax);
-  const zeile = x => `${new Date(x.zeit).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} · <b>${x.richtig}/${x.anzahl}</b> richtig · Ø <b>${sek(x.schnitt)}</b>`
-    + (x.richtig >= 8 ? '' : ' · zählt nicht für Best (unter 8 richtig)');
-  let teile = `<line class="grund" x1="0" x2="${W}" y1="${H - unten}" y2="${H - unten}"/>`;
-  rs.forEach((x, k) => {
-    const cx = k * platz + platz / 2, top = y(x.schnitt / 1000), h = H - unten - top, rr = Math.min(4, h);
-    teile += `<path class="b${x.richtig >= 8 ? '' : ' zaehlt-nicht'}" data-k="${k}" d="M${cx - bw / 2},${H - unten} V${top + rr} Q${cx - bw / 2},${top} ${cx - bw / 2 + rr},${top} H${cx + bw / 2 - rr} Q${cx + bw / 2},${top} ${cx + bw / 2},${top + rr} V${H - unten} Z"/>`;
-  });
-  teile += `<line class="zl" x1="0" x2="${W}" y1="${y(ziel)}" y2="${y(ziel)}"/>`;
-  const n = rs.length - 1, letzte = rs[n];                      // nur der letzte Balken trägt seinen Wert
-  teile += `<text x="${n * platz + platz / 2}" y="${Math.max(10, y(letzte.schnitt / 1000) - 4)}" text-anchor="middle">${(letzte.schnitt / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1, minimumFractionDigits: 1 })}</text>`;
-  rs.forEach((x, k) => { teile += `<rect class="treffer" data-k="${k}" x="${k * platz}" y="0" width="${platz}" height="${H}"/>`; });
-  svg.innerHTML = teile;
-  const zeige = k => { info.innerHTML = (k === n ? 'Zuletzt: ' : '') + zeile(rs[k]);
-    for (const b of svg.querySelectorAll('.b')) b.classList.toggle('an', Number(b.dataset.k) === k && k !== n); };
-  for (const t of svg.querySelectorAll('.treffer')) t.addEventListener('click', () => zeige(Number(t.dataset.k)));
-  zeige(n);
 }
 function waehleEingabe(e) {
   stand.eingabe = e; speichereAlles();
@@ -683,7 +627,11 @@ function ladeText() {
 function zeigeSprachstatus() {                       // Startseite: Zustand der Spracherkennung, solange „Sprechen“ gewählt ist
   const el = $('#sprachstatus'), mini = $('#sprach-mini');   // klein im Knopf „Sprechen“ (Nutzer 06.11.: Hinweis kleiner)
   mini.className = 'mini' + (sprache.modell ? ' bereit' : sprache.fehler ? ' fehler' : sprache.laden ? ' laedt' : '');
-  mini.textContent = sprache.modell ? '✓' : sprache.fehler ? '✗' : sprache.laden ? Math.round((performance.now() - sprache.ladeStart) / 1000) + ' s' : '';
+  mini.textContent = sprache.modell ? '✓' : sprache.fehler ? '✗' : sprache.laden ? '…' : '';
+  // Laden steht im Start-Knopf (Nutzer 06.11.: nicht darüber, sonst springt der Bildschirm); Knopf bleibt einzeilig
+  const laedt = stand.eingabe === 'sprechen' && sprache.laden && !sprache.modell && !sprache.fehler, los = $('#los');
+  los.classList.toggle('laedt', !!laedt);
+  los.textContent = laedt ? `Start · Sprache lädt … ${Math.round((performance.now() - sprache.ladeStart) / 1000)} s` : 'Start · 10 Aufgaben';
   el.hidden = stand.eingabe !== 'sprechen';
   if (el.hidden) return;
   if (sprache.modell) { el.className = 'sprachstatus bereit'; el.textContent = '✓ Sprache bereit'; }

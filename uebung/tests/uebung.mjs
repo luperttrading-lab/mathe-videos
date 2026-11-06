@@ -109,17 +109,17 @@ ok((await page.$$('.hoerfehler')).length === 0, 'Getippter Fehler: kein „Hörf
 ok((await page.textContent('#e-spruch')).length > 10, `Motivation: „${(await page.textContent('#e-spruch')).trim()}“`);
 await foto('5_ende');
 await page.click('#uebersicht');
-ok(await page.isVisible('#verlauf'), 'Übersicht zeigt die letzte Runde');
+ok(!(await page.$('#verlauf')), 'Startseite ohne Verlaufs-Grafik (Nutzer 06.11.)');
 const bestK = await page.textContent('#stufen button[aria-pressed="true"] .bestmarke').catch(() => '');
 ok(/Best \d+,\d s/.test(bestK), `Bestwert auf der gewählten Kachel: „${bestK.trim()}“`);
-ok((await page.$$('#balken .b')).length >= 1, `Verlauf als Balken: ${(await page.$$('#balken .b')).length} Runde(n), „${(await page.textContent('#balken-info')).trim()}“`);
 await foto('6_verlauf');
 
 console.log('Sprechen wählen: Laden sichtbar, „Solange tippen“');
 await page.click('#eingabe button[data-e="sprechen"]');
 await page.waitForTimeout(600);
 const st = await page.textContent('#sprachstatus');
-ok(/wird geladen … \d+ s/.test(st) && (await page.getAttribute('#sprachstatus', 'class')).includes('laedt'), `Startseite zeigt das Laden: „${st.trim()}“`);
+const losT = await page.textContent('#los');
+ok(/Sprache lädt … \d+ s/.test(losT) && !(await page.isVisible('#sprachstatus')), `Laden steht im Start-Knopf, keine Zeile darüber: „${losT.trim()}“`);
 ok((await page.getAttribute('#eingabe [data-e="sprechen"]', 'aria-pressed')) === 'true', 'Umschalter zeigt „Sprechen“ gewählt');
 ok((await page.getAttribute('#schalter', 'aria-checked')) === 'true', 'Schieberegler steht rechts (sprechen)');
 await page.click('#schalter');
