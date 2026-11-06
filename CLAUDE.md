@@ -72,6 +72,11 @@ nachziehen.
   richtig gezählt, Ø-Zeit). **Eine App mit vielen Übungen, nicht viele Apps** (06.11.: ein Symbol auf dem Handy, ein
   Sprachmodell-Download, ein Update-Mechanismus). Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
+- **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
+  jedes Video in YouTube Studio so einstellen; nur dann gibt es Abspann, Infokarten und Kommentare. Die Einstellung muss
+  zum Inhalt passen (Kinder = unter 13, US-Gesetz COPPA): keine Wörter wie „Grundschule“, „Klasse 4“, „für Kinder“ in
+  Titel, Beschreibung und Schlagwörtern, keine Kinderansprache, keine Zeichentrickfiguren, Beispiele aus dem Alltag.
+  „Großes Einmaleins“ als Suchwort bleibt. Der Haken versteckt nichts: Kinder dürfen weiter zuschauen.
 - **Vernetzung Video ↔ App, Bezahlmodell** (Nutzer 06.11., Übersicht `strategie/video_app_vernetzung.pdf`, Quelltext
   daneben als HTML): Video zuerst, kein App-Hinweis am Anfang oder in der Mitte; ein Satz vor dem Abspann („… kostenlos
   unter dem Video“), QR-Code und kurze Adresse im Abspann für Fernseh-Zuschauer; Link zur Übung in der Beschreibung
