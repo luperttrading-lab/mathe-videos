@@ -98,7 +98,12 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   box-shadow: 0 6px 18px rgba(15,118,110,.28); }
 /* Start-Knopf im Fluss unter Tippen/Sprechen (Nutzer 06.11.: fest unten verdeckte er zu viel) */
 #start .los { margin-top: 0; padding: 14px; font-size: 20px; }
-#start .sprachstatus { margin: 0; padding: 7px 12px; font-size: 14px; border-radius: 10px; }
+#start .sprachstatus { margin: -4px 0 0; padding: 0 4px; font-size: 13px; background: none; text-align: center; }
+#start .sprachstatus.bereit { display: none; }
+.umschalter .mini { margin-left: 6px; font-size: 13px; font-weight: 800; }
+.umschalter .mini.bereit { color: var(--ok); }
+.umschalter .mini.laedt { color: #9a6200; }
+.umschalter .mini.fehler { color: var(--falsch); }
 .los:active { transform: scale(.98); }
 .los small { display: block; font-size: 14px; font-weight: 700; opacity: .85; margin-top: 2px; }
 .fuss { text-align: center; color: var(--grau); font-size: 13px; }
@@ -236,19 +241,19 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
     <div class="stufen" id="stufen"></div>
     <div class="umschalter" id="eingabe">
       <button data-e="tippen" aria-pressed="true">⌨︎ Tippen</button>
-      <button data-e="sprechen" aria-pressed="false">🎤 Sprechen</button>
+      <button data-e="sprechen" aria-pressed="false">🎤 Sprechen<span class="mini" id="sprach-mini"></span></button>
     </div>
     <p class="sprachstatus" id="sprachstatus" hidden></p>
     <button class="los" id="los">Start · 10 Aufgaben</button>
+    <div class="karte" id="anleitung">
+      <h3>So geht der Trick</h3>
+      <ol id="schritte"></ol>
+    </div>
     <div class="karte" id="verlauf" hidden>
       <div class="vkopf"><h3 id="verlauf-titel">Deine Runden</h3><span class="legende" id="verlauf-ziel"></span></div>
       <p class="bester" id="bester"></p>
       <svg id="balken" viewBox="0 0 300 62" role="img" aria-label="Schnitt je Runde"></svg>
       <p id="balken-info"></p>
-    </div>
-    <div class="karte" id="anleitung" hidden>
-      <h3>So geht der Trick</h3>
-      <ol id="schritte"></ol>
     </div>
     <div class="fuss"><button id="version"></button></div>
   </div>
@@ -294,7 +299,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.7';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.8';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -369,15 +374,14 @@ function baueStart() {
   zeigeSprachstatus();
   $('#ton').textContent = stand.ton ? '🔊' : '🔇';
   // Verlauf der gewählten Stufe: letzte 10 Runden als Balken (Ø je Aufgabe), Ziel als gestrichelte Linie
+  // „So geht der Trick“ immer direkt unter Start, am Beispiel der Stufe (Nutzer 06.11.: auch beim Sprechen den Tipp,
+  // nicht den Verlauf); der Verlauf der Stufe folgt darunter
+  const [x, y] = st.info.match(/\d+/g).map(Number);
+  $('#schritte').innerHTML = u.weg(u.aufgabe(x, y)).map(w => `<li><span class="nr${w.nr === '=' ? ' gleich' : ''}">${w.nr}</span>`
+    + `<span>${w.titel ? `<span class="t">${w.titel}:</span> ` : ''}<span class="r">${w.text}</span></span></li>`).join('');
   const rs = r.filter(x => stufeVon(x) === st.id && vergleichbar(x, stand.eingabe)).slice(-10);
   $('#verlauf').hidden = !rs.length;
-  $('#anleitung').hidden = !!rs.length;
-  if (!rs.length) {                                   // noch keine Runde in dieser Stufe: So geht der Trick
-    const [x, y] = st.info.match(/\d+/g).map(Number);
-    $('#schritte').innerHTML = u.weg(u.aufgabe(x, y)).map(w => `<li><span class="nr${w.nr === '=' ? ' gleich' : ''}">${w.nr}</span>`
-      + `<span>${w.titel ? `<span class="t">${w.titel}:</span> ` : ''}<span class="r">${w.text}</span></span></li>`).join('');
-    return;
-  }
+  if (!rs.length) return;
   const best = bestVon(st.id);
   $('#verlauf-titel').textContent = 'Deine Runden · ' + st.name;
   $('#verlauf-ziel').innerHTML = rs.length ? `<i></i>Ziel ${st.ziel} s` : '';
@@ -657,7 +661,9 @@ function ladeText() {
   return erstes ? `Sprachmodell wird geladen … ${s} s (nur beim ersten Mal, 45 MB, bis zu 1 Minute)` : `Sprachmodell wird vorbereitet … ${s} s`;
 }
 function zeigeSprachstatus() {                       // Startseite: Zustand der Spracherkennung, solange „Sprechen“ gewählt ist
-  const el = $('#sprachstatus');
+  const el = $('#sprachstatus'), mini = $('#sprach-mini');   // klein im Knopf „Sprechen“ (Nutzer 06.11.: Hinweis kleiner)
+  mini.className = 'mini' + (sprache.modell ? ' bereit' : sprache.fehler ? ' fehler' : sprache.laden ? ' laedt' : '');
+  mini.textContent = sprache.modell ? '✓' : sprache.fehler ? '✗' : sprache.laden ? Math.round((performance.now() - sprache.ladeStart) / 1000) + ' s' : '';
   el.hidden = stand.eingabe !== 'sprechen';
   if (el.hidden) return;
   if (sprache.modell) { el.className = 'sprachstatus bereit'; el.textContent = '✓ Sprache bereit'; }

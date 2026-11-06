@@ -48,6 +48,9 @@ gewählten Stufe als Balken (letzte 10 Runden, Ø je Aufgabe, Ziel gestrichelt, 
 richtig). Stufe ohne Runde: „So geht der Trick“ mit den drei Schritten am Beispiel der Stufe. Start-Knopf (v2.7, Nutzer
 06.11.: fest unten verdeckte er mit dem Sprachhinweis ein Viertel des Bildschirms) direkt unter Tippen/Sprechen, einzeilig;
 Sprachhinweis kurz („✓ Sprache bereit“).
+v2.8 (Nutzer 06.11.): „So geht der Trick“ steht immer direkt unter Start, auch beim Sprechen; der Verlauf der Stufe
+folgt darunter (wischen). Sprache bereit = nur ein grünes ✓ im Knopf „Sprechen“; die Zeile darunter erscheint nur beim
+Laden (mit Sekunden) oder bei einem Fehler.
 Zwei Entwürfe: `?stil=b` = wie das YouTube-Vorschaubild (Aufgabe groß mit „= ?“, grüne Leiste); Standard `a` = Karten.
 Nach der Wahl des Nutzers den anderen Stil entfernen.
 
