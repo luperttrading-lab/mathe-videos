@@ -1,14 +1,14 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "Oben 1 Clip ansehen (QR-Code jetzt neben dem Handy, Abspann ohne App), dann „passt“ oder „ändern“.",
+ "aufgabe": "Nichts offen auf dieser Seite. Der Clip mit App-Satz und QR-Code ist abgenommen; das ganze Video wird erst nach „rendern“ neu gebaut.",
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/clip_app/app_schluss_clip.mp4",
    "titel": "Neu: App-Satz mit QR-Code vor dem Abspann (letzte 33 s)",
    "stand": "06.11., 14:20",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 15.5,
-   "notiz": "Neu nach deiner Frage: Der QR-Code steht jetzt neben dem Handy („QR-Code scannen / oder Link unter dem Video“), der Abspann ist wieder ohne App. Die Seite bleibt 1,5 s länger stehen, damit man scannen kann. Gesprochen: „Üben kannst du in der kostenlosen App. Den Link findest du unter dem Video.“ „passt“ = so ins Video; gerendert wird erst nach deinem „rendern“."
+   "notiz": "Abgenommen („passt“, 06.11.). QR-Code neben dem Handy, Abspann ohne App, Seite 1,5 s länger zum Scannen. Das ganze Video wird erst nach deinem „rendern“ neu gebaut."
   },
   {
    "datei": "/tmp/claude-0/-home-user-5-Minuten-videos/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/hook3/einstieg_clip.mp4",
