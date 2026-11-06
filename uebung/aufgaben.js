@@ -13,7 +13,7 @@ const UEBUNGEN = [
   {
     id: 'einmaleins-1119',
     kurz: 'zehner',                                // Direktlink …/uebung/#zehner (Videobeschreibung, QR-Code im Abspann)
-    video: '',                                     // YouTube-Adresse nach dem Hochladen eintragen (leer = „Video folgt“)
+    video: 'https://youtu.be/prkKe_iExIU',         // YouTube (06.11., nicht gelistet, Test); leer = „Video folgt“
     titel: 'Zehner-Trick',
     untertitel: 'Zahlen von 11 bis 19 malnehmen',
     auto: true,                                    // alle Ergebnisse dreistellig (121 … 361): nach 3 Ziffern prüfen

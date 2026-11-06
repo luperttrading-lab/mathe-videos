@@ -115,7 +115,9 @@ ok(await page.isVisible('#naechster') && (await page.getAttribute('#naechster', 
 await page.evaluate(() => { UEBUNGEN.pop(); zeigeEnde(false); });
 await page.click('#uebersicht');
 ok(!(await page.$('#verlauf')), 'Startseite ohne Verlaufs-Grafik (Nutzer 06.11.)');
-ok((await page.textContent('#video')).includes('Video folgt'), 'Vor dem Hochladen: „▶ Video folgt“ an der Trick-Karte');
+{ const adresse = await page.evaluate(() => UEBUNGEN[0].video), vt = (await page.textContent('#video')).trim();
+  ok(adresse ? (await page.getAttribute('#video', 'href')) === adresse && vt === '▶ Video' : vt.includes('Video folgt'),
+    adresse ? `Trick-Karte: „${vt}“ führt zu ${adresse}` : 'Vor dem Hochladen: „▶ Video folgt“ an der Trick-Karte'); }
 const bestK = await page.textContent('#stufen button[aria-pressed="true"] .bestmarke').catch(() => '');
 ok(/Best \d+,\d s/.test(bestK), `Bestwert auf der gewählten Kachel: „${bestK.trim()}“`);
 await foto('6_verlauf');
