@@ -60,6 +60,7 @@ springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leic
 Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besser“): Aufgabe der gewählten Stufe groß
 mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
 Der Entwurf „Karten“ ist entfernt.
+v2.15 (Nutzerwahl 06.11.): Überschrift „So geht der Trick“ grün wie „Ergebnis“.
 v2.14 (Nutzerwahl 06.11.): neues Symbol wie das Vorschaubild (`tools/icon.py`); auf dem iPhone erst nach Löschen und neu
 „Zum Home-Bildschirm“ sichtbar.
 v2.13 (Nutzerwahl 06.11.): grüner Balken mit „Zehner-Trick“ und „KOPFRECHNEN“ steht über der großen Aufgabe (Name zuerst).

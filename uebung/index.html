@@ -79,7 +79,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .naechster .pf { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--c10); color: #fff; display: grid; place-items: center; font-size: 16px; }
 .naechster small { display: block; color: var(--grau); font-size: 13px; font-weight: 600; }
 .naechster b { font-size: 17px; }
-#anleitung h3 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: var(--grau); letter-spacing: .06em; text-transform: uppercase; }
+#anleitung h3 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: var(--c10); letter-spacing: .06em; text-transform: uppercase; }   /* grün wie „Ergebnis“ (Nutzerwahl 06.11.) */
 #schritte { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-size: 14px; line-height: 1.3; }
 #schritte li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: center; }
 #schritte .nr { width: 22px; height: 22px; border-radius: 50%; background: var(--c10); color: #fff; font-size: 13px; font-weight: 800;
@@ -286,7 +286,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.14';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.15';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
