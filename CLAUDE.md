@@ -71,7 +71,9 @@ nachziehen.
 - **Zu jedem Mathe-Video eine Übung** in der App `uebung/` (Nutzerwunsch 04.11.: 10 Aufgaben, tippen oder sprechen,
   richtig gezählt, Ø-Zeit). **Eine App mit vielen Übungen, nicht viele Apps** (06.11.: ein Symbol auf dem Handy, ein
   Sprachmodell-Download, ein Update-Mechanismus). Startseite der App im Stil des Vorschaubilds (Nutzerwahl 06.11.: Aufgabe groß mit „= ?“, grüne Leiste
-  mit dem Namen des Tricks darüber).
+  mit dem Namen des Tricks darüber). App-Symbol wie das Vorschaubild (Nutzerwahl 06.11.: „16·18“, grüne Leiste mit „= ?“,
+  `uebung/tools/icon.py`); Name unter dem Symbol „Kopfrechnen“, kein Trickname und keine Nummer, weil die App alle Tricks
+  enthält. Ob die Tricks nummeriert werden („Trick 1“), entscheidet der Nutzer nach Sichtung der ganzen Serie.
   Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
 - **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
