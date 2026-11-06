@@ -90,7 +90,7 @@ SZENEN = [
     # gleich danach „Noch ein Trick?“ – wer nicht üben will, bleibt im Video-Kreislauf. Eigene Szene, damit der
     # abgenommene Ton von „schluss“ unverändert bleibt.
     # Nutzer 06.11.: nicht „zehn Übungsaufgaben … kostenlos“ – die App hat beliebig viele Runden, kostenlos ist die App
-    dict(id='app', kicker='Merke', anhang=True, pause=1.0, text=(
+    dict(id='app', kicker='Merke', anhang=True, pause=2.5, text=(   # 2,5 s: Zeit zum Scannen des QR-Codes
         'Üben kannst du in der kostenlosen App. Den Link findest du unter dem Video.')),
     # Endbildschirm (Nutzer 05.11.): für jede Folge gleich, ohne bestimmtes Video anzukündigen
     dict(id='abspann', kicker='Kopfrechnen', anhang=True, pause=ABSPANN, text=(
@@ -1085,11 +1085,18 @@ def qr(groesse, alpha=1.0):
 def s_app(b, sc, t):
     """Satz vor dem Abspann: links drei Zeilen zum Wort, rechts das Handy mit der App (Nutzer 06.11.)."""
     a = ein(t, 0.05, 0.6)
-    b.text('Kostenlose App', 110, 290 + 12 * (1 - a), 58, INK, INTER_X, anker='l', alpha=a)
+    b.text('Kostenlose App', 110, 238 + 12 * (1 - a), 58, INK, INTER_X, anker='l', alpha=a)
     a2 = ein(t, C(sc, 'kostenlosen'))
-    b.text('zum Üben', 110, 360 + 10 * (1 - a2), 58, TEAL, INTER_X, anker='l', alpha=a2)
+    b.text('zum Üben', 110, 306 + 10 * (1 - a2), 58, TEAL, INTER_X, anker='l', alpha=a2)
+    # QR-Code (Nutzer 06.11.: hierher statt in den Abspann, sonst kommt die App doppelt) – für Fernseh-Zuschauer, die
+    # keinen Link anklicken können; erscheint früh, damit Zeit zum Scannen bleibt
+    aq = ein(t, C(sc, 'kostenlosen') + 0.3)
+    if aq > 0:
+        karte(b, 110, 372, 150, 150, alpha=aq, r=16)
+        einfuegen(b.img, qr(130, aq), 120 * K, 382 * K)
+        b.text('QR-Code scannen', 284, 428, 28, INK, INTER_X, anker='l', alpha=aq)
     a3 = ein(t, C(sc, 'Link'))
-    b.text('Link unter dem Video ↓', 110, 444 + 10 * (1 - a3), 30, GRAU, INTER_X, anker='l', alpha=a3)
+    b.text('oder Link unter dem Video ↓', 284, 470 + 8 * (1 - a3), 22, GRAU, INTER_X, anker='l', alpha=a3)
     ah = ein(t, 0.15, 0.7)
     if ah > 0:
         sp = handy(540, ah)
@@ -1110,14 +1117,6 @@ def s_abspann(b, sc, t):
         b.d.polygon([((x + 230 - 18) * K, (y + 129 - 22) * K), ((x + 230 - 18) * K, (y + 129 + 22) * K),
                      ((x + 230 + 24) * K, (y + 129) * K)], fill=farbe(HELL, 255 * q))
         b.text(wort, x + 230, y + 259 + 34, 26, GRAU, INTER_X, alpha=q)
-    # QR-Code zur App (Nutzer 06.11.: „App zum Video“ statt „Übung zum Video“): für Fernseh-Zuschauer, die keinen Link anklicken können – mit dem Handy scannen,
-    # der Fernseher läuft weiter. Links unten, wo YouTube Studio keine Elemente hinlegt.
-    qa = ein(t, t_kacheln + 0.45)
-    if qa > 0:
-        karte(b, 110, 522, 136, 136, alpha=qa, r=14)
-        einfuegen(b.img, qr(116, qa), 120 * K, 532 * K)
-        b.text('App zum Video', 266, 572, 24, INK, INTER_X, anker='l', alpha=qa)
-        b.text('QR-Code scannen', 266, 606, 20, GRAU, INTER, anker='l', alpha=qa)
     # Abo-Zeile (Nutzer 05.11.): links ein gezeichneter Knopf „Abonnieren“, den beim Wort „Abonnier“ eine Hand von links
     # drückt (mit Klick; ein Finger passt zu Handy und Fernseher besser als ein Mauszeiger), danach „Abonniert“.
     # Rechts daneben bleibt Platz frei: Dorthin legt YouTube Studio das echte, anklickbare Abo-Element (Kanalbild).

@@ -83,13 +83,13 @@ nachziehen.
   „Großes Einmaleins“ als Suchwort bleibt. Der Haken versteckt nichts: Kinder dürfen weiter zuschauen.
 - **Vernetzung Video ↔ App, Bezahlmodell** (Nutzer 06.11., Übersicht `strategie/video_app_vernetzung.pdf`, Quelltext
   daneben als HTML): Video zuerst, kein App-Hinweis am Anfang oder in der Mitte; ein Satz vor dem Abspann („Üben kannst du in
-  der kostenlosen App. Den Link findest du unter dem Video.“, Nutzer 06.11.: nicht „zehn Aufgaben“, kostenlos ist die App), QR-Code und kurze Adresse im Abspann für Fernseh-Zuschauer; Link zur Übung in der Beschreibung
+  der kostenlosen App. Den Link findest du unter dem Video.“, Nutzer 06.11.: nicht „zehn Aufgaben“, kostenlos ist die App), QR-Code neben dem Handy auf derselben Seite für Fernseh-Zuschauer (Nutzer 06.11.: nicht zusätzlich im Abspann, sonst kommt die App doppelt; Seite 2,5 s länger zum Scannen); Link zur Übung in der Beschreibung
   (Zeile 2) und im angepinnten Kommentar. Die App führt zurück: „▶ Video zum Trick“, „Nächster Trick“ = erst Video, dann
   Übung. Später gratis die Übung je Video, bezahlt Mischtraining/Statistik. **Bezahlen erst nach einem Umzug** (jetzt
   Testphase auf GitHub Pages, öffentlich: eine Bezahlsperre im Browser ist umgehbar). Abspann und Infokarten gibt es
   nicht bei „für Kinder gemacht“. Gebaut 06.11.: App 2.12 („▶ Video“ an der Trick-Karte, „Nächster Trick“ nach
   der Runde, Direktlink `#zehner`, Feld `video` in `aufgaben.js` nach dem Hochladen füllen); im Video Szene `app` vor dem
-  Abspann (Handy mit `bilder/app_start.png`) und QR-Code `bilder/qr_zehner.png` links unten im Abspann. Je neue Folge:
+  Abspann (Handy mit `bilder/app_start.png`) mit QR-Code `bilder/qr_zehner.png` daneben; der Abspann bleibt ohne App. Je neue Folge:
   eigenen QR-Code (`segno`, Adresse `…/uebung/#<kurz>`) und App-Bild erzeugen.
 - **Ziel vier Sekunden** (Nutzerentscheidung 05.11.): Video und App-Stufe „Alle Zahlen“ sagen „in vier Sekunden“ (Uhr
   `UHR = 4` in `regel.py`), „Einer ergeben 10“ und „Mal 11“ drei, „Quadrate“ vier (`ziel` je Stufe in
