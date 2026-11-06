@@ -82,8 +82,8 @@ nachziehen.
   Titel, Beschreibung und Schlagwörtern, keine Kinderansprache, keine Zeichentrickfiguren, Beispiele aus dem Alltag.
   „Großes Einmaleins“ als Suchwort bleibt. Der Haken versteckt nichts: Kinder dürfen weiter zuschauen.
 - **Vernetzung Video ↔ App, Bezahlmodell** (Nutzer 06.11., Übersicht `strategie/video_app_vernetzung.pdf`, Quelltext
-  daneben als HTML): Video zuerst, kein App-Hinweis am Anfang oder in der Mitte; ein Satz vor dem Abspann („… kostenlos
-  unter dem Video“), QR-Code und kurze Adresse im Abspann für Fernseh-Zuschauer; Link zur Übung in der Beschreibung
+  daneben als HTML): Video zuerst, kein App-Hinweis am Anfang oder in der Mitte; ein Satz vor dem Abspann („Üben kannst du in
+  der kostenlosen App. Den Link findest du unter dem Video.“, Nutzer 06.11.: nicht „zehn Aufgaben“, kostenlos ist die App), QR-Code und kurze Adresse im Abspann für Fernseh-Zuschauer; Link zur Übung in der Beschreibung
   (Zeile 2) und im angepinnten Kommentar. Die App führt zurück: „▶ Video zum Trick“, „Nächster Trick“ = erst Video, dann
   Übung. Später gratis die Übung je Video, bezahlt Mischtraining/Statistik. **Bezahlen erst nach einem Umzug** (jetzt
   Testphase auf GitHub Pages, öffentlich: eine Bezahlsperre im Browser ist umgehbar). Abspann und Infokarten gibt es

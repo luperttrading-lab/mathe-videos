@@ -89,8 +89,9 @@ SZENEN = [
     # Ein Satz zur App direkt vor dem Abspann (Nutzer 06.11., strategie/video_app_vernetzung.pdf): erst nach dem Inhalt,
     # gleich danach „Noch ein Trick?“ – wer nicht üben will, bleibt im Video-Kreislauf. Eigene Szene, damit der
     # abgenommene Ton von „schluss“ unverändert bleibt.
+    # Nutzer 06.11.: nicht „zehn Übungsaufgaben … kostenlos“ – die App hat beliebig viele Runden, kostenlos ist die App
     dict(id='app', kicker='Merke', anhang=True, pause=1.0, text=(
-        'Zehn Übungsaufgaben dazu findest du kostenlos unter dem Video.')),
+        'Üben kannst du in der kostenlosen App. Den Link findest du unter dem Video.')),
     # Endbildschirm (Nutzer 05.11.): für jede Folge gleich, ohne bestimmtes Video anzukündigen
     dict(id='abspann', kicker='Kopfrechnen', anhang=True, pause=ABSPANN, text=(
         'Noch ein Trick? Hier geht\'s weiter. Und damit du nichts verpasst: Abonnier den Kanal.')),   # Nutzerwahl 05.11.: „Trick“ nur einmal
@@ -1084,11 +1085,11 @@ def qr(groesse, alpha=1.0):
 def s_app(b, sc, t):
     """Satz vor dem Abspann: links drei Zeilen zum Wort, rechts das Handy mit der App (Nutzer 06.11.)."""
     a = ein(t, 0.05, 0.6)
-    b.text('10 Übungsaufgaben', 110, 300 + 12 * (1 - a), 54, INK, INTER_X, anker='l', alpha=a)
-    a2 = ein(t, C(sc, 'kostenlos'))
-    b.text('kostenlos in der App', 110, 368 + 10 * (1 - a2), 36, TEAL, INTER_X, anker='l', alpha=a2)
-    a3 = ein(t, C(sc, 'unter dem Video'))
-    b.text('Link unter dem Video ↓', 110, 440 + 10 * (1 - a3), 30, GRAU, INTER_X, anker='l', alpha=a3)
+    b.text('Kostenlose App', 110, 290 + 12 * (1 - a), 58, INK, INTER_X, anker='l', alpha=a)
+    a2 = ein(t, C(sc, 'kostenlosen'))
+    b.text('zum Üben', 110, 360 + 10 * (1 - a2), 58, TEAL, INTER_X, anker='l', alpha=a2)
+    a3 = ein(t, C(sc, 'Link'))
+    b.text('Link unter dem Video ↓', 110, 444 + 10 * (1 - a3), 30, GRAU, INTER_X, anker='l', alpha=a3)
     ah = ein(t, 0.15, 0.7)
     if ah > 0:
         sp = handy(540, ah)
