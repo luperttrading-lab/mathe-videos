@@ -48,3 +48,10 @@ sonderfall 98,8 s, vorsicht 127,0 s, merke 145,5 s. Bei jedem neuen Render prüf
 - **Tags:** Kopfrechnen, Kopfrechnen Trick, großes Einmaleins, im Kopf multiplizieren, Zehner-Trick, Mathe Trick, schneller rechnen, Kopfrechnen Tipps
 - **„Verwendung von KI“:** Ja angeben (Sprecherstimme ist synthetisch, ElevenLabs). Grauzone laut YouTube-Hilfe; offen
   angeben kostet nichts, der Hinweis steht bei nicht heiklen Themen nur in der erweiterten Beschreibung.
+
+## Abspann in YouTube Studio (Test 06.11.)
+
+- Geht im iPhone-Safari über studio.youtube.com (Desktop-Ansicht), nicht in „Details bearbeiten“ der YouTube-App.
+- **Nicht gelistete Videos lassen sich als Abspann-Element auswählen** (getestet 06.11. mit den Platzhaltern).
+- Elemente erst ab **3:03** (Szene `abspann` beginnt bei 182,9 s), sonst verdecken sie die App-Seite mit dem QR-Code.
+  Links Elfer-Trick über „Nächster Trick“, rechts Fünfer-Trick über „Auch spannend“, „Abonnieren“ rechts neben den Knopf.
