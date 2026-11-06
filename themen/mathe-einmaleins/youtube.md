@@ -1,6 +1,8 @@
 # YouTube: Zehner-Trick
 
-- **YouTube-Link:** https://youtu.be/prkKe_iExIU (06.11., zunächst nicht gelistet zum Testen; in `uebung/aufgaben.js` eingetragen)
+- **YouTube-Link (nur Test):** https://youtu.be/prkKe_iExIU auf dem Testkanal „Volumen Trader“ (Nutzer 06.11.). Nach dem
+  Hochladen auf den Mathe-Kanal: neuen Link in `uebung/aufgaben.js` (Feld `video`) eintragen, `APP_VERSION` hochzählen.
+  QR-Code und Beschreibung bleiben gleich (sie zeigen auf die App, nicht auf das Video).
 - **Titel** (Nutzerwahl 05.11.): Zehner-Trick: großes Einmaleins im Kopf – 16 · 18 in 4 Sekunden
 - **Vorschaubild:** `vorschaubild_zehner.png` (1280 × 720, Reihen-Stil „Papier mit Teal-Leiste“, `vorschaubild.py`)
 - **Video:** 1080p-Master nicht eingecheckt, neu rendern mit `python3 regel.py <ziel>.mp4` (Ton aus `tts_cache/`, kostenlos)
