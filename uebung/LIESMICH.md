@@ -45,7 +45,9 @@ Scrollen, auch mit Fehlern und mit 110 % Schrift; nur das kleine iPhone SE scrol
 **Neue Startseite (v2.6, Nutzer 06.11.: „hübscher, übersichtlicher, interessanter“):** Stufen als Kacheln mit Beispiel,
 Ziel und eigener Bestzeit (✓ grün, wenn unter dem Ziel; nur Runden mit ≥ 8 richtig und gleicher Eingabe). Verlauf der
 gewählten Stufe als Balken (letzte 10 Runden, Ø je Aufgabe, Ziel gestrichelt, Antippen zeigt die Runde; hell = unter 8
-richtig). Stufe ohne Runde: „So geht der Trick“ mit den drei Schritten am Beispiel der Stufe. Start-Knopf fest unten.
+richtig). Stufe ohne Runde: „So geht der Trick“ mit den drei Schritten am Beispiel der Stufe. Start-Knopf (v2.7, Nutzer
+06.11.: fest unten verdeckte er mit dem Sprachhinweis ein Viertel des Bildschirms) direkt unter Tippen/Sprechen, einzeilig;
+Sprachhinweis kurz („✓ Sprache bereit“).
 Zwei Entwürfe: `?stil=b` = wie das YouTube-Vorschaubild (Aufgabe groß mit „= ?“, grüne Leiste); Standard `a` = Karten.
 Nach der Wahl des Nutzers den anderen Stil entfernen.
 

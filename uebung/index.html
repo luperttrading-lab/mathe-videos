@@ -47,17 +47,18 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
    der Reihe (Aufgabe groß mit „= ?“, grüne Leiste). Start-Knopf fest unten, Verlauf als Balken der gewählten Stufe. */
 #start .inhalt { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 #start .inhalt > * { flex-shrink: 0; }
-.held-oben { display: flex; align-items: center; justify-content: space-between; min-height: 40px; }
+.held-oben { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
+.held-oben .rund { width: 36px; height: 36px; font-size: 18px; }
 .reihe { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c10); }
 .held h1 { margin: 0; font-size: 28px; font-weight: 850; letter-spacing: -.01em; line-height: 1.1; }
 .held p { margin: 3px 0 0; color: var(--grau); font-size: 15px; }
 .held-aufgabe, .held .reihe-b { display: none; }
 #stufen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-#stufen button { display: grid; gap: 1px; text-align: left; background: var(--karte); border-radius: 16px; padding: 10px 12px;
+#stufen button { display: grid; gap: 1px; text-align: left; background: var(--karte); border-radius: 16px; padding: 9px 12px;
   box-shadow: 0 3px 12px rgba(70,50,25,.10); transition: box-shadow .15s, background .15s, transform .1s; }
 #stufen button:active { transform: scale(.98); }
 #stufen button[aria-pressed="true"] { background: #eef7f5; box-shadow: 0 3px 12px rgba(15,118,110,.16), inset 0 0 0 2.5px var(--c10); }
-#stufen .bsp { font-size: 24px; font-weight: 850; letter-spacing: -.01em; line-height: 1.15; }
+#stufen .bsp { font-size: 22px; font-weight: 850; letter-spacing: -.01em; line-height: 1.15; }
 #stufen .name { font-size: 15px; font-weight: 700; }
 #stufen .unten { display: flex; justify-content: space-between; align-items: center; gap: 4px; margin-top: 5px; min-height: 20px; }
 .zielmarke { font-size: 12px; font-weight: 700; color: var(--grau); background: #efe9de; border-radius: 8px; padding: 2px 6px; white-space: nowrap; }
@@ -93,10 +94,11 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 #schritte .nr.gleich { background: var(--ok); }
 #schritte .t { color: var(--grau); }
 #schritte .r { font-weight: 700; white-space: nowrap; }
-.startunten { padding-top: 10px; }
 .los { width: 100%; padding: 16px; border-radius: 18px; background: var(--c10); color: #fff; font-size: 22px; font-weight: 800; margin-top: 8px;
   box-shadow: 0 6px 18px rgba(15,118,110,.28); }
-.startunten .los { margin-top: 0; }
+/* Start-Knopf im Fluss unter Tippen/Sprechen (Nutzer 06.11.: fest unten verdeckte er zu viel) */
+#start .los { margin-top: 0; padding: 14px; font-size: 20px; }
+#start .sprachstatus { margin: 0; padding: 7px 12px; font-size: 14px; border-radius: 10px; }
 .los:active { transform: scale(.98); }
 .los small { display: block; font-size: 14px; font-weight: 700; opacity: .85; margin-top: 2px; }
 .fuss { text-align: center; color: var(--grau); font-size: 13px; }
@@ -236,6 +238,8 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
       <button data-e="tippen" aria-pressed="true">⌨︎ Tippen</button>
       <button data-e="sprechen" aria-pressed="false">🎤 Sprechen</button>
     </div>
+    <p class="sprachstatus" id="sprachstatus" hidden></p>
+    <button class="los" id="los">Start · 10 Aufgaben</button>
     <div class="karte" id="verlauf" hidden>
       <div class="vkopf"><h3 id="verlauf-titel">Deine Runden</h3><span class="legende" id="verlauf-ziel"></span></div>
       <p class="bester" id="bester"></p>
@@ -247,10 +251,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
       <ol id="schritte"></ol>
     </div>
     <div class="fuss"><button id="version"></button></div>
-  </div>
-  <div class="startunten">
-    <p class="sprachstatus" id="sprachstatus" hidden></p>
-    <button class="los" id="los">Start · 10 Aufgaben</button>
   </div>
 </section>
 
@@ -294,7 +294,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.6';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.7';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -365,7 +365,7 @@ function baueStart() {
     $('#stufen').append(b);
   }
   for (const b of document.querySelectorAll('#eingabe button')) b.setAttribute('aria-pressed', String(stand.eingabe === b.dataset.e));
-  $('#los').innerHTML = `Start · 10 Aufgaben<small>${st.name} · ${stand.eingabe === 'sprechen' ? '🎤 mit Sprechen' : '⌨︎ mit Tippen'}</small>`;
+  $('#los').textContent = 'Start · 10 Aufgaben';
   zeigeSprachstatus();
   $('#ton').textContent = stand.ton ? '🔊' : '🔇';
   // Verlauf der gewählten Stufe: letzte 10 Runden als Balken (Ø je Aufgabe), Ziel als gestrichelte Linie
@@ -660,7 +660,7 @@ function zeigeSprachstatus() {                       // Startseite: Zustand der 
   const el = $('#sprachstatus');
   el.hidden = stand.eingabe !== 'sprechen';
   if (el.hidden) return;
-  if (sprache.modell) { el.className = 'sprachstatus bereit'; el.textContent = '✓ Sprache bereit – nach „Start“ geht das Mikrofon an'; }
+  if (sprache.modell) { el.className = 'sprachstatus bereit'; el.textContent = '✓ Sprache bereit'; }
   else if (sprache.fehler) { el.className = 'sprachstatus fehler'; el.textContent = '✗ Sprache lässt sich nicht laden (' + (sprache.fehler.message || sprache.fehler) + ') – bitte tippen'; }
   else if (sprache.laden) { el.className = 'sprachstatus laedt'; el.textContent = ladeText(); }
   else { el.className = 'sprachstatus'; el.textContent = 'Sprache wird geladen, sobald du „Start“ tippst'; }

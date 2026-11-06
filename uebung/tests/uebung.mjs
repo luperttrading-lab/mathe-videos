@@ -120,7 +120,7 @@ await page.click('#eingabe button[data-e="sprechen"]');
 await page.waitForTimeout(600);
 const st = await page.textContent('#sprachstatus');
 ok(/wird geladen … \d+ s/.test(st) && (await page.getAttribute('#sprachstatus', 'class')).includes('laedt'), `Startseite zeigt das Laden: „${st.trim()}“`);
-ok((await page.textContent('#los')).includes('Sprechen'), `Start-Knopf nennt die Art: „${(await page.textContent('#los')).trim()}“`);
+ok((await page.getAttribute('#eingabe [data-e="sprechen"]', 'aria-pressed')) === 'true', 'Umschalter zeigt „Sprechen“ gewählt');
 await foto('7_laedt');
 await page.click('#los');
 ok(await page.isVisible('#bereit') && await page.isDisabled('#bereit-los') && await page.isVisible('#ohne-sprechen'),
