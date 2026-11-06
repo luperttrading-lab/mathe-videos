@@ -1,5 +1,7 @@
 # Folge 2: Der Elfer-Trick – Drehbuch-Entwurf (06.11., noch nicht abgenommen)
 
+**Stand 06.11. abends:** erster Entwurf gerendert (2:17), Sprechtext jetzt in `elfer.py` (maßgeblich, weicht in Kleinigkeiten von der Tabelle ab: „Zieh … auseinander“, „Ist eine Summe zweistellig …“, Brücke „Kein Trick ohne Grund.“). Gewählt: Einstieg mit 4352 · 11 (Lösung in Kapitel 4), Uhr 3 s, Übung 53 · 11. Das Handy auf der App-Seite zeigt noch die Zehner-Übung, bis es die Elfer-Übung in der App gibt.
+
 Aufbau wie Folge 1 (`themen/mathe-einmaleins/regel.py`): Einstieg, Trick, Warum, Vorsicht, große Zahl, Merke mit Übung,
 Schluss, App-Seite, Abspann. Ziel ≈ 3 Minuten. Alle Rechnungen geprüft (43·11 = 473, 87·11 = 957, 4352·11 = 47872,
 53·11 = 583).
@@ -16,5 +18,5 @@ Schluss, App-Seite, Abspann. Ziel ≈ 3 Minuten. Alle Rechnungen geprüft (43·1
 | 8 | App | Handy mit der App, QR-Code `#elfer` | „Üben kannst du in der kostenlosen App. Den Link findest du unter dem Video.“ |
 | 9 | Abspann | wie Folge 1 | „Noch ein Trick? Hier geht's weiter. Und damit du nichts verpasst: Abonnier den Kanal.“ |
 
-Offen (Nutzer): Einstieg mit der großen Zahl (wie Vorschaubild, Lösung erst am Ende) oder mit 43 · 11 und Uhr;
+Offen beim Entwurf (inzwischen mit Vorgaben entschieden, s. o.): Einstieg mit der großen Zahl (wie Vorschaubild, Lösung erst am Ende) oder mit 43 · 11 und Uhr;
 Zeitversprechen für zweistellig (drei Sekunden?); Übungsaufgabe 53 · 11 (ohne Übertrag) oder 76 · 11 (mit Übertrag).

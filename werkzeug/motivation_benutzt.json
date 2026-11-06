@@ -1,8 +1,10 @@
 {
  "schluss": {
-  "mathe-einmaleins": "Das ist kein Hexenwerk."
+  "mathe-einmaleins": "Das ist kein Hexenwerk.",
+  "mathe-elfer": "Das ist keine Raketenwissenschaft."
  },
  "bruecke": {
-  "mathe-einmaleins": "Klingt nach Zauberei? Ist es nicht."
+  "mathe-einmaleins": "Klingt nach Zauberei? Ist es nicht.",
+  "mathe-elfer": "Kein Trick ohne Grund."
  }
 }
