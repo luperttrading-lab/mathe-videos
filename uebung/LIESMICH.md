@@ -60,6 +60,7 @@ springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leic
 Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besser“): Aufgabe der gewählten Stufe groß
 mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
 Der Entwurf „Karten“ ist entfernt.
+v2.13 (Nutzerwahl 06.11.): grüner Balken mit „Zehner-Trick“ und „KOPFRECHNEN“ steht über der großen Aufgabe (Name zuerst).
 
 **Video ↔ App (v2.12, Nutzer 06.11., Plan strategie/video_app_vernetzung.pdf):** je Übung in aufgaben.js `kurz` (Direktlink
 …/uebung/#zehner für Beschreibung und QR-Code) und `video` (YouTube-Adresse nach dem Hochladen; leer = „▶ Video folgt“).

@@ -70,7 +70,8 @@ nachziehen.
   Ein Thema behält seinen Spruch, neue Themen bekommen den seltensten. Sprüche gern ergänzen.
 - **Zu jedem Mathe-Video eine Übung** in der App `uebung/` (Nutzerwunsch 04.11.: 10 Aufgaben, tippen oder sprechen,
   richtig gezählt, Ø-Zeit). **Eine App mit vielen Übungen, nicht viele Apps** (06.11.: ein Symbol auf dem Handy, ein
-  Sprachmodell-Download, ein Update-Mechanismus). Startseite der App im Stil des Vorschaubilds (Nutzerwahl 06.11.: Aufgabe groß mit „= ?“, grüne Leiste).
+  Sprachmodell-Download, ein Update-Mechanismus). Startseite der App im Stil des Vorschaubilds (Nutzerwahl 06.11.: Aufgabe groß mit „= ?“, grüne Leiste
+  mit dem Namen des Tricks darüber).
   Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
 - **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
