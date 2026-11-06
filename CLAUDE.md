@@ -72,6 +72,13 @@ nachziehen.
   richtig gezählt, Ø-Zeit). **Eine App mit vielen Übungen, nicht viele Apps** (06.11.: ein Symbol auf dem Handy, ein
   Sprachmodell-Download, ein Update-Mechanismus). Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
+- **Vernetzung Video ↔ App, Bezahlmodell** (Nutzer 06.11., Übersicht `strategie/video_app_vernetzung.pdf`, Quelltext
+  daneben als HTML): Video zuerst, kein App-Hinweis am Anfang oder in der Mitte; ein Satz vor dem Abspann („… kostenlos
+  unter dem Video“), QR-Code und kurze Adresse im Abspann für Fernseh-Zuschauer; Link zur Übung in der Beschreibung
+  (Zeile 2) und im angepinnten Kommentar. Die App führt zurück: „▶ Video zum Trick“, „Nächster Trick“ = erst Video, dann
+  Übung. Später gratis die Übung je Video, bezahlt Mischtraining/Statistik. **Bezahlen erst nach einem Umzug** (jetzt
+  Testphase auf GitHub Pages, öffentlich: eine Bezahlsperre im Browser ist umgehbar). Abspann und Infokarten gibt es
+  nicht bei „für Kinder gemacht“. Offen: Zielgruppe, Clip mit App-Satz und QR-Code, App → Video einbauen.
 - **Ziel vier Sekunden** (Nutzerentscheidung 05.11.): Video und App-Stufe „Alle Zahlen“ sagen „in vier Sekunden“ (Uhr
   `UHR = 4` in `regel.py`), „Einer ergeben 10“ und „Mal 11“ drei, „Quadrate“ vier (`ziel` je Stufe in
   `uebung/aufgaben.js`). Grund: Drei Sekunden mit Rechnen frustrieren; die meistgesehenen Videos nennen 3–5 s.
