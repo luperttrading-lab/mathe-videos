@@ -32,8 +32,9 @@ geschafft“ nur mit mindestens 8 von 10 richtigen. Gesprochenes, das schon vor 
 wenn sie unter dem Ziel der Stufe liegt, sonst grau. Ziele: Alle Zahlen 4 s, Einer ergeben 10 3 s, Quadrate 4 s, Mal 11 3 s (v2.3).
 
 **Umzug (v2.4, 06.11.):** neues Repo `luperttrading-lab/mathe-videos`, neue Adresse (oben). Die alte Adresse
-`…/5-Minuten-videos/uebung/` leitet weiter, ihr Service Worker meldet sich ab. Der Verlauf bleibt erhalten: localStorage gilt
-für die ganze Adresse `luperttrading-lab.github.io`, beide Pfade teilen ihn. `sw.js` löscht seitdem nur noch eigene
+`…/5-Minuten-videos/uebung/` leitet weiter, ihr Service Worker meldet sich ab. Im selben Browser bleibt der Verlauf (localStorage gilt
+für die ganze Adresse `luperttrading-lab.github.io`). Eine App auf dem iPhone-Home-Bildschirm hat wahrscheinlich eigenen
+Speicher; nach dem Neu-Hinzufügen beginnt der Verlauf dort leer (nicht am Gerät geprüft). `sw.js` löscht seitdem nur noch eigene
 Caches (`kopfrechnen…`), nicht die der Würfel-App auf derselben Adresse.
 
 **Versionen:** nach 0.6 folgt 1.7 (Nutzerwunsch 04.11.). Die Update-Prüfung vergleicht nur auf Gleichheit, der Sprung ist unkritisch.
