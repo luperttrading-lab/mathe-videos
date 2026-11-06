@@ -42,6 +42,13 @@ größte `--s` zwischen 0,78 und 1, bei dem nichts überläuft (auch nach Drehen
 ausblendet). Die Knöpfe „Übersicht“ und „Nochmal“ stehen fest unten. Gemessen: iPhone 15 und Pro Max immer ohne
 Scrollen, auch mit Fehlern und mit 110 % Schrift; nur das kleine iPhone SE scrollt mit zwei Fehlern noch ≈ 30 px.
 
+**Neue Startseite (v2.6, Nutzer 06.11.: „hübscher, übersichtlicher, interessanter“):** Stufen als Kacheln mit Beispiel,
+Ziel und eigener Bestzeit (✓ grün, wenn unter dem Ziel; nur Runden mit ≥ 8 richtig und gleicher Eingabe). Verlauf der
+gewählten Stufe als Balken (letzte 10 Runden, Ø je Aufgabe, Ziel gestrichelt, Antippen zeigt die Runde; hell = unter 8
+richtig). Stufe ohne Runde: „So geht der Trick“ mit den drei Schritten am Beispiel der Stufe. Start-Knopf fest unten.
+Zwei Entwürfe: `?stil=b` = wie das YouTube-Vorschaubild (Aufgabe groß mit „= ?“, grüne Leiste); Standard `a` = Karten.
+Nach der Wahl des Nutzers den anderen Stil entfernen.
+
 **Versionen:** nach 0.6 folgt 1.7 (Nutzerwunsch 04.11.). Die Update-Prüfung vergleicht nur auf Gleichheit, der Sprung ist unkritisch.
 
 ## Sprechen

@@ -110,7 +110,9 @@ ok((await page.textContent('#e-spruch')).length > 10, `Motivation: „${(await p
 await foto('5_ende');
 await page.click('#uebersicht');
 ok(await page.isVisible('#verlauf'), 'Übersicht zeigt die letzte Runde');
-ok((await page.textContent('#bester')).includes('Bester Schnitt'), `Verlauf: ${(await page.textContent('#bester')).trim()}`);
+const bestK = await page.textContent('#stufen button[aria-pressed="true"] .bestmarke').catch(() => '');
+ok(/Best \d+,\d s/.test(bestK), `Bestwert auf der gewählten Kachel: „${bestK.trim()}“`);
+ok((await page.$$('#balken .b')).length >= 1, `Verlauf als Balken: ${(await page.$$('#balken .b')).length} Runde(n), „${(await page.textContent('#balken-info')).trim()}“`);
 await foto('6_verlauf');
 
 console.log('Sprechen wählen: Laden sichtbar, „Solange tippen“');
