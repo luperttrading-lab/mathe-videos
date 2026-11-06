@@ -76,6 +76,8 @@ nachziehen.
   enthält. Ob die Tricks nummeriert werden („Trick 1“), entscheidet der Nutzer nach Sichtung der ganzen Serie.
   Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
+  Stand 06.11. abends: App 2.17 mit zwei Übungen (Zehner, Elfer), Trick wählen über den Namen in der grünen Leiste.
+  Elfer-Stufen: Zweistellig 3 s, Summe unter 10 3 s, Die Eins wandert 4 s, Dreistellig 6 s (nur tippen, Sprache bis 999).
 - **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
   jedes Video in YouTube Studio so einstellen; nur dann gibt es Abspann, Infokarten und Kommentare. Die Einstellung muss
   zum Inhalt passen (Kinder = unter 13, US-Gesetz COPPA): keine Wörter wie „Grundschule“, „Klasse 4“, „für Kinder“ in

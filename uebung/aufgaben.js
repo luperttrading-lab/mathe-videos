@@ -75,6 +75,61 @@ const UEBUNGEN = [
       ];
     },
   },
+  {
+    // Folge 2 (Video themen/mathe-elfer): ab · 11 = a | a + b | b, ist a + b zweistellig, wandert die Eins nach vorn
+    id: 'elfer',
+    kurz: 'elfer',                                 // Direktlink …/uebung/#elfer (QR-Code im Video)
+    video: '',                                     // nach dem Hochladen eintragen; leer = „Video folgt“
+    titel: 'Elfer-Trick',
+    untertitel: 'Jede Zahl mal 11',
+    auto: true,                                    // je Stufe gleich lang: zweistellig immer 3 Ziffern (121 … 979), dreistellig 4
+    antworten: [100, 999],                         // Grammatik fürs Sprechen (nur zweistellige Stufen, Ergebnisse 121 … 979)
+    stufen: [
+      { id: 'zwei', name: 'Zweistellig', info: '53 · 11', ziel: 3 },        // Video: „länger als drei Sekunden?“
+      { id: 'ohne', name: 'Summe unter 10', info: '43 · 11', ziel: 3 },
+      { id: 'wandert', name: 'Die Eins wandert', info: '87 · 11', ziel: 4 },
+      // Ergebnisse vierstellig: die Spracherkennung kennt nur Zahlen bis 999, darum hier nur tippen
+      { id: 'drei', name: 'Dreistellig', info: '352 · 11', ziel: 6, nurTippen: true },
+    ],
+    erzeuge(stufe, anzahl) {
+      // Zehnerziffer höchstens 8: dann bleibt das Ergebnis drei- bzw. vierstellig (89 · 11 = 979, 899 · 11 = 9889),
+      // sprechbar bis 999 und ohne Hinweis durch die Länge. Endziffer 0 (40 · 11 = 440) ist zu leicht.
+      const zahlen = [];
+      if (stufe === 'drei') { for (let x = 101; x <= 899; x++) if (x % 10) zahlen.push(x); }
+      else for (let a = 1; a <= 8; a++) for (let b = 1; b <= 9; b++)
+        if ({ ohne: a + b < 10, wandert: a + b >= 10 }[stufe] ?? true) zahlen.push(10 * a + b);
+      return mischen(zahlen).slice(0, anzahl).map(x => this.aufgabe(x, 11));   // je Runde jede Zahl höchstens einmal
+    },
+    aufgabe(x, y = 11) {
+      return { x, y, frage: `${x} · ${y}`, loesung: x * y };
+    },
+    zeige({ x }) {                                 // wie im Video: erste Ziffer orange, letzte violett, die 11 schwarz
+      const z = String(x);
+      return `<span class="c1">${z[0]}</span>${z.slice(1, -1)}<span class="c2">${z.slice(-1)}</span> · 11`;
+    },
+    weg({ x }) {                                   // Wortlaut wie der Merkzettel im Video
+      const d = String(x).split('').map(Number), n = d.length;
+      const paare = [];                            // Nachbarn von hinten nach vorn (wie im Video)
+      for (let i = n - 1; i >= 1; i--) paare.push([d[i - 1], d[i]]);
+      const wandern = [];
+      let eins = 0;
+      for (const [l, r] of paare) {
+        const s = l + r + eins;
+        if (s >= 10) wandern.push(eins ? `${l + r} + 1 = ${s} → ${s - 10} bleibt` : `${s} → ${s - 10} bleibt`);
+        else if (eins) wandern.push(`${l + r} + 1 = ${s}`);
+        eins = s >= 10 ? 1 : 0;
+      }
+      if (eins) wandern.push(`${d[0]} + 1 = <b class="c3">${d[0] + 1}</b>`);
+      return [
+        { nr: 1, titel: 'Erste und letzte Ziffer bleiben',
+          text: `<b class="c1">${d[0]}</b> ${'_ '.repeat(n - 1)}<b class="c2">${d[n - 1]}</b>` },
+        { nr: 2, titel: 'Dazwischen die Summe der Nachbarn',
+          text: paare.map(([l, r]) => `${l} + ${r} = <b class="c10">${l + r}</b>`).join(' · ') },
+        { nr: 3, titel: 'Summe zweistellig: Eins nach vorn', text: wandern.length ? wandern.join(' · ') : 'nichts wandert' },
+        { nr: '=', titel: '', text: `${x} · 11 = <b class="cok">${x * 11}</b>` },
+      ];
+    },
+  },
 ];
 
 // Motivationssätze für das Ende einer Runde (wie werkzeug/motivation.py, beim Ergänzen beide pflegen)

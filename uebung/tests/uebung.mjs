@@ -108,11 +108,11 @@ ok(weg.includes('13 + 7 = 20') && weg.includes('200') && weg.includes('= 21') &&
 ok((await page.$$('.hoerfehler')).length === 0, 'Getippter Fehler: kein „Hörfehler“-Knopf');
 ok((await page.textContent('#e-spruch')).length > 10, `Motivation: „${(await page.textContent('#e-spruch')).trim()}“`);
 await foto('5_ende');
-ok(!(await page.isVisible('#naechster')), 'Ohne zweiten Trick keine Karte „Nächster Trick“');
-await page.evaluate(() => { UEBUNGEN.push({ ...UEBUNGEN[0], id: 'probe', kurz: 'probe', titel: 'Probe-Trick', video: 'https://youtu.be/probe' }); zeigeEnde(false); });
+ok(!(await page.isVisible('#naechster')), 'Nächster Trick (Elfer) ohne Video: keine Karte „Nächster Trick“');
+await page.evaluate(() => { UEBUNGEN.splice(1, 0, { ...UEBUNGEN[0], id: 'probe', kurz: 'probe', titel: 'Probe-Trick', video: 'https://youtu.be/probe' }); zeigeEnde(false); });
 ok(await page.isVisible('#naechster') && (await page.getAttribute('#naechster', 'href')) === 'https://youtu.be/probe',
   `Mit zweitem Trick: „${(await page.textContent('#naechster')).trim()}“ führt zum Video`);
-await page.evaluate(() => { UEBUNGEN.pop(); zeigeEnde(false); });
+await page.evaluate(() => { UEBUNGEN.splice(1, 1); zeigeEnde(false); });
 await page.click('#uebersicht');
 ok(!(await page.$('#verlauf')), 'Startseite ohne Verlaufs-Grafik (Nutzer 06.11.)');
 { const adresse = await page.evaluate(() => UEBUNGEN[0].video), vt = (await page.textContent('#video')).trim();
@@ -201,6 +201,77 @@ console.log('Runde ohne Fehler: Lob-Spruch');
   const sp = (await page.textContent('#e-spruch b')).trim();
   ok(await page.evaluate(t => LOB_SPRUECHE.includes(t), sp) && (await page.textContent('#e-spruch')).startsWith('Schnell und fehlerfrei'),
     `Alles richtig und schnell: Lob statt „keine Raketenwissenschaft“ („${sp}“)`);
+}
+
+console.log('Elfer-Trick (Folge 2)');
+{
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(basis + '#elfer');
+  ok((await page.textContent('#u-titel')).trim() === 'Elfer-Trick', 'Direktlink #elfer öffnet den Elfer-Trick');
+  ok((await page.textContent('#held-aufgabe')).replace(/\s/g, '') === '53·11=?', `Startbild: „${(await page.textContent('#held-aufgabe')).trim()}“`);
+  ok((await page.$$eval('#stufen .zielmarke', l => l.map(e => e.textContent))).join('|') === 'Ziel 3 s|Ziel 3 s|Ziel 4 s|Ziel 6 s',
+    'Stufen: Zweistellig 3 s, Summe unter 10 3 s, Die Eins wandert 4 s, Dreistellig 6 s');
+  const sch = (await page.textContent('#schritte')).replace(/\s+/g, ' ');
+  ok(sch.includes('5 _ 3') && sch.includes('5 + 3 = 8') && sch.includes('nichts wandert') && sch.includes('583'), `So geht der Trick: „${sch.trim()}“`);
+  await foto('e1_elfer_start');
+  const g = await page.evaluate(() => {
+    const u = UEBUNGEN.find(x => x.id === 'elfer'), r = {};
+    for (const st of ['zwei', 'ohne', 'wandert', 'drei']) {
+      const runden = Array.from({ length: 300 }, () => u.erzeuge(st, 10));
+      r[st] = { doppelt: runden.filter(l => new Set(l.map(a => a.x)).size !== 10).length,
+        laengen: [...new Set(runden.flat().map(a => String(a.loesung).length))],
+        summen: runden.flat().map(a => { const d = String(a.x).split('').map(Number); return d.length === 2 ? d[0] + d[1] : -1; }),
+        richtig: runden.flat().every(a => a.loesung === a.x * 11 && a.x % 10 !== 0) };
+    }
+    return r;
+  });
+  ok(Object.values(g).every(x => x.doppelt === 0 && x.richtig), 'Je Runde jede Zahl höchstens einmal, Lösung = Zahl · 11, keine Endziffer 0 (je 300 Runden)');
+  ok(g.ohne.summen.every(s => s < 10) && g.wandert.summen.every(s => s >= 10), '„Summe unter 10“ nur ohne, „Die Eins wandert“ nur mit Wandern');
+  ok(['zwei', 'ohne', 'wandert'].every(k => g[k].laengen.join() === '3') && g.drei.laengen.join() === '4',
+    'Ergebnisse zweistellig immer dreistellig (sprechbar), dreistellig immer vierstellig');
+  const w = await page.evaluate(() => { const u = UEBUNGEN.find(x => x.id === 'elfer');
+    return [87, 789].map(x => u.weg(u.aufgabe(x)).map(s => s.text.replace(/<[^>]+>/g, '')).join(' | ')); });
+  ok(w[0].includes('8 + 7 = 15') && w[0].includes('8 + 1 = 9') && w[0].includes('957'), `Lösungsweg 87 · 11: „${w[0]}“`);
+  ok(w[1].includes('15 + 1 = 16') && w[1].includes('7 + 1 = 8') && w[1].includes('8679'), `Lösungsweg 789 · 11 (zweimal wandern): „${w[1]}“`);
+  // Runde tippen: nach drei Ziffern wird geprüft
+  await page.goto(basis + '?folge=53x11,87x11,19x11#elfer');
+  await page.click('#los'); await page.waitForTimeout(300); await page.click('#bereit-los');
+  ok((await page.innerHTML('#frage')).includes('<span class="c1">5</span><span class="c2">3</span> · 11'), 'Aufgabe wie im Video: 5 orange, 3 violett');
+  await foto('e2_elfer_aufgabe');
+  for (const z of [583, 957, 209]) {
+    for (const c of String(z)) { await page.dispatchEvent(`#tasten button[aria-label="${c}"]`, 'pointerdown'); await page.waitForTimeout(60); }
+    await page.waitForTimeout(950);
+  }
+  await page.waitForSelector('#ende:not([hidden])', { timeout: 5000 });
+  ok((await page.textContent('#e-richtig')).trim() === '3 von 3 richtig', 'Elfer-Runde getippt: 3 von 3 richtig');
+  await page.click('#uebersicht');
+  // Dreistellig: nur tippen, auch wenn „sprechen“ gewählt war (neu laden ohne ?folge=)
+  await page.goto(basis + '#elfer');
+  await page.evaluate(() => { window.uebung.stand.eingabe = 'sprechen'; });
+  await page.click('#stufen button[data-s="drei"]');
+  ok((await page.getAttribute('#eingabe', 'class')).includes('nur-tippen') && (await page.getAttribute('#schalter', 'aria-checked')) === 'false'
+    && (await page.textContent('#los')).trim() === 'Start · 10 Aufgaben', 'Dreistellig: Regler steht auf eintippen, ausgegraut, keine Sprach-Ladeanzeige');
+  await foto('e3_dreistellig');
+  await page.click('#los');
+  ok(!(await page.isDisabled('#bereit-los')) && (await page.getAttribute('#mikro', 'class')).includes('aus'), 'Dreistellig: Runde startet sofort mit Tippen, Mikrofon aus');
+  await page.click('#bereit-los');
+  const a = await page.evaluate(() => window.uebung.runde.aufgaben[0]);
+  for (const c of String(a.loesung)) await page.dispatchEvent(`#tasten button[aria-label="${c}"]`, 'pointerdown');
+  await page.waitForFunction(() => window.uebung.runde.ergebnisse.length === 1, null, { timeout: 2000 });
+  ok(await page.evaluate(() => window.uebung.runde.ergebnisse[0].ok) && String(a.loesung).length === 4 && a.x >= 101,
+    `Vierstelliges Ergebnis getippt (${a.frage} = ${a.loesung})`);
+  await page.click('#abbruch');
+  await page.click('#stufen button[data-s="zwei"]');
+  ok((await page.getAttribute('#schalter', 'aria-checked')) === 'true', 'Zurück auf Zweistellig: die Wahl „sprechen“ ist noch da');
+  // Trick wählen
+  await page.click('#trickwahl');
+  ok(await page.isVisible('#trickblatt') && (await page.$$('#trickliste button')).length === 2, 'Trickname antippen: Liste mit zwei Tricks');
+  await foto('e4_trick_waehlen');
+  await page.click('#trickliste button:first-child');
+  ok(!(await page.isVisible('#trickblatt')) && (await page.textContent('#u-titel')).trim() === 'Zehner-Trick' && page.url().endsWith('#zehner'),
+    'Zehner gewählt: Titel, Adresse #zehner');
+  await page.reload();
+  ok((await page.textContent('#u-titel')).trim() === 'Zehner-Trick', 'Nach dem Neuladen bleibt der gewählte Trick');
 }
 
 ok(konsole.length === 0, 'Keine Fehler in der Konsole' + (konsole.length ? ': ' + konsole.join(' | ') : ''));

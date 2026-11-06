@@ -54,9 +54,24 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .held-aufgabe { font-size: min(13vw, 54px); font-weight: 850; letter-spacing: -.02em; line-height: 1; padding: 30px 8px 22px;
   background-image: radial-gradient(rgba(120,100,70,.13) 1.2px, transparent 1.3px); background-size: 24px 24px; }
 .held-aufgabe .fz { color: var(--grau); }
+.held-aufgabe.lang { font-size: min(11vw, 46px); }
 .held-text { order: -1; display: flex;   /* Balken oben: der Name steht zuerst (Nutzerwahl 06.11.) */
    justify-content: space-between; align-items: center; gap: 8px; background: var(--c10); padding: 12px 16px; }
 .held h1 { margin: 0; font-size: 22px; font-weight: 850; letter-spacing: -.01em; line-height: 1.1; color: #fff; }
+.trickwahl { display: inline-flex; align-items: center; gap: 6px; font: inherit; color: inherit; padding: 0; text-align: left; }
+.trickwahl .pfeil { font-size: 15px; color: #bfe3df; }
+.trickwahl.einzeln { pointer-events: none; } .trickwahl.einzeln .pfeil { display: none; }
+.blatt-grund { position: fixed; inset: 0; z-index: 20; background: rgba(43,45,66,.35); display: flex; align-items: flex-end; justify-content: center; }
+.blatt { width: 100%; max-width: 520px; background: var(--grund); border-radius: 22px 22px 0 0; padding: 16px max(env(safe-area-inset-right), 16px)
+  max(env(safe-area-inset-bottom), 18px) max(env(safe-area-inset-left), 16px); box-shadow: 0 -8px 30px rgba(43,45,66,.25); }
+.blatt h3 { margin: 0 0 12px; font-size: 13px; font-weight: 800; color: var(--c10); letter-spacing: .06em; text-transform: uppercase; }
+#trickliste { display: grid; gap: 10px; }
+#trickliste button { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 12px; text-align: left; background: var(--karte);
+  border-radius: 16px; padding: 12px 14px; box-shadow: 0 3px 12px rgba(70,50,25,.10); }
+#trickliste button[aria-pressed="true"] { background: #eef7f5; box-shadow: 0 3px 12px rgba(15,118,110,.16), inset 0 0 0 2.5px var(--c10); }
+#trickliste .bsp { font-size: 24px; font-weight: 850; letter-spacing: -.01em; white-space: nowrap; }
+#trickliste b { display: block; font-size: 17px; }
+#trickliste small { display: block; color: var(--grau); font-size: 13px; font-weight: 600; margin-top: 1px; }
 .reihe { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #bfe3df; }
 #stufen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 #stufen button { display: grid; gap: 1px; text-align: left; background: var(--karte); border-radius: 16px; padding: 9px 12px;
@@ -105,6 +120,8 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .schalter i { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff;
   box-shadow: 0 1px 4px rgba(0,0,0,.3); transition: transform .2s ease; }
 .schalter[aria-checked="true"] i { transform: translateX(22px); }
+/* Stufe nur zum Tippen (Elfer „Dreistellig“: Ergebnisse über 999 kennt die Spracherkennung nicht) */
+.eingabewahl.nur-tippen .schalter, .eingabewahl.nur-tippen button[data-e="sprechen"] { opacity: .35; }
 .eingabewahl .mini { margin-left: 4px; font-size: 13px; font-weight: 800; }
 .eingabewahl .mini.bereit { color: var(--ok); }
 .eingabewahl .mini.laedt { color: #9a6200; }
@@ -226,7 +243,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
     <div class="held">
       <button class="rund" id="ton" aria-label="Ton an oder aus">🔊</button>
       <div class="held-aufgabe" id="held-aufgabe"></div>
-      <div class="held-text"><h1 id="u-titel"></h1><span class="reihe">Kopfrechnen</span></div>
+      <div class="held-text"><h1><button class="trickwahl" id="trickwahl" aria-haspopup="dialog"><span id="u-titel"></span><span class="pfeil" aria-hidden="true">▾</span></button></h1><span class="reihe">Kopfrechnen</span></div>
     </div>
     <div class="stufen" id="stufen"></div>
     <div class="eingabewahl" id="eingabe">
@@ -244,6 +261,14 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
     <div class="fuss"><button id="version"></button></div>
   </div>
 </section>
+
+<!-- Trick wählen (seit 2.17: zwei Übungen, Zehner und Elfer; eine App für alle Tricks, Nutzer 06.11.) -->
+<div class="blatt-grund" id="trickblatt" hidden>
+  <div class="blatt" role="dialog" aria-modal="true" aria-labelledby="blatt-titel">
+    <h3 id="blatt-titel">Trick wählen</h3>
+    <div id="trickliste"></div>
+  </div>
+</div>
 
 <!-- Spiel -->
 <section class="seite" id="spiel" hidden>
@@ -286,12 +311,16 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.16';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.17';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
 const ZAHLWORT = { 2: 'zwei', 3: 'drei', 4: 'vier', 5: 'fünf', 6: 'sechs' };
-const ziel = () => { const u = uebung(); return (u.stufen.find(s => s.id === stand.stufe) || u.stufen[0]).ziel || 4; };
+const stufeJetzt = () => { const u = uebung(); return u.stufen.find(s => s.id === stand.stufe) || u.stufen[0]; };
+const ziel = () => stufeJetzt().ziel || 4;
+// Gesprochen wird nur, wenn „sprechen“ gewählt ist UND die Stufe es zulässt (nurTippen: Ergebnisse über 999)
+const sprichtJetzt = () => stand.eingabe === 'sprechen' && !stufeJetzt().nurTippen;
+const NUR_TIPPEN = 'Hier nur eintippen: Die Spracherkennung kennt Zahlen bis 999.';
 const SPEICHER = 'kopfrechnen.stand', RUNDEN = 'kopfrechnen.runden';
 const lies = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (_) { return d; } };
 const schreib = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} };
@@ -300,6 +329,7 @@ const stand = Object.assign({ uebung: UEBUNGEN[0].id, stufe: 'alle', eingabe: 't
   if (ziel && ziel.id !== stand.uebung) { stand.uebung = ziel.id; stand.stufe = ziel.stufen[0].id; } }
 const speichereAlles = () => schreib(SPEICHER, stand);
 const uebung = () => UEBUNGEN.find(u => u.id === stand.uebung) || UEBUNGEN[0];
+if (!uebung().stufen.some(s => s.id === stand.stufe)) stand.stufe = uebung().stufen[0].id;   // Stufe gehört zur Übung
 const sek = ms => (ms / 1000).toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' s';
 const zeigeSeite = id => { for (const s of document.querySelectorAll('.seite')) s.hidden = s.id !== id; };
 
@@ -340,17 +370,21 @@ function baueStart() {
   const u = uebung(), r = lies(RUNDEN, []).filter(x => x.uebung === u.id);
   const st = u.stufen.find(s => s.id === stand.stufe) || u.stufen[0];
   // Bestwert je Stufe: nur Runden mit mindestens 8 richtig und gleicher Eingabe (vergleichbar)
-  const bestVon = id => { const g = r.filter(x => stufeVon(x) === id && x.richtig >= 8 && vergleichbar(x, stand.eingabe)).map(x => x.schnitt);
+  const bestVon = s => { const e = s.nurTippen ? 'tippen' : stand.eingabe;
+    const g = r.filter(x => stufeVon(x) === s.id && x.richtig >= 8 && vergleichbar(x, e)).map(x => x.schnitt);
     return g.length ? Math.min(...g) : null; };
   $('#u-titel').textContent = u.titel;
-  $('#held-aufgabe').innerHTML = farbig(st.info) + '<span class="fz"> = ?</span>';
+  $('#trickwahl').classList.toggle('einzeln', UEBUNGEN.length < 2);
+  const [x, y] = st.info.match(/\d+/g).map(Number);
+  $('#held-aufgabe').innerHTML = (u.zeige ? u.zeige(u.aufgabe(x, y)) : farbig(st.info)) + '<span class="fz"> = ?</span>';
+  $('#held-aufgabe').classList.toggle('lang', st.info.replace(/\D/g, '').length >= 5);   // 352 · 11: kleiner, sonst stößt „?“ an 🔊
   // Video zum Trick (Nutzer 06.11.: die App führt zurück zum Video); vor dem Hochladen „Video folgt“
   const vk = $('#video');
   if (u.video) { vk.href = u.video; vk.textContent = '▶ Video'; vk.classList.remove('folgt'); }
   else { vk.removeAttribute('href'); vk.textContent = '▶ Video folgt'; vk.classList.add('folgt'); }
   $('#stufen').innerHTML = '';
   for (const s of u.stufen) {
-    const b = document.createElement('button'), best = bestVon(s.id), ok = best !== null && best <= s.ziel * 1000;
+    const b = document.createElement('button'), best = bestVon(s), ok = best !== null && best <= s.ziel * 1000;
     b.dataset.s = s.id;
     b.innerHTML = `<span class="name">${s.name}</span>`
       + `<span class="unten"><span class="zielmarke">Ziel ${s.ziel} s</span>`
@@ -359,18 +393,20 @@ function baueStart() {
     b.addEventListener('click', () => { stand.stufe = s.id; speichereAlles(); baueStart(); });
     $('#stufen').append(b);
   }
-  for (const b of document.querySelectorAll('#eingabe button[data-e]')) b.setAttribute('aria-pressed', String(stand.eingabe === b.dataset.e));
-  $('#schalter').setAttribute('aria-checked', String(stand.eingabe === 'sprechen'));
+  const eingabe = sprichtJetzt() ? 'sprechen' : 'tippen';
+  for (const b of document.querySelectorAll('#eingabe button[data-e]')) b.setAttribute('aria-pressed', String(eingabe === b.dataset.e));
+  $('#schalter').setAttribute('aria-checked', String(eingabe === 'sprechen'));
+  $('#eingabe').classList.toggle('nur-tippen', !!st.nurTippen);
   $('#los').textContent = 'Start · 10 Aufgaben';
   zeigeSprachstatus();
   $('#ton').textContent = stand.ton ? '🔊' : '🔇';
   // „So geht der Trick“ immer direkt unter Start, am Beispiel der Stufe (Nutzer 06.11.: den Tipp statt des Verlaufs;
   // der Verlauf als Balken ist seit v2.10 ganz weg, die Bestzeit steht auf den Kacheln)
-  const [x, y] = st.info.match(/\d+/g).map(Number);
   $('#schritte').innerHTML = u.weg(u.aufgabe(x, y)).map(w => `<li><span class="nr${w.nr === '=' ? ' gleich' : ''}">${w.nr}</span>`
     + `<span>${w.titel ? `<span class="t">${w.titel}:</span> ` : ''}<span class="r">${w.text}</span></span></li>`).join('');
 }
 function waehleEingabe(e) {
+  if (stufeJetzt().nurTippen) { showInfo(NUR_TIPPEN, 3, $('#eingabe')); return; }   // Wahl bleibt gespeichert
   stand.eingabe = e; speichereAlles();
   if (e === 'sprechen') vorladen();                   // Modell schon jetzt laden, nicht erst beim Start
   baueStart();
@@ -387,6 +423,25 @@ for (const b of document.querySelectorAll('#eingabe button[data-e]')) b.addEvent
   });
   sch.addEventListener('click', () => { if (gewischt) { gewischt = false; return; } waehleEingabe(stand.eingabe === 'sprechen' ? 'tippen' : 'sprechen'); });
 }
+function zeigeTricks() {
+  $('#trickliste').innerHTML = '';
+  for (const u of UEBUNGEN) {
+    const b = document.createElement('button'), [x, y] = u.stufen[0].info.match(/\d+/g).map(Number);
+    b.setAttribute('aria-pressed', String(u.id === uebung().id));
+    b.innerHTML = `<span class="bsp">${u.zeige ? u.zeige(u.aufgabe(x, y)) : farbig(u.stufen[0].info)}</span>`
+      + `<span><b>${u.titel}</b><small>${u.untertitel}</small></span>`;
+    b.addEventListener('click', () => {
+      if (u.id !== stand.uebung) { stand.uebung = u.id; stand.stufe = u.stufen[0].id; speichereAlles(); }
+      // Adresse mitziehen: sonst setzt ein alter Direktlink (#zehner) beim Neuladen die Übung zurück
+      if (u.kurz) try { history.replaceState(null, '', location.pathname + location.search + '#' + u.kurz); } catch (_) {}
+      $('#trickblatt').hidden = true; baueStart();
+    });
+    $('#trickliste').append(b);
+  }
+  $('#trickblatt').hidden = false;
+}
+$('#trickwahl').addEventListener('click', zeigeTricks);
+$('#trickblatt').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.hidden = true; });
 $('#ton').addEventListener('click', () => { stand.ton = !stand.ton; speichereAlles(); baueStart(); if (stand.ton) klang.tipp(); });
 
 /* ---------- Runde ---------- */
@@ -406,7 +461,7 @@ function starteRunde() {
   $('#frage').innerHTML = ''; $('#antwort').innerHTML = '<span class="leer">?</span>'; $('#antwort').className = 'antwort';
   $('#rueck').textContent = ''; $('#gehoert').textContent = '';
   $('.buehne').classList.add('wartet'); $('#tasten').classList.add('gesperrt'); $('#bereit').hidden = false;
-  if (stand.eingabe === 'sprechen') mikrofonAn().finally(zeigeBereit); else setzeMikro('aus');
+  if (sprichtJetzt()) mikrofonAn().finally(zeigeBereit); else setzeMikro('aus');
   zeigeBereit();
 }
 function sprechenBereit() {                          // grün: Modell da, Mikrofon an, Ton kommt an
@@ -414,7 +469,7 @@ function sprechenBereit() {                          // grün: Modell da, Mikrof
 }
 function zeigeBereit() {
   if (runde.phase !== 'bereit') return;
-  const sp = stand.eingabe === 'sprechen', fehler = $('#mikro').classList.contains('fehler');
+  const sp = sprichtJetzt(), fehler = $('#mikro').classList.contains('fehler');
   const fertig = !sp || fehler || sprechenBereit();
   $('#bereit-los').disabled = !fertig;
   $('#ohne-sprechen').hidden = fertig;
@@ -437,8 +492,9 @@ function naechste() {
   clearTimeout(runde.weiterTimer);
   if (runde.i >= runde.aufgaben.length) return ende();
   const a = runde.aufgaben[runde.i];
-  const zx = String(a.x), zy = String(a.y);
-  $('#frage').innerHTML = `${zx.slice(0, -1)}<span class="c1">${zx.slice(-1)}</span> · ${zy.slice(0, -1)}<span class="c2">${zy.slice(-1)}</span>`;
+  const zx = String(a.x), zy = String(a.y), u = uebung();
+  $('#frage').innerHTML = u.zeige ? u.zeige(a)
+    : `${zx.slice(0, -1)}<span class="c1">${zx.slice(-1)}</span> · ${zy.slice(0, -1)}<span class="c2">${zy.slice(-1)}</span>`;
   runde.eingabe = ''; runde.offenHundert = null;
   zeigeEingabe();
   $('#antwort').className = 'antwort';
@@ -509,7 +565,8 @@ function zeigeEnde(neu) {
   const sprechRunde = gs.length > e.length / 2;
   // Zeitmessung 3 (ab v0.6): gesprochen bis zum ersten Wort. Nur gleiche Eingabe und gleiche Messung sind vergleichbar.
   const eingabe = sprechRunde ? 'sprechen' : 'tippen';
-  const frueher = alle.filter((x, k) => k !== runde.platz && x.uebung === stand.uebung && x.richtig >= 8 && vergleichbar(x, eingabe)).map(x => x.schnitt);
+  const frueher = alle.filter((x, k) => k !== runde.platz && x.uebung === stand.uebung && stufeVon(x) === stand.stufe   // Rekord je Stufe (Ziele 3 … 6 s)
+    && x.richtig >= 8 && vergleichbar(x, eingabe)).map(x => x.schnitt);
   const rekord = richtig >= 8 && frueher.length && schnitt < Math.min(...frueher);
   const eintrag = { uebung: stand.uebung, stufe: stand.stufe, zeit: Date.now(), anzahl: e.length, richtig, schnitt, eingabe,
     mess: 3, ...(bisEnde !== null ? { bisEnde, warte, ...(bisRest !== null ? { bisRest } : {}) } : {}) };   // Kontrollwerte nur gespeichert
@@ -638,10 +695,10 @@ function zeigeSprachstatus() {                       // Startseite: Zustand der 
   mini.className = 'mini' + (sprache.modell ? ' bereit' : sprache.fehler ? ' fehler' : sprache.laden ? ' laedt' : '');
   mini.textContent = sprache.modell ? '✓' : sprache.fehler ? '✗' : sprache.laden ? '…' : '';
   // Laden steht im Start-Knopf (Nutzer 06.11.: nicht darüber, sonst springt der Bildschirm); Knopf bleibt einzeilig
-  const laedt = stand.eingabe === 'sprechen' && sprache.laden && !sprache.modell && !sprache.fehler, los = $('#los');
+  const laedt = sprichtJetzt() && sprache.laden && !sprache.modell && !sprache.fehler, los = $('#los');
   los.classList.toggle('laedt', !!laedt);
   los.textContent = laedt ? `Start · Sprache lädt … ${Math.round((performance.now() - sprache.ladeStart) / 1000)} s` : 'Start · 10 Aufgaben';
-  el.hidden = stand.eingabe !== 'sprechen';
+  el.hidden = !sprichtJetzt();
   if (el.hidden) return;
   if (sprache.modell) { el.className = 'sprachstatus bereit'; el.textContent = '✓ Sprache bereit'; }
   else if (sprache.fehler) { el.className = 'sprachstatus fehler'; el.textContent = '✗ Sprache lässt sich nicht laden (' + (sprache.fehler.message || sprache.fehler) + ') – bitte tippen'; }
@@ -662,7 +719,7 @@ function setzeMikro(zustand, text) {
   m.setAttribute('aria-label', $('#mikro-text').textContent);
   zeigeBereit();
 }
-const zeigeMikro = () => setzeMikro(stand.eingabe !== 'sprechen' ? 'aus' : !sprache.erkenner ? 'laedt' : sprache.hoert ? 'an' : 'still');
+const zeigeMikro = () => setzeMikro(!sprichtJetzt() ? 'aus' : !sprache.erkenner ? 'laedt' : sprache.hoert ? 'an' : 'still');
 (function pegelZeigen() {                            // fünf Balken folgen der Lautstärke
   if (!$('#spiel').hidden && sprache.erkenner) {
     const balken = $('#pegel').children, p = Math.min(1, sprache.pegel * 9);
@@ -672,6 +729,7 @@ const zeigeMikro = () => setzeMikro(stand.eingabe !== 'sprechen' ? 'aus' : !spra
   requestAnimationFrame(pegelZeigen);
 })();
 $('#mikro').addEventListener('click', async () => {  // im Spiel umschalten: Tippen geht immer, Sprechen dazu
+  if (stufeJetzt().nurTippen) return showInfo(NUR_TIPPEN, 3, $('#mikro'));
   stand.eingabe = stand.eingabe === 'sprechen' ? 'tippen' : 'sprechen'; speichereAlles();
   if (stand.eingabe === 'sprechen') await mikrofonAn(); else mikrofonAus();
   zeigeMikro();
@@ -682,7 +740,7 @@ async function mikrofonAn() {
   setzeMikro('laedt', sprache.modell ? null : 'Sprache lädt …');
   try {
     await ladeSprache();                             // erst das Modell, dann das Mikrofon: beim ersten Laden ist es nicht minutenlang offen
-    if ($('#spiel').hidden || stand.eingabe !== 'sprechen') return;
+    if ($('#spiel').hidden || !sprichtJetzt()) return;
     setzeMikro('laedt');
     const strom = await navigator.mediaDevices.getUserMedia({ video: false,
       audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });

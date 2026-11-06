@@ -60,6 +60,19 @@ springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leic
 Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besser“): Aufgabe der gewählten Stufe groß
 mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
 Der Entwurf „Karten“ ist entfernt.
+**v2.17 (Nutzer 06.11.: „Mach die Elfer-Übung in der App“):** zweite Übung **Elfer-Trick** (`id: 'elfer'`, Direktlink
+`#elfer`, QR-Code im Video von Folge 2). Eine App für alle Tricks, keine zweite App (Nutzerentscheidung 06.11.).
+- Stufen: „Zweistellig“ (Ziel 3 s wie im Video), „Summe unter 10“ (3 s), „Die Eins wandert“ (4 s), „Dreistellig“ (6 s).
+  Zehnerziffer bzw. erste Ziffer höchstens 8: Ergebnisse dann immer drei- (121 … 979) bzw. vierstellig (1111 … 9889),
+  also nach der richtigen Ziffernzahl prüfen, ohne dass die Länge etwas verrät. Endziffer 0 (40 · 11) ist zu leicht.
+- „Dreistellig“ nur tippen (`nurTippen`): Die Spracherkennung kennt Zahlen bis 999. Der Regler steht dort auf
+  „eintippen“ (ausgegraut), die Wahl „sprechen“ bleibt für die anderen Stufen gespeichert.
+- Lösungsweg im Wortlaut des Merkzettels, auch mit zweimal Wandern (789 · 11: 17 → 7, 15 + 1 = 16 → 6, 7 + 1 = 8).
+- Aufgabe wie im Video gefärbt (`zeige`): erste Ziffer orange, letzte violett, die 11 schwarz.
+- **Trick wählen:** Name in der grünen Leiste antippen („Elfer-Trick ▾“) → Liste aller Tricks. Die Adresse zieht mit
+  (`#zehner`/`#elfer`), sonst setzt ein alter Direktlink beim Neuladen zurück.
+- „Neuer bester Schnitt“ vergleicht nur noch Runden derselben Stufe (Ziele 3 … 6 s).
+- Sprechen beim Elfer: Grammatik 100 … 999 (Zehner 100 … 399). Am iPhone noch nicht ausprobiert.
 v2.15 (Nutzerwahl 06.11.): Überschrift „So geht der Trick“ grün wie „Ergebnis“.
 v2.14 (Nutzerwahl 06.11.): neues Symbol wie das Vorschaubild (`tools/icon.py`); auf dem iPhone erst nach Löschen und neu
 „Zum Home-Bildschirm“ sichtbar.
@@ -102,7 +115,8 @@ Am iPhone beobachtet (Nutzer 04.11.): einmal 221 als 223 verstanden – dafür d
 ## Neue Übung zu einem neuen Video
 In `aufgaben.js` ein Objekt in `UEBUNGEN` ergänzen: `id`, `titel`, `video`, `stufen`, `erzeuge(stufe, anzahl)`,
 `aufgabe(...)` → `{frage, loesung}`, `weg(aufgabe)` → Schritte für den Lösungsweg. Dann `APP_VERSION` in `index.html`
-hochzählen. (Die Startseite zeigt bisher eine Übung; bei der zweiten kommt eine Auswahl dazu.)
+hochzählen. Optional: `zeige(aufgabe)` (Färbung der Aufgabe), je Stufe `nurTippen`. Die Auswahl „Trick wählen“
+zeigt alle Übungen von selbst.
 
 ## Prüfen
 - `node tests/uebung.mjs [bildordner]` – Zahlwörter, Runde mit Tippen (9/10, Lösungsweg, Ende, Verlauf), Aufgaben-Erzeugung
