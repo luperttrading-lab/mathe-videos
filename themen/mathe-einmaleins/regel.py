@@ -1109,13 +1109,13 @@ def s_abspann(b, sc, t):
         b.d.polygon([((x + 230 - 18) * K, (y + 129 - 22) * K), ((x + 230 - 18) * K, (y + 129 + 22) * K),
                      ((x + 230 + 24) * K, (y + 129) * K)], fill=farbe(HELL, 255 * q))
         b.text(wort, x + 230, y + 259 + 34, 26, GRAU, INTER_X, alpha=q)
-    # QR-Code zur Übung (Nutzer 06.11.): für Fernseh-Zuschauer, die keinen Link anklicken können – mit dem Handy scannen,
+    # QR-Code zur App (Nutzer 06.11.: „App zum Video“ statt „Übung zum Video“): für Fernseh-Zuschauer, die keinen Link anklicken können – mit dem Handy scannen,
     # der Fernseher läuft weiter. Links unten, wo YouTube Studio keine Elemente hinlegt.
     qa = ein(t, t_kacheln + 0.45)
     if qa > 0:
         karte(b, 110, 522, 136, 136, alpha=qa, r=14)
         einfuegen(b.img, qr(116, qa), 120 * K, 532 * K)
-        b.text('Übung zum Video', 266, 572, 24, INK, INTER_X, anker='l', alpha=qa)
+        b.text('App zum Video', 266, 572, 24, INK, INTER_X, anker='l', alpha=qa)
         b.text('QR-Code scannen', 266, 606, 20, GRAU, INTER, anker='l', alpha=qa)
     # Abo-Zeile (Nutzer 05.11.): links ein gezeichneter Knopf „Abonnieren“, den beim Wort „Abonnier“ eine Hand von links
     # drückt (mit Klick; ein Finger passt zu Handy und Fernseher besser als ein Mauszeiger), danach „Abonniert“.
