@@ -108,8 +108,14 @@ ok(weg.includes('13 + 7 = 20') && weg.includes('200') && weg.includes('= 21') &&
 ok((await page.$$('.hoerfehler')).length === 0, 'Getippter Fehler: kein „Hörfehler“-Knopf');
 ok((await page.textContent('#e-spruch')).length > 10, `Motivation: „${(await page.textContent('#e-spruch')).trim()}“`);
 await foto('5_ende');
+ok(!(await page.isVisible('#naechster')), 'Ohne zweiten Trick keine Karte „Nächster Trick“');
+await page.evaluate(() => { UEBUNGEN.push({ ...UEBUNGEN[0], id: 'probe', kurz: 'probe', titel: 'Probe-Trick', video: 'https://youtu.be/probe' }); zeigeEnde(false); });
+ok(await page.isVisible('#naechster') && (await page.getAttribute('#naechster', 'href')) === 'https://youtu.be/probe',
+  `Mit zweitem Trick: „${(await page.textContent('#naechster')).trim()}“ führt zum Video`);
+await page.evaluate(() => { UEBUNGEN.pop(); zeigeEnde(false); });
 await page.click('#uebersicht');
 ok(!(await page.$('#verlauf')), 'Startseite ohne Verlaufs-Grafik (Nutzer 06.11.)');
+ok((await page.textContent('#video')).includes('Video folgt'), 'Vor dem Hochladen: „▶ Video folgt“ an der Trick-Karte');
 const bestK = await page.textContent('#stufen button[aria-pressed="true"] .bestmarke').catch(() => '');
 ok(/Best \d+,\d s/.test(bestK), `Bestwert auf der gewählten Kachel: „${bestK.trim()}“`);
 await foto('6_verlauf');

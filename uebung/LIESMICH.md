@@ -61,6 +61,11 @@ Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besse
 mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
 Der Entwurf „Karten“ ist entfernt.
 
+**Video ↔ App (v2.12, Nutzer 06.11., Plan strategie/video_app_vernetzung.pdf):** je Übung in aufgaben.js `kurz` (Direktlink
+…/uebung/#zehner für Beschreibung und QR-Code) und `video` (YouTube-Adresse nach dem Hochladen; leer = „▶ Video folgt“).
+Trick-Karte der Startseite: „▶ Video“. Ende-Seite: Karte „Nächster Trick · erst das Video“, sobald die nächste Übung ein
+Video hat.
+
 **Versionen:** nach 0.6 folgt 1.7 (Nutzerwunsch 04.11.). Die Update-Prüfung vergleicht nur auf Gleichheit, der Sprung ist unkritisch.
 
 ## Sprechen
