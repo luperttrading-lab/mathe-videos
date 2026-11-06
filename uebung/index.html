@@ -47,19 +47,22 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
    der Reihe (Aufgabe groß mit „= ?“, grüne Leiste). Start-Knopf fest unten, Verlauf als Balken der gewählten Stufe. */
 #start .inhalt { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 #start .inhalt > * { flex-shrink: 0; }
-.held-oben { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
-.held-oben .rund { width: 36px; height: 36px; font-size: 18px; }
-.reihe { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--c10); }
-.held h1 { margin: 0; font-size: 28px; font-weight: 850; letter-spacing: -.01em; line-height: 1.1; }
-.held p { margin: 3px 0 0; color: var(--grau); font-size: 15px; }
-.held-aufgabe, .held .reihe-b { display: none; }
+/* Kopf wie das YouTube-Vorschaubild der Reihe (Nutzerwahl 06.11.): Aufgabe der gewählten Stufe groß mit „= ?“,
+   darunter die grüne Leiste mit dem Namen des Tricks und „KOPFRECHNEN“ */
+.held { position: relative; background: var(--karte); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 22px rgba(70,50,25,.12); text-align: center; }
+.held .rund { position: absolute; top: 8px; right: 8px; width: 38px; height: 38px; font-size: 18px; box-shadow: none; background: #f3efe7; }
+.held-aufgabe { font-size: min(13vw, 54px); font-weight: 850; letter-spacing: -.02em; line-height: 1; padding: 42px 8px 16px;
+  background-image: radial-gradient(rgba(120,100,70,.13) 1.2px, transparent 1.3px); background-size: 24px 24px; }
+.held-aufgabe .fz { color: var(--grau); }
+.held-text { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--c10); padding: 12px 16px; }
+.held h1 { margin: 0; font-size: 22px; font-weight: 850; letter-spacing: -.01em; line-height: 1.1; color: #fff; }
+.reihe { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #bfe3df; }
 #stufen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 #stufen button { display: grid; gap: 1px; text-align: left; background: var(--karte); border-radius: 16px; padding: 9px 12px;
   box-shadow: 0 3px 12px rgba(70,50,25,.10); transition: box-shadow .15s, background .15s, transform .1s; }
 #stufen button:active { transform: scale(.98); }
 #stufen button[aria-pressed="true"] { background: #eef7f5; box-shadow: 0 3px 12px rgba(15,118,110,.16), inset 0 0 0 2.5px var(--c10); }
-#stufen .bsp { font-size: 22px; font-weight: 850; letter-spacing: -.01em; line-height: 1.15; }
-#stufen .name { font-size: 15px; font-weight: 700; }
+#stufen .name { font-size: 16px; font-weight: 700; }
 #stufen .unten { display: flex; justify-content: space-between; align-items: center; gap: 4px; margin-top: 5px; min-height: 20px; }
 .zielmarke { font-size: 12px; font-weight: 700; color: var(--grau); background: #efe9de; border-radius: 8px; padding: 2px 6px; white-space: nowrap; }
 .bestmarke { font-size: 12px; font-weight: 700; color: var(--grau); white-space: nowrap; }
@@ -100,21 +103,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .los small { display: block; font-size: 14px; font-weight: 700; opacity: .85; margin-top: 2px; }
 .fuss { text-align: center; color: var(--grau); font-size: 13px; }
 #version { text-decoration: underline dotted; text-underline-offset: 3px; padding: 4px 10px; }
-/* Stil b: wie das YouTube-Vorschaubild der Reihe */
-#start[data-stil="b"] .held { position: relative; background: var(--karte); border-radius: 20px; overflow: hidden;
-  box-shadow: 0 6px 22px rgba(70,50,25,.12); text-align: center; }
-#start[data-stil="b"] .held-oben { position: absolute; top: 8px; right: 8px; min-height: 0; }
-#start[data-stil="b"] .held-oben .reihe { display: none; }
-#start[data-stil="b"] .held-oben .rund { width: 38px; height: 38px; font-size: 18px; box-shadow: none; background: #f3efe7; }
-#start[data-stil="b"] .held-aufgabe { display: block; font-size: min(13vw, 54px); font-weight: 850; letter-spacing: -.02em; line-height: 1;
-  padding: 42px 8px 16px; background-image: radial-gradient(rgba(120,100,70,.13) 1.2px, transparent 1.3px); background-size: 24px 24px; }
-#start[data-stil="b"] .held-aufgabe .fz { color: var(--grau); }
-#start[data-stil="b"] .held-text { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--c10); padding: 12px 16px; }
-#start[data-stil="b"] .held h1 { font-size: 22px; color: #fff; }
-#start[data-stil="b"] .held p { display: none; }
-#start[data-stil="b"] .held .reihe-b { display: inline; color: #bfe3df; }
-#start[data-stil="b"] #stufen .bsp { display: none; }      /* das Beispiel der gewählten Stufe steht groß oben */
-#start[data-stil="b"] #stufen .name { font-size: 16px; }
 
 /* ---------- Spiel ---------- */
 #spiel .punkte { display: flex; gap: 6px; flex: 1; justify-content: center; }
@@ -226,9 +214,9 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 <section class="seite" id="start">
   <div class="inhalt">
     <div class="held">
-      <div class="held-oben"><span class="reihe">Kopfrechnen</span><button class="rund" id="ton" aria-label="Ton an oder aus">🔊</button></div>
+      <button class="rund" id="ton" aria-label="Ton an oder aus">🔊</button>
       <div class="held-aufgabe" id="held-aufgabe"></div>
-      <div class="held-text"><h1 id="u-titel"></h1><p id="u-video"></p><span class="reihe reihe-b">Kopfrechnen</span></div>
+      <div class="held-text"><h1 id="u-titel"></h1><span class="reihe">Kopfrechnen</span></div>
     </div>
     <div class="stufen" id="stufen"></div>
     <div class="eingabewahl" id="eingabe">
@@ -287,7 +275,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.10';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.11';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -335,7 +323,6 @@ const klang = {
 // Einer farbig wie im Video: 16 · 18 → 6 orange, 8 violett
 const farbig = info => info.replace(/(\d)(\d)\b/g, '$1<span class="c1">$2</span>').replace(/<span class="c1">(\d)<\/span>(?![\s\S]*c1)/, '<span class="c2">$1</span>');
 const stufeVon = x => x.stufe || 'alle';                       // Runden vor v2.0 hatten nur „Alle Zahlen“
-$('#start').dataset.stil = new URLSearchParams(location.search).get('stil') || 'a';   // Entwurf: a = Karten, b = Vorschaubild
 function baueStart() {
   const u = uebung(), r = lies(RUNDEN, []).filter(x => x.uebung === u.id);
   const st = u.stufen.find(s => s.id === stand.stufe) || u.stufen[0];
@@ -343,13 +330,12 @@ function baueStart() {
   const bestVon = id => { const g = r.filter(x => stufeVon(x) === id && x.richtig >= 8 && vergleichbar(x, stand.eingabe)).map(x => x.schnitt);
     return g.length ? Math.min(...g) : null; };
   $('#u-titel').textContent = u.titel;
-  $('#u-video').textContent = u.untertitel;
   $('#held-aufgabe').innerHTML = farbig(st.info) + '<span class="fz"> = ?</span>';
   $('#stufen').innerHTML = '';
   for (const s of u.stufen) {
     const b = document.createElement('button'), best = bestVon(s.id), ok = best !== null && best <= s.ziel * 1000;
     b.dataset.s = s.id;
-    b.innerHTML = `<span class="bsp">${farbig(s.info)}</span><span class="name">${s.name}</span>`
+    b.innerHTML = `<span class="name">${s.name}</span>`
       + `<span class="unten"><span class="zielmarke">Ziel ${s.ziel} s</span>`
       + (best !== null ? `<span class="bestmarke${ok ? ' erreicht' : ''}">${ok ? '✓ ' : ''}Best ${sek(best)}</span>` : '') + '</span>';
     b.setAttribute('aria-pressed', String(st.id === s.id));

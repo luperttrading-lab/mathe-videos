@@ -70,7 +70,8 @@ nachziehen.
   Ein Thema behält seinen Spruch, neue Themen bekommen den seltensten. Sprüche gern ergänzen.
 - **Zu jedem Mathe-Video eine Übung** in der App `uebung/` (Nutzerwunsch 04.11.: 10 Aufgaben, tippen oder sprechen,
   richtig gezählt, Ø-Zeit). **Eine App mit vielen Übungen, nicht viele Apps** (06.11.: ein Symbol auf dem Handy, ein
-  Sprachmodell-Download, ein Update-Mechanismus). Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
+  Sprachmodell-Download, ein Update-Mechanismus). Startseite der App im Stil des Vorschaubilds (Nutzerwahl 06.11.: Aufgabe groß mit „= ?“, grüne Leiste).
+  Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
 - **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
   jedes Video in YouTube Studio so einstellen; nur dann gibt es Abspann, Infokarten und Kommentare. Die Einstellung muss
@@ -83,7 +84,7 @@ nachziehen.
   (Zeile 2) und im angepinnten Kommentar. Die App führt zurück: „▶ Video zum Trick“, „Nächster Trick“ = erst Video, dann
   Übung. Später gratis die Übung je Video, bezahlt Mischtraining/Statistik. **Bezahlen erst nach einem Umzug** (jetzt
   Testphase auf GitHub Pages, öffentlich: eine Bezahlsperre im Browser ist umgehbar). Abspann und Infokarten gibt es
-  nicht bei „für Kinder gemacht“. Offen: Zielgruppe, Clip mit App-Satz und QR-Code, App → Video einbauen.
+  nicht bei „für Kinder gemacht“. Offen: Clip mit App-Satz und QR-Code, App → Video einbauen.
 - **Ziel vier Sekunden** (Nutzerentscheidung 05.11.): Video und App-Stufe „Alle Zahlen“ sagen „in vier Sekunden“ (Uhr
   `UHR = 4` in `regel.py`), „Einer ergeben 10“ und „Mal 11“ drei, „Quadrate“ vier (`ziel` je Stufe in
   `uebung/aufgaben.js`). Grund: Drei Sekunden mit Rechnen frustrieren; die meistgesehenen Videos nennen 3–5 s.

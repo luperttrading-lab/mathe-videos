@@ -57,8 +57,9 @@ in beiden Stellungen grün (eine Wahl, kein An/Aus); das gewählte Wort ist dunk
 v2.10 (Nutzer 06.11.): Verlauf als Balken ganz von der Startseite entfernt (Bestzeit steht auf den Kacheln). Laden der
 Sprache steht im Start-Knopf („Start · Sprache lädt … 12 s“, Knopf heller), nicht in einer Zeile darüber: Der Bildschirm
 springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leicht teal eingefärbt mit feinem Rand.
-Zwei Entwürfe: `?stil=b` = wie das YouTube-Vorschaubild (Aufgabe groß mit „= ?“, grüne Leiste); Standard `a` = Karten.
-Nach der Wahl des Nutzers den anderen Stil entfernen.
+Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besser“): Aufgabe der gewählten Stufe groß
+mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
+Der Entwurf „Karten“ ist entfernt.
 
 **Versionen:** nach 0.6 folgt 1.7 (Nutzerwunsch 04.11.). Die Update-Prüfung vergleicht nur auf Gleichheit, der Sprung ist unkritisch.
 
