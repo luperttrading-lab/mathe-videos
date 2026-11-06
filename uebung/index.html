@@ -64,10 +64,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .zielmarke { font-size: 12px; font-weight: 700; color: var(--grau); background: #efe9de; border-radius: 8px; padding: 2px 6px; white-space: nowrap; }
 .bestmarke { font-size: 12px; font-weight: 700; color: var(--grau); white-space: nowrap; }
 .bestmarke.erreicht { color: var(--ok); }
-/* Tippen/Sprechen: schmaler Umschalter statt zweier großer Karten (Nutzer 05.11.: Startseite übersichtlicher) */
-.umschalter { display: grid; grid-template-columns: 1fr 1fr; background: #ebe4d6; border-radius: 12px; padding: 3px; }
-.umschalter button { padding: 9px 6px; border-radius: 10px; font-weight: 700; font-size: 15px; color: var(--grau); background: none; }
-.umschalter button[aria-pressed="true"] { background: var(--karte); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
 #verlauf { padding: 14px 16px 12px; }
 #verlauf .vkopf { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 #verlauf h3 { margin: 0; font-size: 13px; font-weight: 800; color: var(--grau); letter-spacing: .06em; text-transform: uppercase; }
@@ -100,10 +96,20 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 #start .los { margin-top: 0; padding: 14px; font-size: 20px; }
 #start .sprachstatus { margin: -4px 0 0; padding: 0 4px; font-size: 13px; background: none; text-align: center; }
 #start .sprachstatus.bereit { display: none; }
-.umschalter .mini { margin-left: 6px; font-size: 13px; font-weight: 800; }
-.umschalter .mini.bereit { color: var(--ok); }
-.umschalter .mini.laedt { color: #9a6200; }
-.umschalter .mini.fehler { color: var(--falsch); }
+/* Ergebnis eintippen oder sprechen: Schieberegler links/rechts (Nutzer 06.11.). Beide Seiten sind eine Wahl, kein
+   An/Aus: die Bahn bleibt in beiden Stellungen gleich, das gewählte Wort ist dunkel und fett. */
+.eingabewahl { display: flex; align-items: center; gap: 8px; background: #ebe4d6; border-radius: 14px; padding: 5px 12px; }
+.ew-titel { font-weight: 800; font-size: 15px; margin-right: auto; }
+.eingabewahl button[data-e] { font-weight: 600; font-size: 15px; color: var(--grau); padding: 8px 0; }
+.eingabewahl button[data-e][aria-pressed="true"] { color: var(--ink); font-weight: 800; }
+.schalter { position: relative; flex: none; width: 54px; height: 32px; border-radius: 16px; background: var(--c10); touch-action: none; }
+.schalter i { position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3); transition: transform .2s ease; }
+.schalter[aria-checked="true"] i { transform: translateX(22px); }
+.eingabewahl .mini { margin-left: 4px; font-size: 13px; font-weight: 800; }
+.eingabewahl .mini.bereit { color: var(--ok); }
+.eingabewahl .mini.laedt { color: #9a6200; }
+.eingabewahl .mini.fehler { color: var(--falsch); }
 .los:active { transform: scale(.98); }
 .los small { display: block; font-size: 14px; font-weight: 700; opacity: .85; margin-top: 2px; }
 .fuss { text-align: center; color: var(--grau); font-size: 13px; }
@@ -239,9 +245,11 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
       <div class="held-text"><h1 id="u-titel"></h1><p id="u-video"></p><span class="reihe reihe-b">Kopfrechnen</span></div>
     </div>
     <div class="stufen" id="stufen"></div>
-    <div class="umschalter" id="eingabe">
-      <button data-e="tippen" aria-pressed="true">⌨︎ Tippen</button>
-      <button data-e="sprechen" aria-pressed="false">🎤 Sprechen<span class="mini" id="sprach-mini"></span></button>
+    <div class="eingabewahl" id="eingabe">
+      <span class="ew-titel">Ergebnis</span>
+      <button data-e="tippen" aria-pressed="true">eintippen</button>
+      <button class="schalter" id="schalter" role="switch" aria-checked="false" aria-label="Ergebnis sprechen statt eintippen"><i></i></button>
+      <button data-e="sprechen" aria-pressed="false">sprechen<span class="mini" id="sprach-mini"></span></button>
     </div>
     <p class="sprachstatus" id="sprachstatus" hidden></p>
     <button class="los" id="los">Start · 10 Aufgaben</button>
@@ -299,7 +307,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.8';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.9';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -369,7 +377,8 @@ function baueStart() {
     b.addEventListener('click', () => { stand.stufe = s.id; speichereAlles(); baueStart(); });
     $('#stufen').append(b);
   }
-  for (const b of document.querySelectorAll('#eingabe button')) b.setAttribute('aria-pressed', String(stand.eingabe === b.dataset.e));
+  for (const b of document.querySelectorAll('#eingabe button[data-e]')) b.setAttribute('aria-pressed', String(stand.eingabe === b.dataset.e));
+  $('#schalter').setAttribute('aria-checked', String(stand.eingabe === 'sprechen'));
   $('#los').textContent = 'Start · 10 Aufgaben';
   zeigeSprachstatus();
   $('#ton').textContent = stand.ton ? '🔊' : '🔇';
@@ -414,12 +423,23 @@ function zeichneBalken(rs, ziel) {
   for (const t of svg.querySelectorAll('.treffer')) t.addEventListener('click', () => zeige(Number(t.dataset.k)));
   zeige(n);
 }
-for (const b of document.querySelectorAll('#eingabe button'))
-  b.addEventListener('click', () => {
-    stand.eingabe = b.dataset.e; speichereAlles();
-    if (stand.eingabe === 'sprechen') vorladen();       // Modell schon jetzt laden, nicht erst beim Start
-    baueStart();
+function waehleEingabe(e) {
+  stand.eingabe = e; speichereAlles();
+  if (e === 'sprechen') vorladen();                   // Modell schon jetzt laden, nicht erst beim Start
+  baueStart();
+}
+for (const b of document.querySelectorAll('#eingabe button[data-e]')) b.addEventListener('click', () => waehleEingabe(b.dataset.e));
+// Schieberegler: Antippen schaltet um, Wischen nach rechts = sprechen, nach links = eintippen
+{
+  const sch = $('#schalter'); let x0 = null, gewischt = false;
+  sch.addEventListener('pointerdown', e => { x0 = e.clientX; gewischt = false; });
+  sch.addEventListener('pointerup', e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 12) { gewischt = true; waehleEingabe(dx > 0 ? 'sprechen' : 'tippen'); }
   });
+  sch.addEventListener('click', () => { if (gewischt) { gewischt = false; return; } waehleEingabe(stand.eingabe === 'sprechen' ? 'tippen' : 'sprechen'); });
+}
 $('#ton').addEventListener('click', () => { stand.ton = !stand.ton; speichereAlles(); baueStart(); if (stand.ton) klang.tipp(); });
 
 /* ---------- Runde ---------- */

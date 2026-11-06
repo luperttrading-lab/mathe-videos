@@ -121,6 +121,12 @@ await page.waitForTimeout(600);
 const st = await page.textContent('#sprachstatus');
 ok(/wird geladen … \d+ s/.test(st) && (await page.getAttribute('#sprachstatus', 'class')).includes('laedt'), `Startseite zeigt das Laden: „${st.trim()}“`);
 ok((await page.getAttribute('#eingabe [data-e="sprechen"]', 'aria-pressed')) === 'true', 'Umschalter zeigt „Sprechen“ gewählt');
+ok((await page.getAttribute('#schalter', 'aria-checked')) === 'true', 'Schieberegler steht rechts (sprechen)');
+await page.click('#schalter');
+ok((await page.getAttribute('#eingabe [data-e="tippen"]', 'aria-pressed')) === 'true' && (await page.getAttribute('#schalter', 'aria-checked')) === 'false',
+  'Schieberegler antippen: zurück auf eintippen');
+await page.click('#schalter');
+ok((await page.getAttribute('#eingabe [data-e="sprechen"]', 'aria-pressed')) === 'true', 'Schieberegler antippen: wieder sprechen');
 await foto('7_laedt');
 await page.click('#los');
 ok(await page.isVisible('#bereit') && await page.isDisabled('#bereit-los') && await page.isVisible('#ohne-sprechen'),
