@@ -1,14 +1,22 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: Folge 2 „Der Elfer-Trick“ ganz ansehen (2:17), dann „✓ passt“ oder „ändern“ mit Notiz und „An Claude“.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: neue Sequenz „Und wenn vorne eine Neun steht?“ (25 s) ansehen, dann „✓ passt“ oder „ändern“ mit Notiz und „An Claude“.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip.mp4",
+   "titel": "Neu: Elfer-Trick, „Und wenn vorne eine Neun steht?“ (97 · 11 = 1067, 25 s)",
+   "stand": "07.11., 07:45",
+   "pruefen": true,
+   "poster_bei": 22.4,
+   "notiz": "Deine Frage: Wann bekommt das Ergebnis eine Ziffer mehr? Genau dann, wenn vorne eine 9 steht und eine 1 dazu wandert (91 … 99 · 11). Neue Szene direkt nach „Vorsicht“ (87 · 11), gleiches Kapitel; das Video wird ≈ 21 s länger (2:39). 97 statt 91: bei 91 hieße es zweimal „9 + 1 = 10“. Der Clip zeigt die letzten 2 s davor und den Anfang danach. „passt“ = so ins Video; gerendert wird erst nach deinem „rendern“."
+  },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/elfer_720p.mp4",
    "titel": "Neu: Folge 2 „Der Elfer-Trick“ – erster Entwurf (2:17)",
    "stand": "06.11., 19:08",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 9.0,
-   "notiz": "Aufbau wie Folge 1: Einstieg 4352 · 11 (Lösung erst in Kapitel 4), Trick an 43 · 11, Warum (430 + 43 untereinander), Vorsicht 87 · 11 (die Eins wandert nach vorn), große Zahl, Merke mit Übung 53 · 11 und 3-Sekunden-Uhr, App-Satz, Abspann. Noch offen: Das Handy zeigt die App vom Zehner-Trick, das Bild kommt, sobald es die Elfer-Übung in der App gibt. „passt“ = Inhalt und Bild so; „ändern“ = Notiz mit Sekunde."
+   "notiz": "Dein Urteil 07.11.: „schon sehr sehr gut“, Frage: Wann gibt es eine Ziffer mehr? Antwort als neue Sequenz ganz oben (97 · 11 = 1067). Das ganze Video wird erst nach deinem „rendern“ neu gebaut."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/clip_app/app_schluss_clip.mp4",

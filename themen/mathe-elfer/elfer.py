@@ -42,6 +42,12 @@ SZENEN = [
         'Aber Vorsicht bei siebenundachtzig mal elf. Acht plus sieben ist fünfzehn. Zwei Ziffern passen nicht in die '
         'Lücke. Also kommt nur die Fünf hinein, und die Eins wandert nach vorn: Aus der Acht wird eine Neun. '
         'Ergebnis: neunhundertsiebenundfünfzig.')),
+    # Nutzerfrage 07.11. (Vorschau-Seite): Wann bekommt das Ergebnis eine Ziffer mehr? Genau dann, wenn vorne eine Neun
+    # steht und eine Eins dazu wandert (zweistellig: 91 … 99). 97 statt 91: bei 91 hieße es zweimal „9 + 1 = 10“
+    dict(id='neun', kicker='Vorsicht', anhang=True, text=(
+        'Und wenn vorne eine Neun steht? Siebenundneunzig mal elf: Neun plus sieben ist sechzehn. Die Sechs kommt in die '
+        'Lücke, die Eins wandert nach vorn, und aus der Neun wird eine Zehn. Ergebnis: tausendsiebenundsechzig. Eine '
+        'Ziffer mehr gibt es also nur, wenn vorne eine Neun steht und eine Eins dazu wandert.')),
     dict(id='gross', kicker='Große Zahlen', text=(
         'Und jetzt die große Zahl vom Anfang. Wir gehen von hinten nach vorn. Hinten bleibt die Zwei. Dann immer eine '
         'Ziffer plus ihr rechter Nachbar: fünf plus zwei gleich sieben, drei plus fünf gleich acht, vier plus drei '
@@ -227,6 +233,62 @@ def s_vorsicht(b, sc, t):
              alpha=ein(t, T['plus'] - 0.4, 0.4))             # Karte erst mit ihrer ersten Zeile
 
 
+def s_neun(b, sc, t):
+    """97 · 11 = 1067: Die Eins wandert zur Neun, aus der 9 wird eine 10 – das Ergebnis hat eine Ziffer mehr.
+    Allgemein: x · 11 hat genau dann eine Ziffer mehr als x + 1 Stellen, wenn vorne eine 9 steht und eine 1 dorthin
+    wandert (x · 11 ≥ 10^(n+1), zweistellig ab 91, dreistellig ab 910, vierstellig ab 9091)."""
+    T = {k: C(sc, w) for k, w in dict(neun='vorne eine Neun', mal='mal elf', plus='Neun plus', z16='sechzehn',
+                                         sechs='Die Sechs', eins='die Eins wandert', zehn='aus der Neun', z='tausend',
+                                         mehr='Eine Ziffer mehr').items()}
+    cs = oben2(b, t, '9', '7', [(0, T['neun'], T['mal'] + 0.4)])
+    luecke(b, t, T['mal'] + 0.5, T['sechs'] + 0.5)
+    kompakt = glatt(p(t, T['z'], 0.5))
+    ziel = mitten([('10', INK), ('6', INK), ('7', INK)], X2, G2)
+    gruen = p(t, T['z'], 0.4)
+    f10 = p(t, T['zehn'] + 0.25, 0.5)                      # aus der 9 wird eine 10 (zwei Ziffern, rechtsbündig am Platz)
+    w9, w10 = breite('9', INTER_X, G2), breite('10', INTER_X, G2)
+    x9 = mix(X2 - PP2, ziel[0], kompakt)
+    x10 = mix(X2 - PP2 - (w10 - w9) / 2 - 8, ziel[0], kompakt)
+    auseinander(b, t, cs, '9', '7', T['mal'], x9, mix(X2 + PP2, ziel[2], kompakt),
+                mischfarbe(CA, GRUEN, gruen), mischfarbe(CB, GRUEN, gruen), alpha_a=1 - klemm(f10 * 3))
+    if f10 > 0:
+        b.text('10', x10, YR2, G2 * (0.7 + 0.3 * zurueck(f10)), mischfarbe(CD, GRUEN, gruen), INTER_X, alpha=klemm(f10 * 3))
+    lab = [('9', CA), (' + ', INK), ('7', CB), (' = ', INK), ('1', CD), ('6', CD)]
+    lx = mitten(lab, X2, 46)
+    a_lab = ein(t, T['plus'])
+    a_rest = a_lab * (1 - ein(t, T['sechs'], 0.3))
+    for i in range(4):
+        b.text(lab[i][0], lx[i], YL2 + 10 * (1 - a_lab), 46, lab[i][1], INTER_X, alpha=a_rest)
+    a16 = ein(t, T['z16'], 0.3)
+    g6 = glatt(p(t, T['sechs'], 0.55))
+    b.text('6', mix(mix(lx[5], X2, g6), ziel[1], kompakt), mix(YL2, YR2, g6), mix(46, G2, g6),
+           mischfarbe(mischfarbe(CD, TEAL, g6), GRUEN, gruen), INTER_X, alpha=a16)
+    f1 = glatt(p(t, T['eins'], 0.7))
+    rein = glatt(p(t, T['zehn'], 0.35))
+    z1 = (X2 - PP2, YR2 - 98)                              # über der 9
+
+    def ort1(tt):
+        ff = glatt(p(tt, T['eins'], 0.7))
+        return None if not 0 < ff < 1 else (mix(lx[4], z1[0], ff), mix(YL2, z1[1], ff) - 40 * math.sin(math.pi * ff))
+    spur(b, ort1, t, CD)
+    b.text('1', mix(lx[4], z1[0], f1), mix(YL2, z1[1], f1) - 40 * math.sin(math.pi * f1) + 60 * rein,
+           mix(46, 64, f1), CD, INTER_X, alpha=a16 * (1 - rein))
+    funken(b, t, T['z'] + 0.1, X2, YR2, r0=80, r1=200)
+    am = ein(t, T['mehr'], 0.4)                             # „Eine Ziffer mehr“: die 10 vorne rot unterstrichen
+    if am > 0:                                             # (ein Rahmen stieß an die 6)
+        ox, oy, w, h = G.tinte('10', G2)
+        cx, cy = ziel[0] + ox, YR2 + oy
+        b.linie([(cx - w / 2, cy + h / 2 + 14), (cx - w / 2 + w * am, cy + h / 2 + 14)], CD, 7)
+        zeile(b, [('Eine Ziffer mehr: ', INK), ('9', CA), (' vorne, ', INK), ('1', CD), (' wandert dazu', INK)],
+              X2, YR2 + 118 + 10 * (1 - am), 28, INTER_X, alpha=am)
+    zeilen = [dict(nr='1', farbe=TEAL, titel='Summe in die Lücke', t_titel=T['plus'], t_rech=T['z16'] + 0.3,
+                   teile=[('9', CA), (' + ', INK), ('7', CB), (' = ', INK), ('16', CD)], aktiv=(T['plus'], T['eins'])),
+              dict(nr='2', farbe=CD, titel='Die Eins wandert nach vorn', t_titel=T['eins'], t_rech=T['zehn'] + 0.5,
+                   teile=[('9', CA), (' + ', INK), ('1', CD), (' = ', INK), ('10', CD)], aktiv=(T['eins'], T['z']))]
+    schritte(b, t, 780, 170, 440, zeilen, ([('97 · 11 = ', INK), ('1067', GRUEN)], T['z']),
+             alpha=ein(t, T['plus'] - 0.4, 0.4))
+
+
 def s_gross(b, sc, t):
     T = {k: C(sc, w) for k, w in dict(start='große Zahl', richtung='von hinten', hinten='Hinten bleibt',
                                          p1='fünf plus zwei', e1='gleich sieben', p2='drei plus fünf', e2='gleich acht',
@@ -356,12 +418,13 @@ KLAENGE = {  # sparsam wie in Folge 1: Luftzug bei Flügen, Glöckchen nur mit d
     'warum': [('Summe', 'ding', 0.7)],
     'vorsicht': [('mal elf', 'wusch', 0), ('Zwei Ziffern', 'tief', 0), ('die Eins wandert', 'wusch', 0),
                  ('neunhundert', 'ding', 0.1)],
+    'neun': [('mal elf', 'wusch', 0), ('die Eins wandert', 'wusch', 0), ('tausend', 'ding', 0.1)],
     'gross': [('siebenundvierzigtausend', 'ding', 0.05)],
     'merke': [('#ende', 'tick', 0.2 + k) for k in range(UHR)] + [('#ende', 'ding', 0.2 + UHR + 2.1)],
     'abspann': [('Abonnier', 'klick', 0.2)],
 }
 
-ZEICHNER = {'hook': s_hook, 'regel': s_regel, 'warum': s_warum, 'vorsicht': s_vorsicht, 'gross': s_gross,
+ZEICHNER = {'hook': s_hook, 'regel': s_regel, 'warum': s_warum, 'vorsicht': s_vorsicht, 'neun': s_neun, 'gross': s_gross,
             'merke': s_merke, 'schluss': s_schluss, 'app': G.s_app, 'abspann': G.s_abspann}
 
 # Bausteine von Folge 1 auf diese Folge umstellen
