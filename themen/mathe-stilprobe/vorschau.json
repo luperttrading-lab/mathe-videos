@@ -1,7 +1,15 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "Nichts zu prüfen auf dieser Seite. Offen ist nur die Formulierung im Chat (1, 2 oder 3); danach „rendern“.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: Folge 2 „Der Elfer-Trick“, fertig gerendert (2:49). Ansehen, dann „✓ passt“ (kommt auf die Seite „fertige Videos“) oder „ändern“ mit Sekunde und Notiz.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer2/elfer_720p.mp4",
+   "titel": "Fertig gerendert: Folge 2 „Der Elfer-Trick“ (2:49)",
+   "stand": "07.11., 10:49",
+   "pruefen": true,
+   "poster_bei": 9.0,
+   "notiz": "Mit allem, was du abgenommen hast: Szene „Wie viele Ziffern hat das Ergebnis?“ mit Satz 1, Handy mit der Elfer-Übung auf der App-Seite, QR-Code #elfer. „passt“ = fertig, kommt auf die Seite „fertige Videos“ (mit Titel und Vorschaubild). 1080p zum Hochladen liegt bereit."
+  },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz1_clip.mp4",
    "titel": "Satz 1 (dein Vorschlag): „Meistens eine mehr als die Zahl, die mit elf multipliziert wird.“",
