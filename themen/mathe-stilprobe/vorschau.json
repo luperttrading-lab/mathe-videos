@@ -1,14 +1,38 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: zweite Fassung „Wie viele Ziffern hat das Ergebnis?“ (35 s) ansehen, dann „✓ passt“ oder „ändern“ mit Notiz und „An Claude“.",
+ "aufgabe": "3 Einträge ganz oben, ab Sekunde 4 hinhören: Welcher Satz klingt richtig? Beim besten „✓ passt“ tippen (einer genügt), dann „An Claude“. Gefällt keiner: „ändern“ mit Notiz.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz1_clip.mp4",
+   "titel": "Satz 1 (dein Vorschlag): „Meistens eine mehr als die Zahl, die mit elf multipliziert wird.“",
+   "stand": "07.11., 10:12",
+   "pruefen": true,
+   "poster_bei": 9.0,
+   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+  },
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz2_clip.mp4",
+   "titel": "Satz 2: „Meistens eine mehr als die Zahl, die du mit elf malnimmst.“",
+   "stand": "07.11., 10:12",
+   "pruefen": true,
+   "poster_bei": 9.0,
+   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+  },
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz3_clip.mp4",
+   "titel": "Satz 3 (ohne „Zahl“): „Meistens eine Ziffer mehr.“",
+   "stand": "07.11., 10:12",
+   "pruefen": true,
+   "poster_bei": 9.0,
+   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+  },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip2.mp4",
    "titel": "Neu, 2. Fassung: „Wie viele Ziffern hat das Ergebnis?“ mit 97 · 11 = 1067 (35 s)",
    "stand": "07.11., 09:50",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 13.5,
-   "notiz": "Deine Wünsche: (1) sagen, welche Eins wandert: „Zwei mehr gibt es nur, wenn vorne eine Neun steht und die Summe direkt dahinter zweistellig ist“; (2) in Wort und Bild: Kästchen je Ziffer, meistens eine mehr (43 · 11 = 473: 2 → 3, 352 · 11 = 3872: 3 → 4), zwei mehr nur im roten Fall (2 → 4). Am Ende „Aus 2 Ziffern werden 4“. Szene jetzt 30 s, Video 2:48. „passt“ = so ins Video; gerendert wird erst nach deinem „rendern“."
+   "notiz": "Dein Urteil 07.11.: Bei Sekunde 7 ist „Zahl“ falsch betont. Drei neue Sätze ganz oben; sonst bleibt die Szene so."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip.mp4",
