@@ -1,14 +1,22 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: neue Sequenz „Und wenn vorne eine Neun steht?“ (25 s) ansehen, dann „✓ passt“ oder „ändern“ mit Notiz und „An Claude“.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: zweite Fassung „Wie viele Ziffern hat das Ergebnis?“ (35 s) ansehen, dann „✓ passt“ oder „ändern“ mit Notiz und „An Claude“.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip2.mp4",
+   "titel": "Neu, 2. Fassung: „Wie viele Ziffern hat das Ergebnis?“ mit 97 · 11 = 1067 (35 s)",
+   "stand": "07.11., 09:50",
+   "pruefen": true,
+   "poster_bei": 13.5,
+   "notiz": "Deine Wünsche: (1) sagen, welche Eins wandert: „Zwei mehr gibt es nur, wenn vorne eine Neun steht und die Summe direkt dahinter zweistellig ist“; (2) in Wort und Bild: Kästchen je Ziffer, meistens eine mehr (43 · 11 = 473: 2 → 3, 352 · 11 = 3872: 3 → 4), zwei mehr nur im roten Fall (2 → 4). Am Ende „Aus 2 Ziffern werden 4“. Szene jetzt 30 s, Video 2:48. „passt“ = so ins Video; gerendert wird erst nach deinem „rendern“."
+  },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip.mp4",
    "titel": "Neu: Elfer-Trick, „Und wenn vorne eine Neun steht?“ (97 · 11 = 1067, 25 s)",
    "stand": "07.11., 07:45",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 22.4,
-   "notiz": "Deine Frage: Wann bekommt das Ergebnis eine Ziffer mehr? Genau dann, wenn vorne eine 9 steht und eine 1 dazu wandert (91 … 99 · 11). Neue Szene direkt nach „Vorsicht“ (87 · 11), gleiches Kapitel; das Video wird ≈ 21 s länger (2:39). 97 statt 91: bei 91 hieße es zweimal „9 + 1 = 10“. Der Clip zeigt die letzten 2 s davor und den Anfang danach. „passt“ = so ins Video; gerendert wird erst nach deinem „rendern“."
+   "notiz": "Dein Urteil 07.11.: genauer sagen, welche Eins wandert, und in Wort und Bild zeigen, wann eine Ziffer dazukommt. Umgesetzt in der zweiten Fassung ganz oben."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/elfer_720p.mp4",

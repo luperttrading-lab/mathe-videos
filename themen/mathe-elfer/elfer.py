@@ -45,9 +45,12 @@ SZENEN = [
     # Nutzerfrage 07.11. (Vorschau-Seite): Wann bekommt das Ergebnis eine Ziffer mehr? Genau dann, wenn vorne eine Neun
     # steht und eine Eins dazu wandert (zweistellig: 91 … 99). 97 statt 91: bei 91 hieße es zweimal „9 + 1 = 10“
     dict(id='neun', kicker='Vorsicht', anhang=True, text=(
-        'Und wenn vorne eine Neun steht? Siebenundneunzig mal elf: Neun plus sieben ist sechzehn. Die Sechs kommt in die '
-        'Lücke, die Eins wandert nach vorn, und aus der Neun wird eine Zehn. Ergebnis: tausendsiebenundsechzig. Eine '
-        'Ziffer mehr gibt es also nur, wenn vorne eine Neun steht und eine Eins dazu wandert.')),
+        # Nutzer 07.11. zur ersten Fassung: sagen, WELCHE Eins wandert (die aus der Summe direkt hinter der Neun), und in
+        # Wort und Bild zeigen, dass meist eine Ziffer dazukommt (2 → 3, 3 → 4) und wann zwei (2 → 4, 3 → 5)
+        'Wie viele Ziffern hat das Ergebnis? Meistens eine mehr als die Zahl: Aus zwei Ziffern werden drei, aus drei '
+        'Ziffern vier. Zwei mehr gibt es nur, wenn vorne eine Neun steht und die Summe direkt dahinter zweistellig ist. '
+        'Siebenundneunzig mal elf: Neun plus sieben ist sechzehn. Die Sechs kommt in die Lücke, die Eins wandert zur '
+        'Neun, und aus der Neun wird eine Zehn. Ergebnis: tausendsiebenundsechzig. Aus zwei Ziffern werden vier.')),
     dict(id='gross', kicker='Große Zahlen', text=(
         'Und jetzt die große Zahl vom Anfang. Wir gehen von hinten nach vorn. Hinten bleibt die Zwei. Dann immer eine '
         'Ziffer plus ihr rechter Nachbar: fünf plus zwei gleich sieben, drei plus fünf gleich acht, vier plus drei '
@@ -76,13 +79,13 @@ X2, YT2, G2 = 400, 175, 112                                # Aufgabe oben links
 YR2, PP2, YL2 = 410, 104, 292                              # Ergebniszeile, Abstand der drei Plätze, Summe darüber
 
 
-def oben2(b, t, za, zb, kreise):
+def oben2(b, t, za, zb, kreise, alpha=1.0):
     """Aufgabe „ab · 11“, a orange, b violett; kreise = [(i, von, bis)]: Ziffer i eingekreist."""
     teile = [(za, CA), (zb, CB), (' · 11', INK)]
     cs = mitten(teile, X2, G2)
     for i, von, bis in kreise:
-        einkreisen(b, teile[i][0], cs[i], YT2, G2, teile[i][1], ein(t, von, 0.3) * (1 - ein(t, bis, 0.3)))
-    zeile(b, teile, X2, YT2, G2, INTER_X)
+        einkreisen(b, teile[i][0], cs[i], YT2, G2, teile[i][1], ein(t, von, 0.3) * (1 - ein(t, bis, 0.3)) * alpha)
+    zeile(b, teile, X2, YT2, G2, INTER_X, alpha=alpha)
     return cs
 
 
@@ -233,14 +236,54 @@ def s_vorsicht(b, sc, t):
              alpha=ein(t, T['plus'] - 0.4, 0.4))             # Karte erst mit ihrer ersten Zeile
 
 
+def kaestchen(b, x, y, n, c, alpha=1.0, k=26, abstand=7):
+    """n Kästchen nebeneinander ab x (linke Kante), Mitte y: eine Ziffer = ein Kästchen. Gibt die rechte Kante zurück."""
+    for i in range(n):
+        band(b, x + i * (k + abstand), y - k / 2, x + i * (k + abstand) + k, y + k / 2, c, alpha, r=6)
+    return x + n * (k + abstand) - abstand
+
+
+def stellen(b, x, y, n, m, c, alpha, k=26):
+    """„n Kästchen → m Kästchen“ ab x: so viele Ziffern hat die Zahl, so viele das Ergebnis."""
+    x1 = kaestchen(b, x, y, n, GRAU, 0.55 * alpha, k)
+    b.text('→', x1 + 30, y, k * 1.2, GRAU, INTER_X, alpha=alpha)
+    return kaestchen(b, x1 + 60, y, m, c, alpha, k)
+
+
 def s_neun(b, sc, t):
-    """97 · 11 = 1067: Die Eins wandert zur Neun, aus der 9 wird eine 10 – das Ergebnis hat eine Ziffer mehr.
-    Allgemein: x · 11 hat genau dann eine Ziffer mehr als x + 1 Stellen, wenn vorne eine 9 steht und eine 1 dorthin
-    wandert (x · 11 ≥ 10^(n+1), zweistellig ab 91, dreistellig ab 910, vierstellig ab 9091)."""
-    T = {k: C(sc, w) for k, w in dict(neun='vorne eine Neun', mal='mal elf', plus='Neun plus', z16='sechzehn',
-                                         sechs='Die Sechs', eins='die Eins wandert', zehn='aus der Neun', z='tausend',
-                                         mehr='Eine Ziffer mehr').items()}
-    cs = oben2(b, t, '9', '7', [(0, T['neun'], T['mal'] + 0.4)])
+    """Wie viele Ziffern hat das Ergebnis? Meist eine mehr als die Zahl (2 → 3, 3 → 4), zwei mehr genau dann, wenn vorne
+    eine 9 steht und die Summe direkt dahinter zweistellig ist (mit wandernder Eins von weiter hinten): dann wird aus der
+    9 eine 10. Zweistellig ab 91, dreistellig ab 910, vierstellig ab 9091 (x · 11 ≥ 10^(n+1)). Beispiel 97 · 11 = 1067."""
+    T = {k: C(sc, w) for k, w in dict(r1='Aus zwei Ziffern', r2='aus drei Ziffern', r3='Zwei mehr', s97='Siebenundneunzig',
+                                         mal='mal elf', plus='Neun plus', z16='sechzehn', sechs='Die Sechs',
+                                         eins='die Eins wandert', zehn='aus der Neun', z='tausend').items()}
+    T['ende'] = C(sc, 'Aus zwei Ziffern', 'tausend')
+    # Teil 1: Übersicht in Wort und Bild, verschwindet bei „Siebenundneunzig“
+    aA = ein(t, 0.05) * (1 - ein(t, T['s97'] - 0.35, 0.4))
+    if aA > 0:
+        karte(b, 170, 140, 940, 420, aA)
+        b.text('WIE VIELE ZIFFERN HAT DAS ERGEBNIS?', 210, 180, 22, GRAU, INTER_X, anker='l', alpha=aA)
+        zeilen_ = [(T['r1'], [('43 · 11 = ', INK), ('473', GRUEN)], 2, 3, TEAL, 'meistens eine mehr'),
+                   (T['r2'], [('352 · 11 = ', INK), ('3872', GRUEN)], 3, 4, TEAL, 'meistens eine mehr'),
+                   (T['r3'], [('9', CA), (' vorne, Summe dahinter', INK)], 2, 4, CD, 'zwei mehr')]
+        for k, (tz, links, n, m, c, wort) in enumerate(zeilen_):
+            a = ein(t, tz) * aA
+            if a <= 0:
+                continue
+            y = 262 + k * 104 + 12 * (1 - ein(t, tz))
+            if k == 2:                                     # dritte Zeile hinterlegt: der Sonderfall
+                band(b, 186, y - 46, 1094, y + 46, CD, 0.07 * a, r=16)
+                zeile(b, links, 210, y - 14, 36, INTER_X, alpha=a, anker='l')
+                b.text('zweistellig', 210, y + 24, 36, CD, INTER_X, anker='l', alpha=a)
+            else:
+                zeile(b, links, 210, y, 46, INTER_X, alpha=a, anker='l')
+            stellen(b, 690, y - 12, n, m, c, a)
+            b.text(f'{n} → {m} Ziffern · {wort}', 690, y + 26, 22, c if k == 2 else GRAU, INTER_X, anker='l', alpha=a)
+    # Teil 2: das Beispiel 97 · 11
+    aE = ein(t, T['s97'] - 0.1, 0.4)
+    if aE <= 0:
+        return
+    cs = oben2(b, t, '9', '7', [], alpha=aE)
     luecke(b, t, T['mal'] + 0.5, T['sechs'] + 0.5)
     kompakt = glatt(p(t, T['z'], 0.5))
     ziel = mitten([('10', INK), ('6', INK), ('7', INK)], X2, G2)
@@ -274,16 +317,17 @@ def s_neun(b, sc, t):
     b.text('1', mix(lx[4], z1[0], f1), mix(YL2, z1[1], f1) - 40 * math.sin(math.pi * f1) + 60 * rein,
            mix(46, 64, f1), CD, INTER_X, alpha=a16 * (1 - rein))
     funken(b, t, T['z'] + 0.1, X2, YR2, r0=80, r1=200)
-    am = ein(t, T['mehr'], 0.4)                             # „Eine Ziffer mehr“: die 10 vorne rot unterstrichen
-    if am > 0:                                             # (ein Rahmen stieß an die 6)
+    am = ein(t, T['ende'], 0.4)                             # „Aus zwei Ziffern werden vier“: 10 rot unterstrichen, Kästchen
+    if am > 0:
         ox, oy, w, h = G.tinte('10', G2)
         cx, cy = ziel[0] + ox, YR2 + oy
         b.linie([(cx - w / 2, cy + h / 2 + 14), (cx - w / 2 + w * am, cy + h / 2 + 14)], CD, 7)
-        zeile(b, [('Eine Ziffer mehr: ', INK), ('9', CA), (' vorne, ', INK), ('1', CD), (' wandert dazu', INK)],
-              X2, YR2 + 118 + 10 * (1 - am), 28, INTER_X, alpha=am)
+        breit = 2 * 33 - 7 + 60 + 4 * 33 - 7               # Breite von „▢▢ → ▢▢▢▢“
+        stellen(b, X2 - breit / 2, YR2 + 112 + 10 * (1 - am), 2, 4, CD, am)
+        b.text('Aus 2 Ziffern werden 4', X2, YR2 + 156 + 10 * (1 - am), 26, CD, INTER_X, alpha=am)
     zeilen = [dict(nr='1', farbe=TEAL, titel='Summe in die Lücke', t_titel=T['plus'], t_rech=T['z16'] + 0.3,
                    teile=[('9', CA), (' + ', INK), ('7', CB), (' = ', INK), ('16', CD)], aktiv=(T['plus'], T['eins'])),
-              dict(nr='2', farbe=CD, titel='Die Eins wandert nach vorn', t_titel=T['eins'], t_rech=T['zehn'] + 0.5,
+              dict(nr='2', farbe=CD, titel='Die Eins wandert zur Neun', t_titel=T['eins'], t_rech=T['zehn'] + 0.5,
                    teile=[('9', CA), (' + ', INK), ('1', CD), (' = ', INK), ('10', CD)], aktiv=(T['eins'], T['z']))]
     schritte(b, t, 780, 170, 440, zeilen, ([('97 · 11 = ', INK), ('1067', GRUEN)], T['z']),
              alpha=ein(t, T['plus'] - 0.4, 0.4))
@@ -418,7 +462,7 @@ KLAENGE = {  # sparsam wie in Folge 1: Luftzug bei Flügen, Glöckchen nur mit d
     'warum': [('Summe', 'ding', 0.7)],
     'vorsicht': [('mal elf', 'wusch', 0), ('Zwei Ziffern', 'tief', 0), ('die Eins wandert', 'wusch', 0),
                  ('neunhundert', 'ding', 0.1)],
-    'neun': [('mal elf', 'wusch', 0), ('die Eins wandert', 'wusch', 0), ('tausend', 'ding', 0.1)],
+    'neun': [('mal elf', 'wusch', 0), ('die Eins wandert', 'wusch', 0), ('tausend', 'ding', 0.1)],   # wie Vorsicht
     'gross': [('siebenundvierzigtausend', 'ding', 0.05)],
     'merke': [('#ende', 'tick', 0.2 + k) for k in range(UHR)] + [('#ende', 'ding', 0.2 + UHR + 2.1)],
     'abspann': [('Abonnier', 'klick', 0.2)],

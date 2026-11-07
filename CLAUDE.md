@@ -15,8 +15,9 @@ nachziehen.
   `vorschaubild.py`, `youtube.md` (Titel), `tts_cache/` (Ton, eingecheckt), `bilder/` (Hand, MIT-Lizenz)
 - `themen/mathe-elfer/` – Folge 2 „Der Elfer-Trick“: `elfer.py` (nutzt `regel.py` aus Folge 1 als Baukasten und bringt
   nur eigene Szenen, Klänge und Merksätze mit), `drehbuch.md`, `youtube.md`, `tts_cache/`, `bilder/` (QR `#elfer`,
-  App-Bild). Stand 07.11.: Entwurf 2:39 mit Sequenz „Und wenn vorne eine Neun steht?“ (97 · 11 = 1067, Nutzerfrage:
-  eine Ziffer mehr genau dann, wenn vorne eine 9 steht und eine 1 dazu wandert), noch nicht abgenommen.
+  App-Bild). Stand 07.11.: Entwurf 2:48 mit Szene `neun` „Wie viele Ziffern hat das Ergebnis?“ (Nutzerwunsch: in Wort
+  und Bild, Kästchen je Ziffer: meist eine mehr, 2 → 3, 3 → 4; zwei mehr nur, wenn vorne eine 9 steht und die Summe
+  direkt dahinter zweistellig ist, Beispiel 97 · 11 = 1067), 2. Fassung als Clip, noch nicht abgenommen.
   Offen: Sequenz „passt“?, App-Stufe „Die Eins wandert“ mit 91–99 (Sprache bis 1099) ja/nein, Ziele 3/3/4/6 s.
 - `themen/mathe-stilprobe/` – `vorschau.json` (Auswahl und Proben), `fertig.json` (fertige Videos)
 - `themen/mathe-tricks/` – Folgenplan und Recherche der 127 Tricks
