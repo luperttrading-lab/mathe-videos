@@ -47,8 +47,10 @@ SZENEN = [
     dict(id='neun', kicker='Vorsicht', anhang=True, text=(
         # Nutzer 07.11. zur ersten Fassung: sagen, WELCHE Eins wandert (die aus der Summe direkt hinter der Neun), und in
         # Wort und Bild zeigen, dass meist eine Ziffer dazukommt (2 → 3, 3 → 4) und wann zwei (2 → 4, 3 → 5)
-        'Wie viele Ziffern hat das Ergebnis? Meistens eine mehr als die Zahl: Aus zwei Ziffern werden drei, aus drei '
-        'Ziffern vier. Zwei mehr gibt es nur, wenn vorne eine Neun steht und die Summe direkt dahinter zweistellig ist. '
+        # Nutzerwahl 07.11. (Hörprobe, Satz 1): „… als die Zahl, die mit elf multipliziert wird“ – vorher war „Zahl“ falsch betont
+        'Wie viele Ziffern hat das Ergebnis? Meistens eine mehr als die Zahl, die mit elf multipliziert wird: Aus zwei '
+        'Ziffern werden drei, aus drei Ziffern vier. Zwei mehr gibt es nur, wenn vorne eine Neun steht und die Summe '
+        'direkt dahinter zweistellig ist. '
         'Siebenundneunzig mal elf: Neun plus sieben ist sechzehn. Die Sechs kommt in die Lücke, die Eins wandert zur '
         'Neun, und aus der Neun wird eine Zehn. Ergebnis: tausendsiebenundsechzig. Aus zwei Ziffern werden vier.')),
     dict(id='gross', kicker='Große Zahlen', text=(

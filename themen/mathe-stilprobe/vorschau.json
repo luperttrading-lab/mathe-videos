@@ -1,30 +1,30 @@
 {
  "titel": "Mathe-Videos",
- "aufgabe": "3 Einträge ganz oben, ab Sekunde 4 hinhören: Welcher Satz klingt richtig? Beim besten „✓ passt“ tippen (einer genügt), dann „An Claude“. Gefällt keiner: „ändern“ mit Notiz.",
+ "aufgabe": "Nichts zu prüfen auf dieser Seite. Offen ist nur die Formulierung im Chat (1, 2 oder 3); danach „rendern“.",
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz1_clip.mp4",
    "titel": "Satz 1 (dein Vorschlag): „Meistens eine mehr als die Zahl, die mit elf multipliziert wird.“",
    "stand": "07.11., 10:12",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 9.0,
-   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+   "notiz": "Gewählt („passt“, 07.11.) – genau dieser Ton kommt ins Video."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz2_clip.mp4",
    "titel": "Satz 2: „Meistens eine mehr als die Zahl, die du mit elf malnimmst.“",
    "stand": "07.11., 10:12",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 9.0,
-   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+   "notiz": "Nicht gewählt (Satz 1 kommt ins Video)."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/satz3_clip.mp4",
    "titel": "Satz 3 (ohne „Zahl“): „Meistens eine Ziffer mehr.“",
    "stand": "07.11., 10:12",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 9.0,
-   "notiz": "Anfang der Szene „Wie viele Ziffern hat das Ergebnis?“ bis zum Beispiel. Der Satz kommt nach etwa 4 s. Rest der Szene unverändert. „passt“ = dieser Satz kommt ins Video."
+   "notiz": "Nicht gewählt (Satz 1 kommt ins Video)."
   },
   {
    "datei": "/tmp/claude-0/-home-user/73e1be1b-a92e-56f2-a1b6-f0279a8a0f8a/scratchpad/elfer/neun_clip2.mp4",
