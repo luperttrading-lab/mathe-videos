@@ -18,9 +18,9 @@ nachziehen.
   App-Bild). Stand 07.11.: Entwurf 2:48 mit Szene `neun` „Wie viele Ziffern hat das Ergebnis?“ (Nutzerwunsch: in Wort
   und Bild, Kästchen je Ziffer: meist eine mehr, 2 → 3, 3 → 4; zwei mehr nur, wenn vorne eine 9 steht und die Summe
   direkt dahinter zweistellig ist, Beispiel 97 · 11 = 1067). Satz „Meistens eine mehr als die Zahl, die mit elf
-  multipliziert wird“ per Hörprobe gewählt (07.11., Satz 1; genau dieser Ton im Cache). Offen: Formulierung 1/2/3 für
-  „Zwei mehr gibt es nur, wenn …“ (1 = bisher, ohne neuen Ton), dann „rendern“.
-  Offen: Sequenz „passt“?, App-Stufe „Die Eins wandert“ mit 91–99 (Sprache bis 1099) ja/nein, Ziele 3/3/4/6 s.
+  multipliziert wird“ per Hörprobe gewählt (07.11., Satz 1; genau dieser Ton im Cache). Formulierung bleibt „… die Summe
+  direkt dahinter zweistellig ist“ (Nutzer 07.11.: nicht „ab 91“, das ist ab vier Stellen falsch, 9091 · 11 = 100001).
+  Offen: „rendern“, App-Stufe „Die Eins wandert“ mit 91–99 (Sprache bis 1099) ja/nein, Ziele 3/3/4/6 s.
 - `themen/mathe-stilprobe/` – `vorschau.json` (Auswahl und Proben), `fertig.json` (fertige Videos)
 - `themen/mathe-tricks/` – Folgenplan und Recherche der 127 Tricks
 - `uebung/` – App „Kopfrechnen üben“ (GitHub Pages), Details `uebung/LIESMICH.md`
@@ -134,6 +134,11 @@ nachziehen.
 - **Geprüft und verworfen** (Nutzerentscheidung 04.11.): Abweichungs-Kreuz (tecmath/vedisch, Probe `kreuz_probe.py`) –
   unser Flächenmodell mit „Andersherum“ erklärt es besser. Recherche der meistgesehenen Videos zum Trick: kein anderer
   Rechenweg, nur andere Darstellungen.
+- **Nichts Falsches behaupten, auch nicht vereinfacht** (Nutzer 07.11.): Nicht jeden Sonderfall erklären, aber eine
+  Regel muss immer stimmen. Lieber die allgemeingültige Formulierung (Elfer: „die Summe direkt dahinter“, die wandernde
+  Eins steckt darin) als eine einfachere, die Sonderfälle falsch macht („ab 91“ scheitert an 9091 · 11 = 100001).
+- **„multiplizieren“ statt „malnehmen“** in neuen Folgen (Nutzer 07.11.: „malnehmen“ klingt nach Grundschule,
+  Zielgruppe ab 13). Folge 1 bleibt, wie sie abgenommen ist.
 - **Merksätze so sprechen, wie sie dastehen** (Nutzerwunsch 04.11.): keine Kurzformen („Einer rüber“), die man nur
   lesend versteht; der Merkzettel zeigt genau die gesprochenen Sätze.
 - **Geräusche sparsam** (Nutzer 04.11.): kein „Plopp“; Glöckchen nur zusammen mit den Funken an den grünen
