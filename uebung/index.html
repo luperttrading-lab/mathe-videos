@@ -311,7 +311,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 <script src="aufgaben.js"></script>
 <script>
-const APP_VERSION = '2.17';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '2.18';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const ANZAHL = 10;
 // Ziel in Sekunden je Aufgabe, je Stufe (Nutzerentscheidung 05.11.: „Alle Zahlen“ 4 s wie im Video, Sonderfall 3 s)
@@ -792,7 +792,7 @@ function mikrofonAus() {
 function gehoert(text, woerter) {
   const wert = zahlwortZuZahl(text), jetzt = performance.now();
   const w = (woerter || []).filter(x => x.word && x.word !== '[unk]');
-  const rest = w.find(x => !/hundert$/.test(x.word) && x.word !== 'und');   // „einundzwanzig“ in „zweihundert einundzwanzig“
+  const rest = w.find(x => !/(hundert|tausend)$/.test(x.word) && x.word !== 'und');   // „einundzwanzig“ in „zweihundert einundzwanzig“
   const sp = w.length ? { beginn: stromZuSeite(w[0].start), zweiter: rest ? stromZuSeite(rest.start) : null,
     schluss: stromZuSeite(w[w.length - 1].end), erkannt: jetzt } : null;
   sprache.protokoll.push({ text, wert, aufgabe: runde.aufgaben[runde.i]?.frage, phase: runde.phase, t0: runde.t0, ...sp,

@@ -82,8 +82,8 @@ const UEBUNGEN = [
     video: '',                                     // nach dem Hochladen eintragen; leer = „Video folgt“
     titel: 'Elfer-Trick',
     untertitel: 'Jede Zahl mal 11',
-    auto: true,                                    // je Stufe gleich lang: zweistellig immer 3 Ziffern (121 … 979), dreistellig 4
-    antworten: [100, 999],                         // Grammatik fürs Sprechen (nur zweistellige Stufen, Ergebnisse 121 … 979)
+    auto: true,                                    // nach so vielen Ziffern prüfen, wie das Ergebnis hat (121 … 1089, dreistellig 4)
+    antworten: [100, 1099],                        // Grammatik fürs Sprechen (zweistellige Stufen, Ergebnisse 121 … 1089)
     stufen: [
       { id: 'zwei', name: 'Zweistellig', info: '53 · 11', ziel: 3 },        // Video: „länger als drei Sekunden?“
       { id: 'ohne', name: 'Summe unter 10', info: '43 · 11', ziel: 3 },
@@ -92,11 +92,12 @@ const UEBUNGEN = [
       { id: 'drei', name: 'Dreistellig', info: '352 · 11', ziel: 6, nurTippen: true },
     ],
     erzeuge(stufe, anzahl) {
-      // Zehnerziffer höchstens 8: dann bleibt das Ergebnis drei- bzw. vierstellig (89 · 11 = 979, 899 · 11 = 9889),
-      // sprechbar bis 999 und ohne Hinweis durch die Länge. Endziffer 0 (40 · 11 = 440) ist zu leicht.
+      // Zweistellig mit 91 … 99 (seit 2.18, Video Folge 2 zeigt 97 · 11 = 1067: vorne eine 9, die Summe dahinter
+      // zweistellig, das Ergebnis hat zwei Ziffern mehr). Dreistellig nur bis 899: Ergebnisse immer vierstellig (nur tippen).
+      // Endziffer 0 (40 · 11 = 440) ist zu leicht.
       const zahlen = [];
       if (stufe === 'drei') { for (let x = 101; x <= 899; x++) if (x % 10) zahlen.push(x); }
-      else for (let a = 1; a <= 8; a++) for (let b = 1; b <= 9; b++)
+      else for (let a = 1; a <= 9; a++) for (let b = 1; b <= 9; b++)
         if ({ ohne: a + b < 10, wandert: a + b >= 10 }[stufe] ?? true) zahlen.push(10 * a + b);
       return mischen(zahlen).slice(0, anzahl).map(x => this.aufgabe(x, 11));   // je Runde jede Zahl höchstens einmal
     },
@@ -158,6 +159,8 @@ const ZEHNER = { zehn: 10, elf: 11, 'zwölf': 12, dreizehn: 13, vierzehn: 14, 'f
 function zahlwortZuZahl(text) {
   const s = text.toLowerCase().replace(/\[unk\]/g, ' ').replace(/[^a-zäöüß]/g, '');
   if (!s) return null;
+  const t = s.match(/^(?:ein)?tausend(.*)$/);      // 1000 … 1999 (Elfer: 91 · 11 = 1001 … 99 · 11 = 1089)
+  if (t) { if (!t[1]) return 1000; const r = zahlwortZuZahl(t[1].replace(/^und/, '')); return r === null || r >= 1000 ? null : 1000 + r; }
   const m = s.match(/^(?:(ein|eins|zwei|zwo|drei|vier|fünf|sechs|sieben|acht|neun)?(hundert))?(.*)$/);
   let wert = 0;
   if (m[2]) wert = 100 * (m[1] ? EINER[m[1]] : 1);
@@ -183,18 +186,20 @@ function zahlPhrasen(zahlen, bis) {
     : r % 10 === 0 ? [T[r / 10]] : [`${E[r % 10]}und${T[Math.floor(r / 10)]}`, `${E[r % 10]} und ${T[Math.floor(r / 10)]}`];
   const aus = new Set();
   for (const n of zahlen) {
-    const h = Math.floor(n / 100), r = n % 100;
+    const th = Math.floor(n / 1000), h = Math.floor(n % 1000 / 100), r = n % 100;
+    const ts = th ? ['tausend', 'eintausend'] : [''];  // nur 1000 … 1999
     const hs = h ? HUNDERT[h] : [''];
-    for (const hw of hs) for (const rw of rest(r)) {
-      aus.add(`${hw} ${rw}`.trim());
-      if (hw && rw) aus.add(`${hw} und ${rw}`);
+    for (const tw of ts) for (const hw of hs) for (const rw of rest(r)) {
+      const vorn = `${tw} ${hw}`.trim();
+      aus.add(`${vorn} ${rw}`.trim());
+      if (vorn && rw) aus.add(`${vorn} und ${rw}`);
     }
   }
   return [...aus, '[unk]'];
 }
 // Wörter, die die Erkennung überhaupt kennen darf (Grammatik): alles, woraus 0 … 999 gebaut wird
 function zahlGrammatik() {
-  const w = new Set([...Object.keys(EINER), ...Object.keys(ZEHNER), 'und', 'hundert']);
+  const w = new Set([...Object.keys(EINER), ...Object.keys(ZEHNER), 'und', 'hundert', 'tausend', 'eintausend']);
   for (const e of ['ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun']) {
     w.add(e + 'hundert');
     for (const z of ['zwanzig', 'dreißig', 'vierzig', 'fünfzig', 'sechzig', 'siebzig', 'achtzig', 'neunzig']) w.add(e + 'und' + z);

@@ -60,6 +60,10 @@ springt nicht. Eigene Zeile nur noch bei einem Fehler. Zeile „Ergebnis“ leic
 Kopf wie das YouTube-Vorschaubild (Nutzerwahl 06.11., v2.11: „B ist viel besser“): Aufgabe der gewählten Stufe groß
 mit „= ?“, darunter die grüne Leiste mit „Zehner-Trick“ und „KOPFRECHNEN“; Kacheln nur mit Name, Ziel und Bestzeit.
 Der Entwurf „Karten“ ist entfernt.
+**v2.18 (07.11.):** Elfer-Stufen „Zweistellig“ und „Die Eins wandert“ üben auch 91 … 99 (Ergebnisse 1001 … 1089),
+weil das Video von Folge 2 jetzt 97 · 11 = 1067 zeigt (vorne eine 9, die Summe dahinter zweistellig: zwei Ziffern mehr).
+Sprechen bis 1099: `zahlPhrasen` kennt „tausend …“/„eintausend …“, `zahlwortZuZahl` liest 1000 … 1999; „tausend“ mit
+Pause wartet wie „…hundert“ 1,5 s auf den Rest. Am iPhone noch nicht ausprobiert.
 **v2.17 (Nutzer 06.11.: „Mach die Elfer-Übung in der App“):** zweite Übung **Elfer-Trick** (`id: 'elfer'`, Direktlink
 `#elfer`, QR-Code im Video von Folge 2). Eine App für alle Tricks, keine zweite App (Nutzerentscheidung 06.11.).
 - Stufen: „Zweistellig“ (Ziel 3 s wie im Video), „Summe unter 10“ (3 s), „Die Eins wandert“ (4 s), „Dreistellig“ (6 s).

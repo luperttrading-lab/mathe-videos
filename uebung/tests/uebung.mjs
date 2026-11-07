@@ -227,8 +227,18 @@ console.log('Elfer-Trick (Folge 2)');
   });
   ok(Object.values(g).every(x => x.doppelt === 0 && x.richtig), 'Je Runde jede Zahl höchstens einmal, Lösung = Zahl · 11, keine Endziffer 0 (je 300 Runden)');
   ok(g.ohne.summen.every(s => s < 10) && g.wandert.summen.every(s => s >= 10), '„Summe unter 10“ nur ohne, „Die Eins wandert“ nur mit Wandern');
-  ok(['zwei', 'ohne', 'wandert'].every(k => g[k].laengen.join() === '3') && g.drei.laengen.join() === '4',
-    'Ergebnisse zweistellig immer dreistellig (sprechbar), dreistellig immer vierstellig');
+  ok(g.ohne.laengen.join() === '3' && g.zwei.laengen.sort().join() === '3,4' && g.wandert.laengen.sort().join() === '3,4'
+    && g.drei.laengen.join() === '4', 'Ergebnisse: Summe unter 10 dreistellig, mit 91 … 99 auch vierstellig (1001 … 1089), dreistellig vierstellig');
+  const neun = await page.evaluate(() => { const u = UEBUNGEN.find(x => x.id === 'elfer'), z = new Set();
+    for (let k = 0; k < 300; k++) for (const a of u.erzeuge('wandert', 10)) if (a.x >= 91) z.add(a.x);
+    return [...z].sort(); });
+  ok(neun.join() === '91,92,93,94,95,96,97,98,99', `„Die Eins wandert“ übt auch 91 … 99 (wie im Video 97 · 11 = 1067): ${neun.join(', ')}`);
+  const tausend = await page.evaluate(() => ['tausend siebenundsechzig', 'eintausend eins', 'tausend und neunundachtzig', 'tausend',
+    'tausendacht'].map(t => window.uebung.zahlwortZuZahl(t)));
+  ok(tausend.join() === '1067,1001,1089,1000,1008', `Zahlwörter ab tausend: ${tausend.join(', ')}`);
+  const gr = await page.evaluate(() => { const u = UEBUNGEN.find(x => x.id === 'elfer'); return zahlPhrasen(u.antworten[0], u.antworten[1]); });
+  ok(gr.includes('tausend siebenundsechzig') && gr.includes('eintausend eins') && gr.includes('neunhundert neunundsiebzig')
+    && !gr.some(x => x.includes('undefined')), `Grammatik Elfer 100 … 1099: ${gr.length} Phrasen, mit „tausend …“`);
   const w = await page.evaluate(() => { const u = UEBUNGEN.find(x => x.id === 'elfer');
     return [87, 789].map(x => u.weg(u.aufgabe(x)).map(s => s.text.replace(/<[^>]+>/g, '')).join(' | ')); });
   ok(w[0].includes('8 + 7 = 15') && w[0].includes('8 + 1 = 9') && w[0].includes('957'), `Lösungsweg 87 · 11: „${w[0]}“`);

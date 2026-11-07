@@ -20,7 +20,7 @@ nachziehen.
   direkt dahinter zweistellig ist, Beispiel 97 · 11 = 1067). Satz „Meistens eine mehr als die Zahl, die mit elf
   multipliziert wird“ per Hörprobe gewählt (07.11., Satz 1; genau dieser Ton im Cache). Formulierung bleibt „… die Summe
   direkt dahinter zweistellig ist“ (Nutzer 07.11.: nicht „ab 91“, das ist ab vier Stellen falsch, 9091 · 11 = 100001).
-  Offen: „rendern“, App-Stufe „Die Eins wandert“ mit 91–99 (Sprache bis 1099) ja/nein, Ziele 3/3/4/6 s.
+  07.11.: „rendern“ (Nutzer), App 2.18 übt 91–99 mit.
 - `themen/mathe-stilprobe/` – `vorschau.json` (Auswahl und Proben), `fertig.json` (fertige Videos)
 - `themen/mathe-tricks/` – Folgenplan und Recherche der 127 Tricks
 - `uebung/` – App „Kopfrechnen üben“ (GitHub Pages), Details `uebung/LIESMICH.md`
@@ -85,7 +85,8 @@ nachziehen.
   Neue Übung in `uebung/aufgaben.js`, `APP_VERSION` hochzählen,
   `node uebung/tests/uebung.mjs` muss „Alles grün“ melden.
   Stand 06.11. abends: App 2.17 mit zwei Übungen (Zehner, Elfer), Trick wählen über den Namen in der grünen Leiste.
-  Elfer-Stufen: Zweistellig 3 s, Summe unter 10 3 s, Die Eins wandert 4 s, Dreistellig 6 s (nur tippen, Sprache bis 999).
+  Elfer-Stufen: Zweistellig 3 s, Summe unter 10 3 s, Die Eins wandert 4 s, Dreistellig 6 s (nur tippen). Seit 2.18 (07.11.)
+  mit 91 … 99 wie im Video (97 · 11 = 1067), Sprache bis 1099.
 - **Zielgruppe: Jugendliche ab 13 und Erwachsene, „nicht speziell für Kinder“** (Nutzerentscheidung 06.11.): Kanal und
   jedes Video in YouTube Studio so einstellen; nur dann gibt es Abspann, Infokarten und Kommentare. Die Einstellung muss
   zum Inhalt passen (Kinder = unter 13, US-Gesetz COPPA): keine Wörter wie „Grundschule“, „Klasse 4“, „für Kinder“ in
