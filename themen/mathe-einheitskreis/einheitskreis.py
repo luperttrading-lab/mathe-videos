@@ -376,6 +376,12 @@ def s_werte(b, sc, t):
                 ww = breite(s_, INTER_X, g_)
                 b.text(s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
                 x0 += ww
+    a45 = ein(t, w('dritte Winkel'), 0.4) * (1 - ein(t, w('Nach Pythagoras'), 0.4))
+    if a45 > 0:
+        px45, py45 = punkt(45)
+        b.linie([(px45 + 34 * math.cos(math.radians(225 + 45 * k / 12)), py45 - 34 * math.sin(math.radians(225 + 45 * k / 12)))
+                 for k in range(13)], WINKEL, 5, alpha=a45)
+        etikett(b, '45°', px45 - 26, py45 + 62, 22, WINKEL, a45)
     # 30°: Spiegelbild unter der x-Achse → gleichseitiges Dreieck
     sp = ein(t, t30 + 0.4, 0.6) * (1 - ein(t, t60, 0.4))
     if sp > 0:
@@ -444,12 +450,17 @@ def s_werte(b, sc, t):
     zeit_zeile(b, t, w('Minus eins ist'), [('cos', COS), (' 180° = −1', INK)], 360, 40, ende=w('Genauso'))
     zeit_zeile(b, t, w('Genauso'), [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 230, 40,
                ende=tA)
-    zeit_zeile(b, t, tB + 0.4, [('45°: beide Katheten gleich lang', INK)], 190, 28, INTER, ende=t30)
-    zeit_zeile(b, t, w('x Quadrat'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 250, 36, ende=t30)
-    zeit_zeile(b, t, w('x Quadrat') + 1.6, [('2x² = 1', GRAU)], 300, 30, INTER, ende=t30)
-    zeit_zeile(b, t, w('Wurzel zwei'), [('x = √2 / 2 ≈ 0,71', GRUEN)], 360, 40, ende=t30)
-    zeit_zeile(b, t, w('Wurzel zwei') + 1.2, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)], 430,
-               30, INTER, ende=t30)
+    # 45° Schritt für Schritt (Nutzer 13.11.: wie kommt man von 2x² = 1 zu √2 / 2?)
+    zeit_zeile(b, t, w('dritte Winkel'), [('180° − 90° − 45° = 45°', WINKEL)], 175, 28, ende=t30)
+    zeit_zeile(b, t, w('beide Katheten'), [('→ beide Katheten gleich lang: ', INK), ('x', COS), (' und ', INK), ('x', SIN)],
+               220, 26, INTER, ende=t30)
+    zeit_zeile(b, t, w('x Quadrat plus'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 280, 34, ende=t30)
+    zeit_zeile(b, t, w('zwei x Quadrat'), [('2x² = 1', INK)], 325, 30, ende=t30)
+    zeit_zeile(b, t, w('Geteilt durch zwei'), [('x² = ½', INK)], 370, 30, ende=t30)
+    zeit_zeile(b, t, w('Wurzel aus einem halb'), [('x = √½ = 1 / √2', INK)], 415, 30, ende=t30)
+    zeit_zeile(b, t, w('erweitert'), [('x = (1 · √2) / (√2 · √2) = √2 / 2 ≈ 0,71', GRUEN)], 470, 30, ende=t30)
+    zeit_zeile(b, t, w('ungefähr null Komma sieben') + 0.8, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)],
+               530, 28, INTER, ende=t30)
     ende_b = w('gleichseitiges')
     zeit_zeile(b, t, w('zweimal dreißig'), [('Winkel am Ursprung: 2 · 30° = 60°', WINKEL)], 190, 28, INTER, ende=ende_b)
     zeit_zeile(b, t, w('Radien'), [('zwei Seiten = 1', INK)], 240, 28, INTER, ende=ende_b)
