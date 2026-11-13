@@ -31,8 +31,9 @@ Bild: P läuft zu jedem genannten Winkel, dort bleibt ein oranger Strich mit Gra
 > Hypotenuse ist der Radius, also genau eins. Sinus ist Gegenkathete durch Hypotenuse, hier also Gegenkathete durch
 > eins. Der Sinus ist einfach die Höhe von P: die y-Koordinate. Genauso ist der Kosinus Ankathete durch eins, also die
 > x-Koordinate. P hat die Koordinaten Kosinus Alpha und Sinus Alpha. Im Alphabet kommt K vor S, so wie x vor y.
-> Das Dreieck gibt es nur zwischen null und neunzig Grad. Für alle anderen Winkel legt man fest: Kosinus und Sinus
-> sind auch dort die Koordinaten von P. So hat jeder Winkel einen Sinus und einen Kosinus.
+> Aber Vorsicht: In einem rechtwinkligen Dreieck liegt Alpha immer zwischen null und neunzig Grad. Wird Alpha größer,
+> ist der Winkel im Dreieck nicht mehr Alpha. Deshalb legt man fest: Kosinus und Sinus sind die Koordinaten von P,
+> für jeden Winkel. So hat jeder Winkel einen Sinus und einen Kosinus.
 
 Bild: rote Senkrechte (sin), blaue Waagrechte (cos), Hypotenuse „1“; Bruch „sin α = Gegenkathete / 1“ wird zu
 „= y“; Punkt beschriftet „P(cos α | sin α)“; bei „legt man fest“ wandert P über 90° hinaus, Dreieck verschwindet,
