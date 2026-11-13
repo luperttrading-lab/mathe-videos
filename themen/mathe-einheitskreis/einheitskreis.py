@@ -172,29 +172,44 @@ def zeit_zeile(b, t, start, teile, y, g=32, pfad=INTER_X, ende=None):
 
 
 def s_hook(b, sc, t):
-    tS, tE, tJ = C(sc, 'Sinus'), C(sc, 'Einheitskreis'), C(sc, 'jedem Winkel')
-    zeit_zeile(b, t, tS, [('sin', SIN), (' 180° = ?', INK)], 230, 56)
-    for x, s, w in ((RX - 100, '0', 'null'), (RX + 100, '−1', 'minus eins?')):
-        a = ein(t, C(sc, w))
-        if a > 0:
-            band(b, x - 60, 330 + 12 * (1 - a), x + 60, 420 + 12 * (1 - a), '#ffffff', 0.95 * a, r=18)
-            b.text(s, x, 375 + 12 * (1 - a), 48, INK, INTER_X, alpha=a)
-    b.text('oder', RX, 375, 26, GRAU, INTER, alpha=ein(t, C(sc, 'oder')))
-    a = ein(t, tE - 0.4, 0.4)
-    achsen(b, a)
-    kreislinie(b, glatt(p(t, tE - 0.2, 0.9)), a)
-    # Zeiger dreht von 0° auf 180°, Winkel läuft mit (Nutzer 13.11.: zeigen, wo die 180° herkommen)
-    d0 = tE + 0.8
-    g = 180 * glatt(p(t, d0, 2.6))
-    if t > tJ:
-        g = 180 + 75 * (t - tJ)
-    za = ein(t, d0 - 0.2, 0.3)
-    if za > 0:
-        gm = g % 360
-        winkel(b, gm, za, text=f'{int(round(gm)) % 360}°')      # Beschriftung weicht den Achsen aus
-        ls = ein(t, tJ, 0.5)
-        strecken(b, g, a=ls)
-        zeiger(b, g, za)
+    """Startbild A „Kreis und Welle“ entsteht (Nutzer 13.11.); das letzte Bild ist das Startbild/Vorschaubild."""
+    cx, cy, r = 280, 390, 180
+    tS = C(sc, 'Sinus und Kosinus')
+    b.text('Der Einheitskreis', 640, 80 + 12 * (1 - ein(t, 0.0)), 64, INK, INTER_X, alpha=ein(t, 0.0))
+    a = ein(t, 0.4, 0.4)
+    achsen(b, a, cx=cx, cy=cy, r=r)
+    kreislinie(b, glatt(p(t, 0.5, 1.0)), a, cx=cx, cy=cy, r=r)
+    g = 50 * glatt(p(t, 1.4, 1.2))
+    if t > 1.4:
+        winkel(b, g, 1.0, text='', cx=cx, cy=cy)
+        px, py = punkt(g, cx, cy, r)
+        fs = ein(t, tS - 0.2, 0.5)
+        if fs > 0:
+            b.linie([(cx, cy), (cx + (px - cx) * fs, cy)], COS, 10)
+            b.linie([(px, py), (px, py + (cy - py) * fs)], SIN, 10)
+        b.linie([(cx, cy), (px, py)], INK, 5)
+        b.kreis(px, py, 12, INK)
+        # Sinuswelle läuft aus P heraus (gleiche Amplitude wie der Kreis)
+        fw = glatt(p(t, tS + 0.3, 2.2))
+        x0, x1 = 540, 1240
+        if fw > 0:
+            for k in range(0, 20, 2):
+                b.linie([(px + (x0 - px) * k / 20, py), (px + (x0 - px) * (k + 1) / 20, py)], SIN, 3, alpha=0.7 * fw)
+            n = max(2, int(200 * fw))
+            b.linie([(x0 + (x1 - x0) * k / 200, cy - r * math.sin(math.radians(50 + 360 * k / 200))) for k in range(n + 1)],
+                    SIN, 8)
+            b.kreis(x0, py, 10, SIN, alpha=fw)
+    zeit_zeile_x(b, t, tS, [('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' verstehen', INK)], 640, 145, 36)
+    al = ein(t, 0.2, 0.5)
+    band(b, 0, 640, 1280, 720, TEAL, al, r=0)
+    b.text('MATHE VERSTEHEN', 60, 680, 30, '#ffffff', INTER_X, anker='l', alpha=al)
+    b.text('TRIGONOMETRIE', 1220, 680, 30, '#ffffff', INTER_X, anker='r', alpha=al)
+
+
+def zeit_zeile_x(b, t, start, teile, x, y, g):
+    a = ein(t, start)
+    if a > 0:
+        zeile(b, teile, x, y + 12 * (1 - a), g, INTER_X, alpha=a)
 
 
 def s_kreis(b, sc, t):
@@ -545,6 +560,7 @@ def s_werte(b, sc, t):
         b.kreis(x if x != CX else CX, CY, 9, COS, alpha=hell * ax)
         b.kreis(CX, y if y != CY else CY, 7 if y == CY else 9, SIN, alpha=hell * ay)
     # rechte Spalte
+    zeit_zeile(b, t, w('häufiger Fehler'), [('Vorsicht: ', INK), ('sin', SIN), (' 180° ≠ −1', INK)], 150, 32, ende=w('Genauso'))
     zeit_zeile(b, t, w('Die Höhe ist null'), [('Höhe von P', SIN), (' = 0', INK)], 210, 32, INTER, ende=w('Genauso'))
     zeit_zeile(b, t, w('Also ist Sinus'), [('sin', SIN), (' 180° = ', INK), ('0', GRUEN)], 280, 52, ende=w('Genauso'))
     zeit_zeile(b, t, w('Minus eins ist'), [('cos', COS), (' 180° = −1', INK)], 360, 40, ende=w('Genauso'))
@@ -883,6 +899,8 @@ KLAENGE = {}
 MERKSAETZE = []
 
 G.SZENEN, G.ZEICHNER, G.KLAENGE, G.MERKSAETZE = SZENEN, ZEICHNER, KLAENGE, MERKSAETZE
+_rahmen = G.rahmen
+G.rahmen = lambda b, i, tl, t: None if SZENEN[i]['id'] == 'hook' else _rahmen(b, i, tl, t)   # Startbild ohne Kopf
 G.CACHE = os.path.join(HIER, 'tts_cache')
 
 if __name__ == '__main__':
