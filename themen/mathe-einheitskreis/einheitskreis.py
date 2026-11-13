@@ -396,14 +396,20 @@ def s_werte(b, sc, t):
         a60 = ein(t, w('zweimal dreißig'), 0.4) * weg * (1 - ein(t, w('Pythagoras liefert'), 0.4))
         if a60 > 0:
             n = 24
-            b.linie([(CX + 62 * math.cos(math.radians(-30 + 60 * k / n)), CY - 62 * math.sin(math.radians(-30 + 60 * k / n)))
+            # größerer Radius als der 30°-Bogen, Beschriftung im unteren Dreieck (Nutzer 13.11.: nicht übereinander)
+            b.linie([(CX + 100 * math.cos(math.radians(-30 + 60 * k / n)), CY - 100 * math.sin(math.radians(-30 + 60 * k / n)))
                      for k in range(n + 1)], WINKEL, 5, alpha=a60)
-            etikett(b, '60°', CX + 112, CY + 40, 24, WINKEL, a60)
+            etikett(b, '60°', CX + 128 * math.cos(math.radians(-14)), CY + 128 * math.sin(math.radians(14)), 22, WINKEL, a60)
         ar = ein(t, w('Radien'), 0.4) * weg
         if ar > 0:
             for (x1, y1) in ((px, py), (qx, qy)):
                 b.linie([(CX, CY), (x1, y1)], WINKEL, 9, alpha=0.55 * ar * (1 - ein(t, w('zwei gleich große'), 0.4)))
                 etikett(b, '1', (CX + x1) / 2 - 6, (CY + y1) / 2 + (-22 if y1 < CY else 22), 26, INK, ar)
+        # dritte Seite (senkrecht von P zum Spiegelpunkt) zuerst zeichnen, dann erst die Winkel daran (Nutzer 13.11.)
+        a3 = ein(t, w('Ein Dreieck mit'), 0.4) * weg
+        if a3 > 0:
+            f3 = glatt(p(t, w('Ein Dreieck mit'), 0.7))
+            b.linie([(px, py), (px, py + (qy - py) * f3)], INK, 4, alpha=a3)
         aw = ein(t, w('für jeden'), 0.4) * weg * (1 - ein(t, w('gleichseitiges'), 0.4))
         aw0 = ein(t, w('zwei gleich große'), 0.4) * weg * (1 - ein(t, w('Pythagoras liefert'), 0.4))
         if aw0 > 0:                                        # Winkel an P und am Spiegelpunkt
@@ -412,7 +418,7 @@ def s_werte(b, sc, t):
                        for k in range(13)]
                 b.linie(pts, WINKEL, 5, alpha=aw0)
                 if aw > 0:
-                    etikett(b, '60°', x1 - 28, y1 + (60 if y1 < CY else -60), 22, WINKEL, aw)
+                    etikett(b, '60°', x1 - 24, y1 + (44 if y1 < CY else -44), 20, WINKEL, aw)   # auf der Winkelhalbierenden
         ag = ein(t, w('gleichseitiges'), 0.5) * weg
         if ag > 0:
             b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
