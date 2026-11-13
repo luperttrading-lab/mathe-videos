@@ -406,7 +406,7 @@ def s_werte(b, sc, t):
         if t > t60 + 1.2:
             lab_s, lab_c = '√3 / 2', '½'
         strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
-    winkel(b, g, ein(t, tB - 0.2, 0.4), text=f'{int(round(g))}°' if t > tB else '')
+    winkel(b, g, 1.0, text=f'{int(round(g)) % 360}°')                 # Nutzer 13.11.: Bogen und Grad immer mitzeigen
     zeiger(b, g)
     for x, y, hell, ax, ay, fx, fy in spaeter:
         if x != CX:
