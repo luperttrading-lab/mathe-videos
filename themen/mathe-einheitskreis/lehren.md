@@ -10,8 +10,9 @@ Wird nach „Video fertig“ (Nutzer) als Abschnitt „Gestaltungsregeln für Er
 - Beschriftungen dürfen sich nicht überlappen (z. B. 30° und 60° am selben Punkt: verschiedene Radien), auch nicht mit
   Achsenzahlen (1, −1, Gradzahlen, Achsennamen). Vor jedem Clip ein Kontaktbogen und gezielt danach suchen.
 - Bei schmalen Winkeln kleinere Schrift und weiter außen.
-- Trennstrich in Koordinaten (P(x | y)) als eigener Strich so hoch wie die Klammern (der Schrift-Strich „|“ ragt
-  unten heraus).
+- Koordinaten P(x | y) wie im Mathe-Satz: Trennstrich als eigener Strich so hoch und kräftig wie die Klammern (der
+  Schrift-Strich „|“ ragt unten heraus), ≈ 0,28 em Luft je Seite (wie \mid in LaTeX), innen an den Klammern ≈ 0,07 em
+  (`breiten()` in einheitskreis.py).
 - Gleiche Art Beschriftung immer gleich groß (Koordinaten nicht mal 30, mal 24).
 - Vor jedem Clip automatisch prüfen: `werkzeug/beschriftung_pruefen.py` (rendert alle 0,5 s ohne Text, misst Linien
   unter jeder Beschriftung und Überlappungen); nur bewegte Linien dürfen kurz über eine Zahl streichen. Stichproben

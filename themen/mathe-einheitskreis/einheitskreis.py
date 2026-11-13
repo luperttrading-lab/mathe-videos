@@ -71,13 +71,29 @@ def zeichen(b, s, xc, y, g, c, pfad=INTER_X, alpha=1.0):
     b.linie([(xc, y + o + g * 0.04), (xc, y + u - g * 0.04)], c, max(2.5, g * 0.11), alpha=alpha)   # so kräftig wie die Schrift
 
 
-def zeile(b, teile, x, y, g, pfad, alpha=1.0, anker='m'):      # ersetzt regel.zeile in diesem Video
-    ws = [breite(s_, pfad, g) for s_, _ in teile]
-    x0 = x - sum(ws) / 2 if anker == 'm' else x
+def breiten(teile, pfad, g):
+    """Satz wie im Mathe-Satz (Nutzer 13.11.): um „|“ ein mittlerer Abstand (≈ 0,28 em je Seite, wie \\mid in LaTeX),
+    innen an den Klammern ein Haarabstand (≈ 0,07 em). Ergibt je Teil (Breite, Versatz vor dem Text)."""
+    aus = []
+    for s_, _ in teile:
+        if s_.strip() == '|':
+            aus.append((0.62 * g, 0.0))                 # ≈ 0,28 em Luft je Seite wie \mid im Mathe-Satz
+            continue
+        vor = 0.07 * g if s_.startswith(')') else 0.0
+        nach = 0.07 * g if s_.endswith('(') else 0.0
+        aus.append((breite(s_, pfad, g) + vor + nach, vor))
+    return aus
+
+
+def zeile(b, teile, x, y, g, pfad, alpha=1.0, anker='m', alphas=None):   # ersetzt regel.zeile in diesem Video
+    bw = breiten(teile, pfad, g)
+    x0 = x - sum(w_ for w_, _ in bw) / 2 if anker == 'm' else x
     pos = []
-    for (s_, c), w_ in zip(teile, ws):
-        zeichen(b, s_, x0 + w_ / 2, y, g, c, pfad, alpha)
-        pos.append(x0 + w_ / 2)
+    for i, ((s_, c), (w_, vor)) in enumerate(zip(teile, bw)):
+        kern = w_ if s_.strip() == '|' else breite(s_, pfad, g)
+        xc = x0 + vor + kern / 2
+        zeichen(b, s_, xc, y, g, c, pfad, alpha * (alphas[i] if alphas else 1.0))
+        pos.append(xc)
         x0 += w_
     return pos
 from animationen import breite, glatt, klemm, p           # noqa: E402
@@ -507,7 +523,7 @@ def s_werte(b, sc, t):
     achsen(b)
     kreislinie(b)
     teil1 = 1 - ein(t, tA, 0.4)                            # Achsenpunkte
-    teil2 = ein(t, tB - 0.2, 0.4)                          # Dreiecke
+    teil2 = ein(t, tB + 0.9, 0.4)                          # Dreieck erst, wenn P bei 45° angekommen ist
     # Achsenpunkte (Nutzer 13.11.: zeigen, wo die Koordinaten herkommen, und erst schreiben, wenn sie gesprochen
     # werden): Beim ersten Wert läuft eine blaue Strecke auf der x-Achse, beim zweiten eine rote auf der y-Achse;
     # die Koordinaten entstehen Teil für Teil in denselben Farben und bleiben danach klein stehen.
@@ -530,7 +546,8 @@ def s_werte(b, sc, t):
             b.kreis(x, y, 8, GRUEN, alpha=a * (1 - hell))
             g_ = 26                                        # immer gleich groß (Nutzer 13.11.)
             teile = [('(', INK), (xs, COS)] + ([(' | ', INK), (ys, SIN), (')', INK)] if ay > 0 else [])
-            w_ = sum(breite(s_, INTER_X, g_) for s_, _ in [('(', 0), (xs, 0), (' | ', 0), (ys, 0), (')', 0)])
+            voll = [('(', INK), (xs, COS), (' | ', INK), (ys, SIN), (')', INK)]
+            w_ = sum(w for w, _ in breiten(voll, INTER_X, g_))
             # ganz außerhalb des Kreises, nicht auf Achse, Kreis oder dem Namen P
             if gg == 0:
                 lx, ly = CX + R + 14 + w_ / 2, CY - 54
@@ -538,11 +555,7 @@ def s_werte(b, sc, t):
                 lx, ly = CX - R - 14 - w_ / 2, CY - 54
             else:
                 lx, ly = CX + 48 + w_ / 2, y + (-34 if gg == 90 else 34)
-            x0 = lx - w_ / 2
-            for s_, c_ in teile:
-                ww = breite(s_, INTER_X, g_)
-                zeichen(b, s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
-                x0 += ww
+            zeile(b, voll, lx, ly, g_, INTER_X, alpha=a, alphas=[1, 1, ay, ay, ay])
     a45 = ein(t, w('dritte Winkel'), 0.4) * (1 - ein(t, w('Nach Pythagoras'), 0.4))
     if a45 > 0:
         px45, py45 = punkt(45)
@@ -605,12 +618,12 @@ def s_werte(b, sc, t):
         if ac3 > 0:                                        # √3/2 im oberen Dreieck, nicht auf der unteren Seite
             etikett(b, '√3 / 2', CX + 140, CY - 36, 22, COS, ac3, grund=False)
     # Linien und Dreieck
-    zeig = t < w('Genauso') or t > tB - 0.2
+    zeig = t < w('Genauso') or t > tB + 0.9
     if zeig:
         dreieck_fuell(b, g, teil2 * (1 - ein(t, t30 + 0.2, 0.3)) + ein(t, t60 + 1.2, 0.4))
         lab_s = lab_c = ''
         if t > tB:
-            lab_s = lab_c = 'x' if t < t30 else ''
+            lab_s = lab_c = 'x' if tB + 1.0 < t < t30 else ''
         if t > w('Sinus dreißig'):
             lab_s, lab_c = ('', '') if t < t60 else ('1 / 2', '√3 / 2')    # im Spiegel-Teil eigene Beschriftung
         if t > t60 + 1.2:
