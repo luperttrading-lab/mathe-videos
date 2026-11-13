@@ -54,6 +54,32 @@ STAND = {
 
 
 from regel import BG, C, band, ein, zeile                 # noqa: E402
+from animationen import sprite as _sprite                   # noqa: E402
+_kl = {}
+
+
+def zeichen(b, s, xc, y, g, c, pfad=INTER_X, alpha=1.0):
+    """Wie b.text, aber „|“ als Strich genau so hoch wie eine Klammer (Nutzer 13.11.: Koordinaten sauber in Klammern)."""
+    if s.strip() != '|':
+        b.text(s, xc, y, g, c, pfad, alpha=alpha)
+        return
+    if (pfad, g) not in _kl:
+        sp = _sprite('(', pfad, g, '#000000')
+        l, o, r, u = sp.getchannel('A').getbbox()
+        _kl[(pfad, g)] = ((o - sp.height / 2) / 2, (u - sp.height / 2) / 2)
+    o, u = _kl[(pfad, g)]
+    b.linie([(xc, y + o + g * 0.04), (xc, y + u - g * 0.04)], c, max(2.0, g * 0.09), alpha=alpha)
+
+
+def zeile(b, teile, x, y, g, pfad, alpha=1.0, anker='m'):      # ersetzt regel.zeile in diesem Video
+    ws = [breite(s_, pfad, g) for s_, _ in teile]
+    x0 = x - sum(ws) / 2 if anker == 'm' else x
+    pos = []
+    for (s_, c), w_ in zip(teile, ws):
+        zeichen(b, s_, x0 + w_ / 2, y, g, c, pfad, alpha)
+        pos.append(x0 + w_ / 2)
+        x0 += w_
+    return pos
 from animationen import breite, glatt, klemm, p           # noqa: E402
 
 KICKER = {'hook': 'Einheitskreis', 'kreis': 'Der Kreis', 'orientierung': 'Der Kreis', 'warum': 'Warum?', 'werte': 'Besondere Winkel',
@@ -350,15 +376,15 @@ def s_warum(b, sc, t):
     m = math.radians(g)
     ux, uy = math.cos(m), -math.sin(m)                     # Richtung Ursprung → P (Bildschirm)
     nx, ny = -math.sin(m), -math.cos(m)                    # Normale nach links oben (außerhalb des Dreiecks)
-    wort = 'Hypotenuse' + (' = 1' if t >= C(sc, 'genau eins') else '')
-    ws = [breite(ch, INTER_X, 22) for ch in wort]
-    pos = R / 2 - sum(ws) / 2
+    wort = 'Hypotenuse = 1'                                 # Lage fest für den ganzen Text (Nutzer 13.11.: sprang)
+    ws = [breite(ch, INTER_X, 20) for ch in wort]
+    pos = 0.56 * R - sum(ws) / 2
     for i, (ch, w) in enumerate(zip(wort, ws)):
-        start = T['H'] + 0.07 * i if i < 10 else C(sc, 'genau eins') + 0.05 * (i - 10)
+        start = T['H'] + 0.07 * i if i < 10 else C(sc, 'genau eins') + 0.08 * (i - 10)
         a_ch = ein(t, start, 0.18) * weg_h * (1 - ein(t, C(sc, 'y-Koordinate'), 0.4))   # Platz für die y-Linie
         mitte = pos + w / 2
         if a_ch > 0 and ch != ' ':
-            b.text(ch, CX + ux * mitte + nx * 20, CY + uy * mitte + ny * 20, 22, INK, INTER_X, alpha=a_ch, dreh=g)
+            b.text(ch, CX + ux * mitte + nx * 21, CY + uy * mitte + ny * 21, 20, INK, INTER_X, alpha=a_ch, dreh=g)
         pos += w
     a1 = ein(t, C(sc, 'y-Koordinate'), 0.4) * weg_h          # danach nur noch „1“ neben der Hypotenuse
     if a1 > 0:
@@ -496,7 +522,7 @@ def s_werte(b, sc, t):
             x0 = lx - w_ / 2
             for s_, c_ in teile:
                 ww = breite(s_, INTER_X, g_)
-                b.text(s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
+                zeichen(b, s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
                 x0 += ww
     a45 = ein(t, w('dritte Winkel'), 0.4) * (1 - ein(t, w('Nach Pythagoras'), 0.4))
     if a45 > 0:
