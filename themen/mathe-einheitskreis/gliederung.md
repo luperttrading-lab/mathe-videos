@@ -41,4 +41,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
 - Nutzer 13.11.: Wenn das Video fertig ist, `lehren.md` als Gestaltungsregeln in die CLAUDE.md übernehmen (für alle
   künftigen Videos und Apps).
 - Startbild: A „Kreis und Welle“ (Nutzer 13.11., Vorschau-Seite „passt“), `startbild.py` → `startbild_welle.png`.
+- 13.11. abends: „rendern“ (Nutzer) – ganzes Video 5:45, 1080p/720p/480p.
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
