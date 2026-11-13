@@ -236,7 +236,8 @@ def s_orientierung(b, sc, t):
     w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
     halte = [(0, 'Null Grad', 0), (90, 'neunzig Grad oben', 90), (180, 'hundertachtzig Grad links', 180),
              (270, 'zweihundertsiebzig', 270), (30, 'dreißig', 390), (45, 'fünfundvierzig', 405), (60, 'sechzig', 420),
-             (135, 'hundertfünfunddreißig', 495)]
+             (135, 'hundertfünfunddreißig', 495), (120, 'hundertzwanzig', 480), (240, 'zweihundertvierzig', 600),
+             (300, 'dreihundert Grad', 660)]
     g = bahn(t, [(0, 50)] + [(w(wort) - 0.5, ziel) for _, wort, ziel in halte], 0.9)
     achsen(b)
     kreislinie(b)
@@ -257,6 +258,8 @@ def s_orientierung(b, sc, t):
     zeit_zeile(b, t, w('hundertachtzig Grad links'), [('180° links · 270° unten', INK)], 305, 32, INTER)
     zeit_zeile(b, t, w('dreißig'), [('30°, 45°, 60°: erstes Viertel', INK)], 380, 30, INTER)
     zeit_zeile(b, t, w('hundertfünfunddreißig'), [('135° = Mitte zwischen 90° und 180°', INK)], 435, 30, INTER)
+    zeit_zeile(b, t, w('hundertzwanzig'), [('120° oben links · 240° unten links', INK)], 510, 30, INTER)
+    zeit_zeile(b, t, w('dreihundert Grad'), [('300° unten rechts', INK)], 560, 30, INTER)
 
 
 def s_warum(b, sc, t):
