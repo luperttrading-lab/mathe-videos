@@ -1,14 +1,14 @@
 {
  "titel": "Einheitskreis-Video",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: Orientierung ab ≈ 0:28 mit korrigiertem Text. Danach „rendern“.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: Radius-Zirkel (≈ 0:13) und Dreieck über 90° (≈ 1:30). Danach „rendern“.",
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
-   "titel": "Animiert: Startbild und Szenen 1–3 (1:45)",
-   "stand": "13.11., 20:45",
+   "titel": "Animiert: Startbild und Szenen 1–3 (1:49)",
+   "stand": "13.11., 21:05",
    "pruefen": true,
-   "poster_bei": 52,
-   "notiz": "Neu ab ≈ 0:28 (Orientierung): jedes Viertel genau einmal – „Im ersten Viertel liegen zum Beispiel dreißig, fünfundvierzig und sechzig Grad. Oben links liegen hundertzwanzig Grad und hundertfünfunddreißig Grad, genau in der Mitte zwischen oben und links. Unten links liegen zweihundertvierzig Grad, unten rechts dreihundert Grad.“ Rechts je Viertel eine Zeile. Startbild am Anfang wie vorher."
+   "poster_bei": 16,
+   "notiz": "Neu: (1) „Radius 1“ (≈ 0:13): ein grüner Radius der Länge 1 dreht wie ein Zirkel einmal herum und zeichnet dabei den Kreis, bleibt schräg stehen mit „r = 1“; rechts „jeder Punkt hat Abstand 1 zur Mitte“. (2) Dreieck über 90° (≈ 1:30): neuer Text „Aber Vorsicht: In einem rechtwinkligen Dreieck liegt Alpha immer zwischen null und neunzig Grad. Wird Alpha größer, ist der Winkel im Dreieck nicht mehr Alpha. Deshalb legt man fest …“ – P dreht auf 140°, das Dreieck bleibt, sein Winkel am Ursprung wird als 40° markiert. Neu vertont nur dieser Satz."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",

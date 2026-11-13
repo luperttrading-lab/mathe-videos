@@ -216,34 +216,45 @@ def s_kreis(b, sc, t):
     tR, tM, tX = C(sc, 'Radius eins'), C(sc, 'Mittelpunkt'), C(sc, 'positiven x-Achse')
     tU, tP = C(sc, 'gegen den Uhrzeigersinn'), C(sc, 'Punkt P')
     achsen(b)
-    kreislinie(b)
-    # Radius wächst waagrecht, dreht sich später auf 50°
-    f = glatt(p(t, tR, 0.6))
-    g = 50 * glatt(p(t, tU, 1.6))
-    if f > 0:
-        px, py = punkt(g)
-        b.linie([(CX, CY), (CX + (px - CX) * f, CY + (py - CY) * f)], INK, 4)
-        if g < 1:
-            etikett(b, 'r = 1', CX + R / 2, CY - 26, 28, INK, ein(t, tR + 0.3) * (1 - ein(t, tX, 0.3)))
+    # Wie ein Zirkel (Nutzer 13.11.: „Radius 1“ deutlich zeigen, nicht als Strich auf der Achse): Ein Radius der
+    # Länge 1 dreht einmal ganz herum und zeichnet dabei den Kreis; er bleibt schräg bei 135° stehen.
+    fz = glatt(p(t, tR, 2.6))
+    phi = 495 * fz                                         # 360° + 135°
+    kreislinie(b, 1.0, 0.18)
+    kreislinie(b, min(phi / 360, 1.0), 1.0)
+    ar = ein(t, tR, 0.3) * (1 - ein(t, tX, 0.4))
+    if ar > 0:
+        m = math.radians(phi)
+        qx, qy = CX + R * math.cos(m), CY - R * math.sin(m)
+        b.linie([(CX, CY), (qx, qy)], TEAL, 7, alpha=ar)
+        b.kreis(qx, qy, 8, TEAL, alpha=ar)
+        nx, ny = -math.sin(m), -math.cos(m)                 # Normale, links neben dem Radius
+        etikett(b, 'r = 1' if fz > 0.98 else '1', (CX + qx) / 2 + 44 * nx, (CY + qy) / 2 + 44 * ny, 28, TEAL, ar,
+                grund=False)
     am = ein(t, tM, 0.3)
     if am > 0:
         b.kreis(CX, CY, 8 + 6 * math.sin(math.pi * klemm((t - tM) / 0.6)), INK, alpha=am)
-        etikett(b, '(0 | 0)', CX - 52, CY + 28, 22, INK, am)
+        etikett(b, '(0 | 0)', CX - 52, CY + 28, 22, INK, am, grund=False)
+    # danach der Zeiger für α: startet auf der positiven x-Achse, dreht auf 50°
+    f = ein(t, tX, 0.4)
+    g = 50 * glatt(p(t, tU, 1.6))
     ax = ein(t, tX, 0.4) * (1 - ein(t, tU + 1.6, 0.6))
     if ax > 0:
         b.linie([(CX, CY), (CX + 1.32 * R, CY)], WINKEL, 10, alpha=0.45 * ax)
     winkel(b, g, ein(t, tU, 0.3))
     if f > 0:
         px, py = punkt(g)
+        b.linie([(CX, CY), (px, py)], INK, 4, alpha=f)
         ap = ein(t, tP, 0.3)
         if ap > 0:
             b.kreis(px, py, 9 * (0.6 + 0.4 * ap), INK, alpha=ap)
             b.text('P', px + 24, py - 22, 28, INK, INTER_X, alpha=ap)
-    zeit_zeile(b, t, tR, [('Radius 1', INK)], 200, 38)
-    zeit_zeile(b, t, tM, [('Mittelpunkt im Ursprung', INK)], 270, 32, INTER)
-    zeit_zeile(b, t, tX, [('Winkel ', INK), ('α', WINKEL), (' ab der positiven x-Achse', INK)], 340, 30, INTER)
-    zeit_zeile(b, t, tU, [('gegen den Uhrzeigersinn ↺', WINKEL)], 400, 30, INTER)
-    zeit_zeile(b, t, tP, [('P liegt auf dem Kreis', INK)], 470, 32)
+    zeit_zeile(b, t, tR, [('Radius ', INK), ('1', TEAL)], 200, 38)
+    zeit_zeile(b, t, tR + 1.2, [('jeder Punkt hat Abstand 1 zur Mitte', GRAU)], 245, 26, INTER)
+    zeit_zeile(b, t, tM, [('Mittelpunkt im Ursprung', INK)], 300, 32, INTER)
+    zeit_zeile(b, t, tX, [('Winkel ', INK), ('α', WINKEL), (' ab der positiven x-Achse', INK)], 360, 30, INTER)
+    zeit_zeile(b, t, tU, [('gegen den Uhrzeigersinn ↺', WINKEL)], 415, 30, INTER)
+    zeit_zeile(b, t, tP, [('P liegt auf dem Kreis', INK)], 480, 32)
 
 
 def s_orientierung(b, sc, t):
@@ -281,15 +292,15 @@ def s_orientierung(b, sc, t):
 def s_warum(b, sc, t):
     T = {k: C(sc, w) for k, w in dict(L='senkrecht nach unten', D='rechtwinkliges', H='Hypotenuse', G='Gegenkathete durch Hyp',
                                        G1='Gegenkathete durch eins', Ho='Höhe von P', K='Kosinus Ankathete',
-                                       Xk='x-Koordinate', Ko='Koordinaten Kosinus', Al='Alphabet', N='nur zwischen',
-                                       F='legt man fest', J='jeder Winkel').items()}
-    g = 50 + 95 * glatt(p(t, T['F'] + 0.3, 2.2))
+                                       Xk='x-Koordinate', Ko='Koordinaten Kosinus', Al='Alphabet', N='Aber Vorsicht',
+                                       G2='Wird Alpha größer', F='legt man fest', J='jeder Winkel').items()}
+    g = 50 + 90 * glatt(p(t, T['G2'], 1.8))               # Nutzer 13.11.: Dreieck gibt es auch dort, aber …
     if t > T['J']:
         g = 145 + 70 * (t - T['J'])
     achsen(b)
     kreislinie(b)
     px, py = punkt(g)
-    dreieck = ein(t, T['D'], 0.4) * (1 - ein(t, T['F'], 0.4))
+    dreieck = ein(t, T['D'], 0.4) * (1 - ein(t, T['F'] + 1.0, 0.5))
     if dreieck > 0:
         b.poly([(CX, CY), (px, CY), (px, py)], fill=WINKEL, alpha=0.10 * dreieck)
         # rechter Winkel wie in der Schule: Viertelbogen mit Punkt (Nutzer 13.11.)
@@ -299,6 +310,14 @@ def s_warum(b, sc, t):
         b.linie([(px + sx * rw * math.cos(math.pi / 2 * k / 12), CY + sy * rw * math.sin(math.pi / 2 * k / 12))
                  for k in range(13)], INK, 2.5, alpha=dreieck)
         b.kreis(px + sx * 11, CY + sy * 11, 3.5, INK, alpha=dreieck)
+    # über 90°: Der Winkel im Dreieck (am Ursprung) ist 180° − α, nicht α
+    ai = ein(t, T['G2'] + 1.6, 0.4) * dreieck
+    if ai > 0 and g > 95:
+        n_ = 16
+        b.linie([(CX + 34 * math.cos(math.radians(g + (180 - g) * k / n_)), CY - 34 * math.sin(math.radians(g + (180 - g) * k / n_)))
+                 for k in range(n_ + 1)], INK, 3, alpha=ai)
+        mi = math.radians((g + 180) / 2)
+        etikett(b, f'{int(round(180 - g))}°', CX + 64 * math.cos(mi), CY - 64 * math.sin(mi), 22, INK, ai, grund=False)
     winkel(b, g % 360, 1.0)
     lab_s = 'Gegenkathete' if t < T['Ho'] else 'sin α'
     lab_c = 'Ankathete' if t < T['Xk'] else 'cos α'
@@ -349,8 +368,9 @@ def s_warum(b, sc, t):
     zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : 1', INK)], 240, 28, INTER, ende=weg)
     zeit_zeile(b, t, T['Ho'], [('sin α', SIN), (' = ', INK), ('Höhe von P', SIN), (' = ', INK), ('y', SIN)], 300, 34, ende=weg)
     zeit_zeile(b, t, T['K'], [('cos α', COS), (' = ', INK), ('Ankathete', COS), (' : 1 = ', INK), ('x', COS)], 360, 34, ende=weg)
-    zeit_zeile(b, t, T['N'], [('Dreieck nur für 0° < ', INK), ('α', WINKEL), (' < 90°', INK)], 220, 30, INTER)
-    zeit_zeile(b, t, T['F'], [('sonst festgelegt:', GRAU)], 280, 30, INTER)
+    zeit_zeile(b, t, T['N'], [('im rechtwinkligen Dreieck: 0° < ', INK), ('α', WINKEL), (' < 90°', INK)], 200, 28, INTER)
+    zeit_zeile(b, t, T['G2'] + 1.6, [('bei ', INK), ('α', WINKEL), (' = 140°: Winkel im Dreieck 40°', INK)], 250, 28, INTER)
+    zeit_zeile(b, t, T['F'], [('deshalb festgelegt, für jedes ', GRAU), ('α', WINKEL), (':', GRAU)], 310, 28, INTER)
     zeit_zeile(b, t, T['Ko'], [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 450, 46)
     a = ein(t, T['Al'])
     if a > 0:
