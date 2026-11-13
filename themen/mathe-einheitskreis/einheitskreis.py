@@ -85,15 +85,15 @@ def achsen(b, a=1.0, cx=CX, cy=CY, r=R):
     if a <= 0:
         return
     L = 1.32 * r
-    b.linie([(cx - L, cy), (cx + L, cy)], GRAU, 2.5, alpha=a)
-    b.linie([(cx, cy + L), (cx, cy - L)], GRAU, 2.5, alpha=a)
+    b.linie([(cx - L, cy), (cx + L, cy)], GRAU, 3.5, alpha=a)
+    b.linie([(cx, cy + L), (cx, cy - L)], GRAU, 3.5, alpha=a)
     b.poly([(cx + L + 12, cy), (cx + L - 4, cy - 7), (cx + L - 4, cy + 7)], fill=GRAU, alpha=a)
     b.poly([(cx, cy - L - 12), (cx - 7, cy - L + 4), (cx + 7, cy - L + 4)], fill=GRAU, alpha=a)
     b.text('x', cx + L + 6, cy + 24, 24, GRAU, INTER_X, alpha=a)
     b.text('y', cx - 22, cy - L - 2, 24, GRAU, INTER_X, alpha=a)
     for v in (1, -1):
-        b.linie([(cx + v * r, cy - 7), (cx + v * r, cy + 7)], GRAU, 2.5, alpha=a)
-        b.linie([(cx - 7, cy - v * r), (cx + 7, cy - v * r)], GRAU, 2.5, alpha=a)
+        b.linie([(cx + v * r, cy - 7), (cx + v * r, cy + 7)], GRAU, 3.5, alpha=a)
+        b.linie([(cx - 7, cy - v * r), (cx + 7, cy - v * r)], GRAU, 3.5, alpha=a)
         s = '1' if v > 0 else '−1'
         b.text(s, cx + v * r + (18 if v > 0 else -24), cy + 22, 22, INK, INTER_X, alpha=a)
         b.text(s, cx - 24 - (6 if v < 0 else 0), cy - v * r - (18 if v > 0 else -18), 22, INK, INTER_X, alpha=a)
