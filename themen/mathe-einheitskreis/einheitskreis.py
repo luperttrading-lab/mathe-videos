@@ -277,10 +277,10 @@ def s_warum(b, sc, t):
             b.text(ch, CX + ux * mitte + nx * 20, CY + uy * mitte + ny * 20, 22, INK, INTER_X, alpha=a_ch, dreh=g)
         pos += w
     weg = T['N']
-    zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = Gegenkathete : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
-    zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = Gegenkathete : 1', INK)], 240, 28, INTER, ende=weg)
-    zeit_zeile(b, t, T['Ho'], [('sin α', SIN), (' = Höhe von P = ', INK), ('y', SIN)], 300, 34, ende=weg)
-    zeit_zeile(b, t, T['K'], [('cos α', COS), (' = Ankathete : 1 = ', INK), ('x', COS)], 360, 34, ende=weg)
+    zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
+    zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : 1', INK)], 240, 28, INTER, ende=weg)
+    zeit_zeile(b, t, T['Ho'], [('sin α', SIN), (' = ', INK), ('Höhe von P', SIN), (' = ', INK), ('y', SIN)], 300, 34, ende=weg)
+    zeit_zeile(b, t, T['K'], [('cos α', COS), (' = ', INK), ('Ankathete', COS), (' : 1 = ', INK), ('x', COS)], 360, 34, ende=weg)
     zeit_zeile(b, t, T['N'], [('Dreieck nur für 0° < ', INK), ('α', WINKEL), (' < 90°', INK)], 220, 30, INTER)
     zeit_zeile(b, t, T['F'], [('sonst festgelegt:', GRAU)], 280, 30, INTER)
     zeit_zeile(b, t, T['Ko'], [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 450, 46)
@@ -376,19 +376,6 @@ def s_werte(b, sc, t):
                 ww = breite(s_, INTER_X, g_)
                 b.text(s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
                 x0 += ww
-    # Linien und Dreieck
-    zeig = t < w('Genauso') or t > tB - 0.2
-    if zeig:
-        dreieck_fuell(b, g, teil2 * (1 - ein(t, t30 + 0.2, 0.3)) + ein(t, t60 + 1.2, 0.4))
-        lab_s = lab_c = ''
-        if t > tB:
-            lab_s = lab_c = 'x' if t < t30 else ''
-        if t > w('Sinus dreißig'):
-            lab_s, lab_c = '½', ('√3 / 2' if t > w('Wurzel drei') else '')
-        if t > t60 + 1.2:
-            lab_s, lab_c = '√3 / 2', '½'
-        strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
-    winkel(b, g, ein(t, tB - 0.2, 0.4), text=f'{int(round(g))}°' if t > tB else '')
     # 30°: Spiegelbild unter der x-Achse → gleichseitiges Dreieck
     sp = ein(t, t30 + 0.4, 0.6) * (1 - ein(t, t60, 0.4))
     if sp > 0:
@@ -407,6 +394,19 @@ def s_werte(b, sc, t):
             if hl > 0:
                 b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
                 etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
+    # Linien und Dreieck
+    zeig = t < w('Genauso') or t > tB - 0.2
+    if zeig:
+        dreieck_fuell(b, g, teil2 * (1 - ein(t, t30 + 0.2, 0.3)) + ein(t, t60 + 1.2, 0.4))
+        lab_s = lab_c = ''
+        if t > tB:
+            lab_s = lab_c = 'x' if t < t30 else ''
+        if t > w('Sinus dreißig'):
+            lab_s, lab_c = '½', ('√3 / 2' if t > w('Wurzel drei') else '')
+        if t > t60 + 1.2:
+            lab_s, lab_c = '√3 / 2', '½'
+        strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
+    winkel(b, g, ein(t, tB - 0.2, 0.4), text=f'{int(round(g))}°' if t > tB else '')
     zeiger(b, g)
     for x, y, hell, ax, ay, fx, fy in spaeter:
         if x != CX:
@@ -416,20 +416,20 @@ def s_werte(b, sc, t):
         b.kreis(x if x != CX else CX, CY, 9, COS, alpha=hell * ax)
         b.kreis(CX, y if y != CY else CY, 7 if y == CY else 9, SIN, alpha=hell * ay)
     # rechte Spalte
-    zeit_zeile(b, t, w('Die Höhe ist null'), [('Höhe von P = 0', INK)], 210, 32, INTER, ende=w('Genauso'))
+    zeit_zeile(b, t, w('Die Höhe ist null'), [('Höhe von P', SIN), (' = 0', INK)], 210, 32, INTER, ende=w('Genauso'))
     zeit_zeile(b, t, w('Also ist Sinus'), [('sin', SIN), (' 180° = ', INK), ('0', GRUEN)], 280, 52, ende=w('Genauso'))
     zeit_zeile(b, t, w('Minus eins ist'), [('cos', COS), (' 180° = −1', INK)], 360, 40, ende=w('Genauso'))
     zeit_zeile(b, t, w('Genauso'), [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 230, 40,
                ende=tA)
     zeit_zeile(b, t, tB + 0.4, [('45°: beide Katheten gleich lang', INK)], 190, 28, INTER, ende=t30)
-    zeit_zeile(b, t, w('x Quadrat'), [('x² + x² = 1', INK)], 250, 36, ende=t30)
+    zeit_zeile(b, t, w('x Quadrat'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 250, 36, ende=t30)
     zeit_zeile(b, t, w('x Quadrat') + 1.6, [('2x² = 1', GRAU)], 300, 30, INTER, ende=t30)
     zeit_zeile(b, t, w('Wurzel zwei'), [('x = √2 / 2 ≈ 0,71', GRUEN)], 360, 40, ende=t30)
     zeit_zeile(b, t, w('Wurzel zwei') + 1.2, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)], 430,
                30, INTER, ende=t30)
     zeit_zeile(b, t, w('gleichseitiges'), [('gleichseitig: alle Seiten 1', WINKEL)], 190, 28, INTER, ende=t60)
     zeit_zeile(b, t, w('Sinus dreißig'), [('sin', SIN), (' 30° = ', INK), ('½', GRUEN)], 260, 46, ende=t60 + 1.2)
-    zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ¼)', INK)], 330, 32, INTER, ende=t60 + 1.2)
+    zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ', INK), ('¼', SIN), (')', INK)], 330, 32, INTER, ende=t60 + 1.2)
     zeit_zeile(b, t, w('Wurzel drei'), [('= √3 / 2 ≈ 0,87', GRUEN)], 380, 36, ende=t60 + 1.2)
     zeit_zeile(b, t, t60 + 1.2, [('sin', SIN), (' 60° = √3 / 2', INK)], 260, 40)
     zeit_zeile(b, t, w('tauschen'), [('cos', COS), (' 60° = ½', INK)], 330, 40)
@@ -491,7 +491,7 @@ def s_pythagoras(b, sc, t):
     a1 = 1 - ein(t, w('jeden Winkel'), 0.4)
     if a1 > 0:
         etikett(b, '1', (CX + px) / 2 - 22, (CY + py) / 2 - 14, 28, INK, a1)
-    zeit_zeile(b, t, w('Pythagoras sagt'), [('a² + b² = c²', GRAU)], 220, 34, INTER)
+    zeit_zeile(b, t, w('Pythagoras sagt'), [('a²', COS), (' + ', GRAU), ('b²', SIN), (' = c²', GRAU)], 220, 34, INTER)
     zeit_zeile(b, t, w('Sinus Quadrat'), [('sin²α', SIN), (' + ', INK), ('cos²α', COS), (' = 1', INK)], 320, 52)
     zeit_zeile(b, t, w('jeden Winkel'), [('für jeden Winkel α', WINKEL)], 410, 30, INTER)
 

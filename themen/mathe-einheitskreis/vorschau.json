@@ -1,22 +1,22 @@
 {
  "titel": "Einheitskreis · Vorschau",
- "aufgabe": "2 Einträge zu prüfen: oben Szenen 4–10 (neu), darunter Szenen 1–3 mit kleinerer Hypotenusen-Schrift. Je Eintrag „✓ passt“ oder „ändern“ mit Sekunde.",
+ "aufgabe": "2 Einträge zu prüfen: Szenen 4–10 und 1–3, jetzt mit farbigen Formeln. Je Eintrag „✓ passt“ oder „ändern“ mit Sekunde.",
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
    "titel": "Animiert: Szenen 4–10 (2:58)",
-   "stand": "13.11., 16:20",
+   "stand": "13.11., 16:30",
    "pruefen": true,
-   "poster_bei": 20,
-   "notiz": "Neu ab ≈ 0:00–0:25 (Achsenpunkte): Jede Koordinate erscheint genau, wenn sie gesprochen wird – erst der x-Wert in Blau, dabei läuft eine blaue Strecke auf der x-Achse, dann der y-Wert in Rot mit roter Strecke auf der y-Achse. Rechts steht „P(cos α | sin α)“. Merkzettel ab 2:26 farbig. Sonst wie vorher."
+   "poster_bei": 33,
+   "notiz": "Neu: Formeln in den Farben des Bilds – „x² + x² = 1“ mit blauem und rotem x (≈ 0:33), „a² + b² = c²“ mit blauem a und rotem b (≈ 1:40), in „√(1 − ¼)“ das ¼ rot, „Höhe von P“ rot. Bei 30° liegt „√3 / 2“ jetzt über dem Spiegeldreieck. Achsenpunkte Wert für Wert, Merkzettel farbig wie vorher."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
    "titel": "Animiert: Szenen 1–3 (1:19)",
-   "stand": "13.11., 15:25",
+   "stand": "13.11., 16:30",
    "pruefen": true,
-   "poster_bei": 40,
-   "notiz": "Abgenommen bis auf: „Hypotenuse = 1“ jetzt etwas kleiner geschrieben (ab ≈ 0:35), damit es nicht über die Achse ragt."
+   "poster_bei": 55,
+   "notiz": "Neu: In den Formeln rechts „Gegenkathete“ und „Höhe von P“ rot, „Ankathete“ blau (ab ≈ 0:45). „Hypotenuse = 1“ etwas kleiner (≈ 0:35)."
   }
  ]
 }
