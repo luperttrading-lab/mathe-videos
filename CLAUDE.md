@@ -25,6 +25,11 @@ nachziehen.
 - `themen/mathe-tricks/` – Folgenplan und Recherche der 127 Tricks
 - `uebung/` – App „Kopfrechnen üben“ (GitHub Pages), Details `uebung/LIESMICH.md`
 - `index.html` im Hauptordner leitet auf `uebung/` weiter
+- `themen/mathe-einheitskreis/` – Video „Einheitskreis“ (Reihe „Mathe verstehen“, für den Sohn des Nutzers, 10. Klasse,
+  kein Kanal, kein Abspann): `einheitskreis.py` (Baukasten regel.py), Sprechtext nur in `drehbuch.md`, `gliederung.md`.
+  Eigene Vorschau-Seite [Einheitskreis-Video · Vorschau](https://claude.ai/artifact/2zRnaGCW6fr3xH48QPsMXc)
+  (Slug `101dceed-779d-4835-8c36-388133b01b8f`, `vorschau.json` dort). Im Chat immer „Video“ im Linknamen
+  (Nutzer 13.11.: Verwechslung mit der App-Vorschau vermeiden).
 - `einheitskreis/` – eigene App „Einheitskreis“ (13.11., Details `einheitskreis/LIESMICH.md`), abgenommen 13.11. (v0.8),
   live: [Einheitskreis](https://luperttrading-lab.github.io/mathe-videos/einheitskreis/). Änderungen erst als Vorschau
   [Einheitskreis · Vorschau](https://claude.ai/artifact/43jaMqCCrmXtqx6TYuqET3) (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`),
