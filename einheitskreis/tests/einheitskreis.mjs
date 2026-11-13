@@ -170,6 +170,27 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   await page.click('#version'); await page.waitForTimeout(700);
   const nach = await page.evaluate(() => ({ t: document.querySelector('#update-text').textContent, k: document.querySelector('#kurven').getBoundingClientRect().top }));
   ok(/ist aktuell/.test(nach.t) && nach.k === vor, `Version antippen: „${nach.t}“, nichts verschoben`);
+  // Abspielen: dreht mit dem eingestellten Tempo, Griff an einen Regler hält an
+  await regler('#r-win', 100);
+  await page.evaluate(() => { const e = document.querySelector('#r-tempo'); e.value = 1; e.dispatchEvent(new Event('input')); });
+  ok(await page.textContent('#w-tempo') === '20 °/s', `Tempo höchstens 20 °/s (${await page.textContent('#w-tempo')})`);
+  await page.evaluate(() => { const e = document.querySelector('#r-tempo'); e.value = 0; e.dispatchEvent(new Event('input')); });
+  ok(await page.textContent('#w-tempo') === '2,0 °/s', `Tempo mindestens 2 °/s (${await page.textContent('#w-tempo')})`);
+  await page.evaluate(() => { const e = document.querySelector('#r-tempo'); e.value = 1; e.dispatchEvent(new Event('input')); });
+  const g0 = await page.evaluate(() => window.einheitskreis.stand.grad);
+  await page.click('#play'); await page.waitForTimeout(1000);
+  const g1 = await page.evaluate(() => window.einheitskreis.stand.grad);
+  ok(g1 - g0 > 14 && g1 - g0 < 26, `Play: in 1 s um ${(g1 - g0).toFixed(1)}° gedreht (≈ 20)`);
+  await foto(page, 'play');
+  await regler('#r-sin', 0.5);
+  ok(!(await page.evaluate(() => window.einheitskreis.laeuft())), 'Griff an den sin-Regler hält an');
+  // Abspiel-Knöpfe überdecken den Kreis nicht (Abstand Kreismittelpunkt – Knopfecke > Radius)
+  const ueber = await page.evaluate(() => {
+    const f = document.querySelector('#kreis').getBoundingClientRect(), a = document.querySelector('#abspielen').getBoundingClientRect();
+    const m = window.Einheitskreis.kreisMasse({ x: 0, y: 0, w: f.width, h: f.height }, {});
+    return Math.hypot(a.left - f.left - m.mx, a.top - f.top - m.my) - m.r;
+  });
+  ok(ueber > 0, `Abspiel-Knöpfe außerhalb des Kreises (${ueber.toFixed(0)} px Abstand)`);
   // Stand bleibt nach Neuladen
   await regler('#r-win', 135); await page.waitForTimeout(500);
   await page.reload(); await page.waitForTimeout(300);

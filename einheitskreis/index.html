@@ -67,6 +67,16 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .ecke { position: absolute; font-size: 13px; font-weight: 700; pointer-events: none; line-height: 1.25; }
 #tanwert { right: 0; top: 0; color: var(--tan); text-align: right; }
 #hinweis { left: 0; bottom: 0; color: var(--grau); font-weight: 600; transition: opacity .6s; }
+/* Abspielen (v0.7, Nutzer 13.11.): Play-Knopf und kleiner Tempo-Regler unten rechts im Kreisfeld */
+#abspielen { position: absolute; right: 0; bottom: 0; display: flex; align-items: center; gap: 8px; }
+.tempo { display: flex; flex-direction: column; align-items: center; width: 92px; }
+.tempo span { font-size: 11px; font-weight: 700; color: var(--grau); line-height: 1; }
+#r-tempo { height: 26px; --f: var(--grau); }
+#r-tempo::-webkit-slider-runnable-track { height: 4px; }
+#r-tempo::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; border-width: 2.5px; }
+#play { width: 44px; height: 44px; border-radius: 50%; background: var(--tan); color: #fff; display: grid; place-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18); flex: none; }
+#play svg { width: 18px; height: 18px; fill: currentColor; }
 #kurven { display: block; width: 100%; height: clamp(110px, 21vh, 200px); flex: none; touch-action: none; }
 
 .regler { display: flex; flex-direction: column; gap: 2px; flex: none; }
@@ -135,7 +145,11 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   <div id="kreisfeld">
     <canvas id="kreis" aria-label="Einheitskreis, Punkt P ziehen"></canvas>
     <div class="ecke" id="tanwert" hidden></div>
-    <div class="ecke" id="hinweis">P ziehen oder Regler schieben</div>
+    <div class="ecke" id="hinweis">P ziehen</div>
+    <div id="abspielen">
+      <div class="tempo"><input type="range" id="r-tempo" min="0" max="1" step="0.01" aria-label="Tempo"><span id="w-tempo"></span></div>
+      <button id="play" aria-label="Abspielen"></button>
+    </div>
   </div>
   <canvas id="kurven" aria-label="Sinus- und Kosinuskurve"></canvas>
   <div class="regler">
@@ -153,13 +167,13 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.6';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.7';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 
 /* ---------- Zustand ---------- */
 const SPEICHER = 'einheitskreis.stand';
-const stand = { grad: 30, einrasten: true, tan: false };
+const stand = { grad: 30, einrasten: true, tan: false, tempo: 0.5 };
 try { Object.assign(stand, JSON.parse(localStorage.getItem(SPEICHER) || '{}')); } catch (_) {}
 function speichereAlles() { try { localStorage.setItem(SPEICHER, JSON.stringify(stand)); } catch (_) {} }
 // Welche Hälfte gilt, wenn ein Regler den Punkt nicht eindeutig festlegt:
@@ -328,7 +342,45 @@ schalter('#einrasten', 'einrasten');
 schalter('#tan', 'tan');
 
 let ersterGriff = false;
-function erstesMal() { if (!ersterGriff) { ersterGriff = true; $('#hinweis').style.opacity = 0; } }
+function erstesMal() { stoppe(); if (!ersterGriff) { ersterGriff = true; $('#hinweis').style.opacity = 0; } }
+
+/* ---------- Abspielen: P dreht sich gleichmäßig gegen den Uhrzeigersinn ----------
+   Tempo 2 … 20 Grad je Sekunde (eine Umdrehung in 3 min … 18 s), Regler logarithmisch; Nutzer 13.11.: „langsam bis noch
+   langsamer, nicht zu schnell“. Jeder Griff an Kreis, Kurven oder Reglern hält an. Beim Anhalten kein Einrasten. */
+const TEMPO_MIN = 2, TEMPO_MAX = 20;
+const gradJeSek = () => TEMPO_MIN * (TEMPO_MAX / TEMPO_MIN) ** stand.tempo;
+const ICON_PLAY = '<svg viewBox="0 0 20 20"><path d="M5 3l12 7-12 7z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 20 20"><path d="M4 3h4v14H4zM12 3h4v14h-4z"/></svg>';
+let laeuft = false, spielAnim = null, letzte = 0;
+function zeigeTempo() {
+  $('#r-tempo').value = stand.tempo;
+  const t = gradJeSek();
+  $('#w-tempo').textContent = (t < 10 ? EK.komma(t, 1) : Math.round(t)) + ' °/s';
+}
+function spielSchritt(t) {
+  if (!laeuft) return;
+  const dt = Math.min(0.1, (t - letzte) / 1000); letzte = t;
+  let g = stand.grad + gradJeSek() * dt;
+  if (g >= 360) g -= 360;
+  setzeGrad(g, { roh: true });
+  spielAnim = requestAnimationFrame(spielSchritt);
+}
+function starte() {
+  if (laeuft) return;
+  laeuft = true; cancelAnimationFrame(gleitAnim);
+  $('#play').innerHTML = ICON_PAUSE; $('#play').setAttribute('aria-label', 'Anhalten');
+  $('#hinweis').style.opacity = 0; ersterGriff = true;
+  letzte = performance.now(); spielAnim = requestAnimationFrame(spielSchritt);
+}
+function stoppe() {
+  if (!laeuft) return;
+  laeuft = false; cancelAnimationFrame(spielAnim);
+  $('#play').innerHTML = ICON_PLAY; $('#play').setAttribute('aria-label', 'Abspielen');
+}
+$('#play').innerHTML = ICON_PLAY;
+$('#play').addEventListener('click', () => laeuft ? stoppe() : starte());
+$('#r-tempo').addEventListener('input', e => { stand.tempo = +e.target.value; zeigeTempo(); speichereSpaeter(); });
+zeigeTempo();
 
 /* ---------- Startbild: der Punkt kreist und zeichnet Sinus (nach rechts) und Kosinus (nach unten) ---------- */
 const startC = $('#startbild');
@@ -452,7 +504,7 @@ $('#version').addEventListener('click', e => checkForUpdate(true, e.currentTarge
 if ('serviceWorker' in navigator) { try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (_) {} }
 
 location.hash === '#kreis' ? zeigeWerkzeug() : zeigeStart();
-window.einheitskreis = { stand, setzeGrad, ausSin, ausCos, rasteGrad };   // für Tests
+window.einheitskreis = { stand, setzeGrad, ausSin, ausCos, rasteGrad, gradJeSek, laeuft: () => laeuft };   // für Tests
 </script>
 </body>
 </html>
