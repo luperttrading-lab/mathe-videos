@@ -32,6 +32,8 @@ def szenen_aus_drehbuch():
 
 SZENEN = szenen_aus_drehbuch()
 for s in SZENEN:
+    if s['id'] == 'werte':                                 # Nutzer 13.11.: Erweitern mit √2 langsamer zeigen
+        s['pause_nach'] = {'erweitert:': 1.4, 'null Komma sieben.': 1.6}
     if s['id'] == 'app':
         s['pause'] = 2.5                                   # Seite länger stehen lassen zum Scannen
 
@@ -118,7 +120,9 @@ def winkel(b, grad, a=1.0, text='α', cx=CX, cy=CY):
     b.linie(pts, WINKEL, 5, alpha=a)
     m = math.radians(grad / 2)
     if text:
-        b.text(text, cx + 74 * math.cos(m), cy - 74 * math.sin(m), 26, WINKEL, INTER_X, alpha=a)
+        kl = grad < 40                                     # schmaler Winkel: kleiner und weiter außen (Nutzer 13.11.)
+        rr2 = 88 if kl else 74
+        b.text(text, cx + rr2 * math.cos(m), cy - rr2 * math.sin(m), 20 if kl else 26, WINKEL, INTER_X, alpha=a)
 
 
 def zeiger(b, grad, a=1.0, mit_p=True, p_a=1.0, cx=CX, cy=CY, r=R):
@@ -457,7 +461,10 @@ def s_werte(b, sc, t):
         ag = ein(t, w('gleichseitiges'), 0.5) * weg
         if ag > 0:
             b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
-            etikett(b, '1', px - 22, CY + 58, 26, INK, ag, anker='r', grund=False)
+            # Klammer rechts außen über die ganze senkrechte Seite: „1“ (Nutzer 13.11.: sonst sieht man es nicht)
+            xk = CX + R + 46
+            b.linie([(xk - 8, py), (xk, py), (xk, qy), (xk - 8, qy)], WINKEL, 3.5, alpha=ag)
+            etikett(b, '1', xk + 14, CY - 36, 28, WINKEL, ag, anker='l', grund=False)
         hl = ein(t, w('teilt die senkrechte'), 0.4) * weg
         if hl > 0:
             b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
@@ -511,11 +518,11 @@ def s_werte(b, sc, t):
     te0, te, te3 = w('Mit Wurzel zwei'), w('erweitert'), w('Wurzel zwei durch zwei', 'erweitert')
     a2 = ein(t, te0) * weg45
     if a2 > 0:
-        f3 = ein(t, te3, 0.5)
+        f3 = ein(t, te3, 0.9)
         el = [('t', 'x = ', INK, 1), ('b', [('1', INK)], [('√2', INK)], 1),
               ('t', ' · ', WINKEL, 1), ('b', [('√2', WINKEL)], [('√2', WINKEL)], 1),
-              ('t', ' = ', INK, ein(t, te + 0.4)),
-              ('b2', [('√2', GRUEN)], [('√2 · √2', INK)], [('2', GRUEN)], ein(t, te + 0.4), f3),
+              ('t', ' = ', INK, ein(t, te + 1.0)),
+              ('b2', [('√2', GRUEN)], [('√2 · √2', INK)], [('2', GRUEN)], ein(t, te + 1.0), f3),
               ('t', '  ≈ 0,71', GRUEN, ein(t, te3 + 0.6))]
         el0 = [e if e[0] != 'b2' else e[:5] + (0,) for e in el]
         breite_max = formel(b, el0, 0, 0, 30, messen=True)               # fest, damit die Zeile nicht springt
@@ -676,8 +683,8 @@ def s_kurve(b, sc, t):
     if t >= t0 and g < 360:
         winkel(b, g, 1.0, text='', cx=KX, cy=KY)
         px, py = punkt(g, KX, KY, KR)
-        b.linie([(px, py), (px, KY)], SIN, 5)
-        b.linie([(KX, KY), (px, KY)], COS, 5)
+        b.linie([(px, py), (px, KY)], SIN, 8)              # Nutzer 13.11.: dicker
+        b.linie([(KX, KY), (px, KY)], COS, 8)
         b.linie([(KX, KY), (px, py)], INK, 3.5)
         b.kreis(px, py, 7, INK)
         gestrichelt(b, px, py, gx(g), py, SIN, 0.6, n=30)

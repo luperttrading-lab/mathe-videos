@@ -128,7 +128,12 @@ def ton_und_zeitplan():
                 von = enden[j] / CFG['tempo'] - sc['_lead'] - 0.03
                 bis = sc['_starts'][j2] / CFG['tempo'] - sc['_lead'] + 0.06
                 tc = stille_stelle(x, von, bis, schwelle)
-                if ATEMPAUSEN and tc is not None:
+                # Szene kann gezielt längere Pausen verlangen: pause_nach = {Textende: Sekunden} (Einheitskreis 13.11.:
+                # Zeit für eine Animation, ohne den Ton neu zu erzeugen). Auch hier nur an echten Stillen.
+                extra = next((d for k, d in sc.get('pause_nach', {}).items() if txt[:i + 1].endswith(k)), None)
+                if tc is not None and extra is not None:
+                    pausen.append((tc, extra))
+                elif ATEMPAUSEN and tc is not None:
                     pausen.append((tc, 0.15 if txt[i] == ':' else 0.35))
         grenzen = sum(1 for i in range(len(txt) - 2) if txt[i] in '.?!:' and txt[i + 1] == ' ')
         sc['_pausen_bericht'] = f'{len(pausen)} von {grenzen} Satzgrenzen mit Pause'
