@@ -28,3 +28,9 @@ App-Abgleich (Info App-Sitzung 13.11.): App 0.2 nutzt dieselben Farben, dazu Tan
 Abnahme auf Zweig `einheitskreis`; QR auf …/einheitskreis/ funktioniert erst danach. Zeichencode zum Abgleich der
 Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt beim Python-Baukasten regel.py und
 übernimmt nur Farben und Strichbild.
+
+## Entscheidungen des Nutzers (13.11.)
+- Erstmal **kein YouTube-Kanal**: Das Video ist für den Sohn des Nutzers. Falls später veröffentlicht, dann auf einem
+  eigenen Kanal zum Mathelernen (nicht Kopfrechnen).
+- Name der Reihe: **„Mathe verstehen“**, Thema **Trigonometrie**.
+- Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
