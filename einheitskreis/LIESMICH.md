@@ -3,7 +3,7 @@
 Nutzerwunsch 13.11.2026: „erst eine App … Startbildschirm, dann den Einheitskreis, den man per Hand drehen kann oder
 Sinus und Kosinus verstellt … alles auf einen Bildschirm, Handy-App.“ Erklärvideo vielleicht später.
 
-**Adresse nach Abnahme:** https://luperttrading-lab.github.io/mathe-videos/einheitskreis/ (eigene App, eigenes Symbol;
+**Adresse (live seit 13.11., v0.8 abgenommen: „Die App ist gut so“):** https://luperttrading-lab.github.io/mathe-videos/einheitskreis/ (eigene App, eigenes Symbol;
 „Kopfrechnen“ wäre der falsche Name für ein Trigonometrie-Werkzeug). Bis zur Abnahme nur als Vorschau-Artifact
 (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`) und auf dem Zweig `einheitskreis`, nicht auf `main`.
 
