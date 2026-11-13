@@ -4,11 +4,13 @@ Reihe „Mathe verstehen“ · Trigonometrie · für den Sohn des Nutzers (10. K
 Bogenmaß und Tangens: nicht drin (Bogenmaß = eigenes Video). Farben: Sinus Rot #e63946, Kosinus Blau #3a86ff,
 Winkel Orange #ff9f1c, Kreis/Achsen #2b2d42, Papier #f6f1e7. Sprechtext so, wie Christian ihn lesen soll.
 
-## 1 hook (≈ 15 s)
-> Sinus von hundertachtzig Grad. Ist das null oder minus eins? Viele tippen auf minus eins. Am Einheitskreis siehst
-> du die Antwort sofort. Und nicht nur diese: Sinus und Kosinus von jedem Winkel.
+## 1 hook (≈ 11 s) – Startbild A „Kreis und Welle“, animiert (Nutzer 13.11.: kein „sin 180°“ als Einstieg)
+> Der Einheitskreis. Mit einem einzigen Kreis siehst du, was Sinus und Kosinus bedeuten, für jeden Winkel. Und für
+> die wichtigsten Winkel rechnest du die genauen Werte selbst aus.
 
-Bild: groß „sin 180° = ?“, darunter zwei Karten „0“ und „−1“; dann Kreis blendet ein.
+Bild: Titel „Der Einheitskreis“, Kreis zeichnet sich, P dreht auf 50°, rote und blaue Strecke, die Sinuswelle läuft
+heraus, Untertitel „Sinus und Kosinus verstehen“, grüne Leiste „MATHE VERSTEHEN · TRIGONOMETRIE“ – endet genau im
+Startbild A.
 
 ## 2 kreis (≈ 20 s)
 > Der Einheitskreis ist ein Kreis mit Radius eins. Sein Mittelpunkt liegt im Ursprung. Den Winkel Alpha messen wir
@@ -37,7 +39,7 @@ Bild: rote Senkrechte (sin), blaue Waagrechte (cos), Hypotenuse „1“; Bruch �
 rote und blaue Strecke bleiben.
 
 ## 4 werte (≈ 65 s)
-> Jetzt zur Frage vom Anfang. Bei hundertachtzig Grad liegt P ganz links auf der x-Achse, bei minus eins und null.
+> Ein häufiger Fehler: Sinus von hundertachtzig Grad ist nicht minus eins. Bei hundertachtzig Grad liegt P ganz links auf der x-Achse, bei minus eins und null.
 > Die Höhe ist null. Also ist Sinus von hundertachtzig Grad null. Minus eins ist der Kosinus. Genauso liest du ab:
 > Bei null Grad liegt P bei eins und null, bei neunzig Grad bei null und eins, bei zweihundertsiebzig Grad bei null
 > und minus eins.
