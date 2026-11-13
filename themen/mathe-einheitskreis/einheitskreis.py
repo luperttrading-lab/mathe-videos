@@ -603,7 +603,7 @@ def s_pythagoras(b, sc, t):
 # darunter (Winkel nach unten); die blaue Kurve kippt danach um 90° auf die Sinus-Achsen
 KX, KY, KR = 200, 215, 105
 GX0, GX1 = 380, 1190                                       # Sinus: 0° … 360° waagrecht
-CY0, CY1 = 350, 680                                        # Kosinus: 0° … 360° senkrecht unter dem Kreis
+CY0, CY1 = 372, 668                                        # Kosinus: 0° … 360° senkrecht unter dem Kreis
 
 
 def gestrichelt(b, x0, y0, x1, y1, c, a=1.0, n=24, lw=2):
@@ -655,6 +655,16 @@ def s_kurve(b, sc, t):
     d = (math.sin(th) * L, math.cos(th) * L)                # Winkel-Richtung: erst nach unten, dann nach rechts
     e = (math.cos(th) * KR, -math.sin(th) * KR)             # Wert-Richtung: erst nach rechts, dann nach oben
     ort = lambda u, v: (O[0] + d[0] * u + e[0] * v, O[1] + d[1] * u + e[1] * v)   # noqa: E731
+    # Querachse der Kosinus-Kurve (Nutzer 13.11.: man soll sehen, wo 0 ist): −1 … 1 am oberen Ende, dreht beim Kippen mit
+    if ach > 0:
+        b.linie([ort(0, -1.25), ort(0, 1.25)], GRAU, 3.5, alpha=ach)
+        for v, s_ in ((1, '1'), (-1, '−1'), (0, '0')):
+            x_, y_ = ort(0, v)
+            b.linie([(x_, y_ - 7), (x_, y_ + 7)], GRAU, 3, alpha=ach)
+            if v:
+                b.text(s_, x_, y_ - 18, 18, INK, INTER_X, alpha=ach)
+        x_, y_ = ort(0, 1.25)
+        b.text('cos α', x_ + 30, y_, 20, COS, INTER_X, alpha=ach)
     n = int(200 * g / 360)
     if n > 1:
         b.linie([ort(k / 200, math.cos(2 * math.pi * k / 200)) for k in range(n + 1)], COS, 5)
@@ -676,7 +686,7 @@ def s_kurve(b, sc, t):
         b.kreis(px, cyy(g), 6, COS)
     etikett(b, 'Sinuskurve', gx(140), KY - KR - 2, 22, SIN, ein(t, w('Welle: die')) * (1 - ein(t, tV, 0.4)))
     # Verschiebung: rote Kopie gleitet um 90° nach links auf die blaue Kurve
-    av = ein(t, tV, 0.3) * (1 - ein(t, w('Wechselstrom') + 0.5, 0.6))
+    av = ein(t, tV, 0.3) * (1 - ein(t, tV + 2.6, 0.6))      # Nutzer 13.11.: nach dem Ankommen bald ausblenden
     if av > 0:
         phi = 90 * glatt(p(t, tV + 0.2, 1.6))
         pts = [(gx(360 * k / 200), KY - KR * math.sin(math.radians(360 * k / 200 + phi))) for k in range(201)]
