@@ -65,7 +65,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 #kreisfeld { position: relative; flex: 1 1 auto; min-height: 0; }
 #kreis { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 .ecke { position: absolute; font-size: 13px; font-weight: 700; pointer-events: none; line-height: 1.25; }
-#tanwert { left: 0; top: 0; color: var(--tan); }
+#tanwert { right: 0; top: 0; color: var(--tan); text-align: right; }
 #hinweis { left: 0; bottom: 0; color: var(--grau); font-weight: 600; transition: opacity .6s; }
 #kurven { display: block; width: 100%; height: clamp(110px, 21vh, 200px); flex: none; touch-action: none; }
 
@@ -153,7 +153,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.5';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.6';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 

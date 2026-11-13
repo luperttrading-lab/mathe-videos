@@ -36,3 +36,4 @@ daneben liegt (gilt für Kreis, Kurvenbild und alle drei Regler). Kleine Striche
 Beschriftungen mit Papier-Rand (lesbar über Linien), sin-Beschriftung auf der Seite mit mehr Platz.
 
 **v0.5 (Nutzerwahl 13.11.):** sin-Beschriftung von 0° bis unter 90° links der Strecke (innen), ab 90° rechts – ein fester Wechsel statt Platzautomatik.
+**v0.6 (Nutzer 13.11.):** Winkel auch oben im Bild: oben links „θ = 54,4°“, darunter das Bogenmaß (π-Bruch an besonderen Winkeln). Am Bogen nur „θ“, weil eine Gradzahl dort mit der sin-Beschriftung zusammenstieß. „tan nicht definiert“ steht jetzt oben rechts.

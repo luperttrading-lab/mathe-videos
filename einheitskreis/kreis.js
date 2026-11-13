@@ -86,6 +86,11 @@
     ctx.fillStyle = farbe; ctx.fill();
     if (rand) { ctx.lineWidth = Math.max(1.5, r * .3); ctx.strokeStyle = rand; ctx.stroke(); }
   }
+  // Grad mit Komma: ganze Zahl ohne Nachkommastelle, sonst eine (29,8°)
+  function gradText(g) {
+    const n = Math.abs(g - 360) < 1e-7 ? 360 : normiere(g);
+    return (Number.isInteger(n) ? String(n) : komma(n, 1)) + '°';
+  }
   // Wert für die Beschriftung: exakt (√3/2) oder drei Nachkommastellen wie unten
   function wertText(exakt, zahl) { return exakt || komma(zahl, 3); }
   // Name fett, Wert darunter etwas kleiner; (x, y) = Mitte des Blocks
@@ -176,7 +181,7 @@
       ctx.closePath(); ctx.fillStyle = F.winkel; ctx.fill();
       ctx.beginPath(); ctx.arc(mx, my, rb, 0, grad >= 360 ? -2 * Math.PI + 1e-6 : bis, true);
       ctx.strokeStyle = F.bogen; ctx.lineWidth = 1.8 * u; ctx.stroke();
-      // θ in die Mitte des Bogens
+      // θ in die Mitte des Bogens (die Gradzahl steht oben links, dort stößt sie mit nichts zusammen)
       const mitte = -w.rad / 2 - (grad >= 360 ? Math.PI : 0);
       const rt = rb + 11 * u;
       ctx.fillStyle = '#c96f00'; ctx.font = schrift(fs * 1.05, 800);
@@ -251,6 +256,17 @@
         const h2 = fs * 2.1;                                   // Höhe der zwei Zeilen
         zweiZeilen(ctx, 'cos', wertText(w.cosText, w.cos), mx + r * w.cos / 2, my + (w.sin >= 0 ? 7 * u + h2 / 2 : -7 * u - h2 / 2), fs);
       }
+    }
+
+    // Winkel oben links im Bild (Nutzer 13.11.): Grad groß, darunter Bogenmaß (π-Bruch an besonderen Winkeln)
+    if (opt.winkelAnzeige !== false) {
+      ctx.save();
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = '#c96f00'; ctx.font = schrift(Math.round(fs * 1.35), 800);
+      ctx.fillText('θ = ' + gradText(grad), rahmen.x + 2, rahmen.y + 2);
+      ctx.fillStyle = F.grau; ctx.font = schrift(fs, 600);
+      ctx.fillText(w.radText ? '= ' + w.radText : '= ' + komma(w.rad, 3) + ' rad', rahmen.x + 2, rahmen.y + 6 + fs * 1.4);
+      ctx.restore();
     }
 
     // Der Punkt P: groß, damit man ihn mit dem Finger trifft; Ring als Hinweis „zieh mich“
@@ -334,7 +350,7 @@
   }
 
   global.Einheitskreis = {
-    FARBEN, werte, normiere, besonders, sinExakt, cosExakt, tanExakt, radExakt, komma,
+    FARBEN, werte, normiere, gradText, besonders, sinExakt, cosExakt, tanExakt, radExakt, komma,
     kreisMasse, zeichneKreis, kurvenMasse, zeichneKurven,
   };
 })(typeof window !== 'undefined' ? window : globalThis);
