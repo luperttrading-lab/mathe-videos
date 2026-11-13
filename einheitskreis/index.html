@@ -71,7 +71,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 #abspielen { position: absolute; right: 0; bottom: 0; display: flex; align-items: center; gap: 8px; }
 .tempo { display: flex; flex-direction: column; align-items: center; width: 92px; }
 .tempo span { font-size: 11px; font-weight: 700; color: var(--grau); line-height: 1; }
-#r-tempo { height: 26px; --f: var(--grau); }
+#r-tempo { height: 26px; --f: var(--tan); }
 #r-tempo::-webkit-slider-runnable-track { height: 4px; }
 #r-tempo::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -8px; border-width: 2.5px; }
 #play { width: 44px; height: 44px; border-radius: 50%; background: var(--tan); color: #fff; display: grid; place-items: center;
@@ -167,7 +167,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.7';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.8';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 
@@ -354,6 +354,7 @@ const ICON_PAUSE = '<svg viewBox="0 0 20 20"><path d="M4 3h4v14H4zM12 3h4v14h-4z
 let laeuft = false, spielAnim = null, letzte = 0;
 function zeigeTempo() {
   $('#r-tempo').value = stand.tempo;
+  $('#r-tempo').style.setProperty('--p', (stand.tempo * 100) + '%');   // Füllung bis zum Knopf (fehlte in 0.7)
   const t = gradJeSek();
   $('#w-tempo').textContent = (t < 10 ? EK.komma(t, 1) : Math.round(t)) + ' °/s';
 }

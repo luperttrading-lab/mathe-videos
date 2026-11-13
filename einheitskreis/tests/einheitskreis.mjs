@@ -184,6 +184,19 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   await foto(page, 'play');
   await regler('#r-sin', 0.5);
   ok(!(await page.evaluate(() => window.einheitskreis.laeuft())), 'Griff an den sin-Regler hält an');
+  // Jeder Regler: farbige Füllung endet genau am Knopf (Nutzer 13.11.: Tempo-Füllung blieb in der Mitte stehen)
+  for (const [id, v] of [['#r-tempo', 0.15], ['#r-tempo', 0.85], ['#r-win', 250], ['#r-sin', -0.4], ['#r-cos', 0.7]]) {
+    const f = await page.evaluate(([id, v]) => {
+      const e = document.querySelector(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true }));
+      const st = e.style, anteil = (+e.value - +e.min) / (+e.max - +e.min) * 100;
+      const ende = id === '#r-sin' || id === '#r-cos'
+        ? (+e.value < 0 ? parseFloat(st.getPropertyValue('--a')) : parseFloat(st.getPropertyValue('--b')))
+        : parseFloat(st.getPropertyValue('--p'));
+      return { anteil, ende };
+    }, [id, v]);
+    ok(Math.abs(f.anteil - f.ende) < 0.6, `${id} = ${v}: Füllung endet am Knopf (${f.ende.toFixed(1)} % ≈ ${f.anteil.toFixed(1)} %)`);
+  }
+  await page.click('#play'); await page.waitForTimeout(400); await page.click('#play');
   // Abspiel-Knöpfe überdecken den Kreis nicht (Abstand Kreismittelpunkt – Knopfecke > Radius)
   const ueber = await page.evaluate(() => {
     const f = document.querySelector('#kreis').getBoundingClientRect(), a = document.querySelector('#abspielen').getBoundingClientRect();
