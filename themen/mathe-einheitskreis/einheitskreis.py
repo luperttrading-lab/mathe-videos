@@ -334,6 +334,38 @@ def dreieck_fuell(b, grad, a, rw=True):
         b.kreis(px + sx * 11, CY + sy * 11, 3.5, INK, alpha=a)
 
 
+def formel(b, elemente, x0, y, g, a=1.0, messen=False):
+    """Formelzeile mit echten Brüchen. Elemente: ('t', text, farbe, alpha), ('b', zähler, nenner, alpha) oder
+    ('b2', zähler, nenner_alt, nenner_neu, alpha, überblendung). Zähler/Nenner = Liste von (text, farbe)."""
+    x, gb = x0, g * 0.85
+    for el in elemente:
+        if el[0] == 't':
+            _, s_, c, al = el
+            w_ = breite(s_, INTER_X, g)
+            if not messen and al * a > 0:
+                b.text(s_, x + w_ / 2, y, g, c, INTER_X, alpha=a * al)
+            x += w_
+            continue
+        if el[0] == 'b':
+            _, zt, nt, al = el
+            n2, f = None, 0
+        else:
+            _, zt, nt, n2, al, f = el
+        bz = sum(breite(s_, INTER_X, gb) for s_, _ in zt)
+        bn = sum(breite(s_, INTER_X, gb) for s_, _ in nt)
+        bn2 = sum(breite(s_, INTER_X, gb) for s_, _ in n2) if n2 else 0
+        w_ = max(bz, bn * (1 - f) + bn2 * f) + 12
+        if not messen and al * a > 0:
+            zeile(b, zt, x + w_ / 2, y - g * 0.62, gb, INTER_X, alpha=a * al)
+            b.linie([(x + 3, y), (x + w_ - 3, y)], INK, 2.5, alpha=a * al)
+            zeile(b, nt, x + w_ / 2, y + g * 0.66, gb, INTER_X, alpha=a * al * klemm(1 - 2 * f))   # erst aus-, dann einblenden
+            if n2:
+                zeile(b, n2, x + w_ / 2, y + g * 0.66, gb, INTER_X, alpha=a * al * klemm(2 * f - 1))
+        x += w_
+    return x - x0
+
+
+
 def s_werte(b, sc, t):
     w = lambda s, nach=None: C(sc, s, nach)                 # noqa: E731
     tA, tB = w('Und die Winkel'), w('fünfundvierzig')
@@ -470,10 +502,29 @@ def s_werte(b, sc, t):
     zeit_zeile(b, t, w('x Quadrat plus'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 280, 34, ende=t30)
     zeit_zeile(b, t, w('zwei x Quadrat'), [('2x² = 1', INK)], 325, 30, ende=t30)
     zeit_zeile(b, t, w('Geteilt durch zwei'), [('x² = ½', INK)], 370, 30, ende=t30)
-    zeit_zeile(b, t, w('Wurzel aus einem halb'), [('x = √½ = 1 / √2', INK)], 415, 30, ende=t30)
-    zeit_zeile(b, t, w('erweitert'), [('x = (1 · √2) / (√2 · √2) = √2 / 2 ≈ 0,71', GRUEN)], 470, 30, ende=t30)
-    zeit_zeile(b, t, w('ungefähr null Komma sieben') + 0.8, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)],
-               530, 28, INTER, ende=t30)
+    # echte Brüche, Erweitern animiert (Nutzer 13.11.): 1/√2 · √2/√2 = √2/(√2·√2) → √2/2
+    weg45 = 1 - ein(t, t30, 0.4)
+    a1 = ein(t, w('Wurzel aus einem halb')) * weg45
+    if a1 > 0:
+        el = [('t', 'x = √½ = ', INK, 1), ('b', [('1', INK)], [('√2', INK)], 1)]
+        formel(b, el, RX - formel(b, el, 0, 0, 30, messen=True) / 2, 425 + 14 * (1 - ein(t, w('Wurzel aus einem halb'))), 30, a1)
+    te0, te, te3 = w('Mit Wurzel zwei'), w('erweitert'), w('Wurzel zwei durch zwei', 'erweitert')
+    a2 = ein(t, te0) * weg45
+    if a2 > 0:
+        f3 = ein(t, te3, 0.5)
+        el = [('t', 'x = ', INK, 1), ('b', [('1', INK)], [('√2', INK)], 1),
+              ('t', ' · ', WINKEL, 1), ('b', [('√2', WINKEL)], [('√2', WINKEL)], 1),
+              ('t', ' = ', INK, ein(t, te + 0.4)),
+              ('b2', [('√2', GRUEN)], [('√2 · √2', INK)], [('2', GRUEN)], ein(t, te + 0.4), f3),
+              ('t', '  ≈ 0,71', GRUEN, ein(t, te3 + 0.6))]
+        el0 = [e if e[0] != 'b2' else e[:5] + (0,) for e in el]
+        breite_max = formel(b, el0, 0, 0, 30, messen=True)               # fest, damit die Zeile nicht springt
+        formel(b, el, RX - breite_max / 2, 510, 30, a2)
+    a4 = ein(t, w('ungefähr null Komma sieben') + 0.8) * weg45
+    if a4 > 0:
+        el = [('t', 'sin', SIN, 1), ('t', ' 45° = ', INK, 1), ('t', 'cos', COS, 1), ('t', ' 45° = ', INK, 1),
+              ('b', [('√2', INK)], [('2', INK)], 1)]
+        formel(b, el, RX - formel(b, el, 0, 0, 28, messen=True) / 2, 600, 28, a4)
     ende_b = w('gleichseitiges')
     zeit_zeile(b, t, w('zweimal dreißig'), [('Winkel am Ursprung: 2 · 30° = 60°', WINKEL)], 190, 28, INTER, ende=ende_b)
     zeit_zeile(b, t, w('Radien'), [('zwei Seiten = 1', INK)], 240, 28, INTER, ende=ende_b)
