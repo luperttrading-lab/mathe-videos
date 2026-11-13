@@ -4,11 +4,11 @@
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
-   "titel": "Animiert: Szenen 4–10 (3:49)",
-   "stand": "13.11., 17:40",
+   "titel": "Animiert: Szenen 4–10 (3:57)",
+   "stand": "13.11., 18:00",
    "pruefen": true,
-   "poster_bei": 48,
-   "notiz": "Neu ab ≈ 0:25 (45°): Erst warum die Katheten gleich lang sind (dritter Winkel 180° − 90° − 45° = 45°), dann jeder Rechenschritt einzeln: x² + x² = 1 → 2x² = 1 → x² = ½ → x = √½ = 1/√2 → mit √2 erweitert = √2/2 ≈ 0,71. Ab ≈ 1:10 die 30°-Begründung. Video jetzt ≈ 5:08."
+   "poster_bei": 190.4,
+   "notiz": "Neu ab ≈ 2:41 (Sinuskurve), wie der Startbildschirm der App: P läuft, rechts entsteht der Sinus, gleichzeitig unter dem Kreis der Kosinus (x-Wert, Winkel nach unten). Bei „Kippen“ dreht sich die blaue Kurve um 90° auf die Sinus-Achsen, bei „verschoben“ gleitet eine gestrichelte Kopie der roten Kurve 90° nach links genau auf die blaue. Satz dafür neu vertont. Davor: 45° Schritt für Schritt (≈ 0:25), 30°-Begründung (≈ 1:10). Video jetzt ≈ 5:15."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",

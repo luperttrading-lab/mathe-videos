@@ -535,68 +535,100 @@ def s_pythagoras(b, sc, t):
     zeit_zeile(b, t, w('jeden Winkel'), [('für jeden Winkel α', WINKEL)], 410, 30, INTER)
 
 
-KX, KY, KR = 230, 375, 150                                 # Kreis links in der Kurven-Szene
-GX0, GX1 = 470, 1210                                       # 0° … 360°
+# Kurven-Szene wie der Startbildschirm der App (Nutzer 13.11.): Kreis oben links, Sinus rechts daneben, Kosinus
+# darunter (Winkel nach unten); die blaue Kurve kippt danach um 90° auf die Sinus-Achsen
+KX, KY, KR = 200, 215, 105
+GX0, GX1 = 380, 1190                                       # Sinus: 0° … 360° waagrecht
+CY0, CY1 = 350, 680                                        # Kosinus: 0° … 360° senkrecht unter dem Kreis
+
+
+def gestrichelt(b, x0, y0, x1, y1, c, a=1.0, n=24, lw=2):
+    for k in range(0, n, 2):
+        b.linie([(x0 + (x1 - x0) * k / n, y0 + (y1 - y0) * k / n),
+                 (x0 + (x1 - x0) * (k + 1) / n, y0 + (y1 - y0) * (k + 1) / n)], c, lw, alpha=a)
 
 
 def s_kurve(b, sc, t):
     w = lambda s: C(sc, s)                                  # noqa: E731
     t0, t1 = w('tragen'), w('wiederholt') - 0.2
+    tU, tK, tV = w('Unter dem Kreis'), w('Kippen'), w('nach links verschoben')
     g = 360 * klemm((t - t0) / (t1 - t0))
+    gx = lambda grad: GX0 + (GX1 - GX0) * grad / 360       # noqa: E731
+    cyy = lambda grad: CY0 + (CY1 - CY0) * grad / 360      # noqa: E731
     achsen(b, cx=KX, cy=KY, r=KR)
     kreislinie(b, cx=KX, cy=KY, r=KR)
-    gx = lambda grad: GX0 + (GX1 - GX0) * grad / 360       # noqa: E731
-    # Diagramm-Achsen
+    # Sinus-Achsen
     b.linie([(GX0, KY), (GX1 + 30, KY)], GRAU, 3.5)
     b.poly([(GX1 + 42, KY), (GX1 + 26, KY - 7), (GX1 + 26, KY + 7)], fill=GRAU)
-    b.linie([(GX0, KY + KR + 30), (GX0, KY - KR - 30)], GRAU, 3.5)
-    b.poly([(GX0, KY - KR - 42), (GX0 - 7, KY - KR - 26), (GX0 + 7, KY - KR - 26)], fill=GRAU)
+    b.linie([(GX0, KY + KR + 24), (GX0, KY - KR - 24)], GRAU, 3.5)
+    b.poly([(GX0, KY - KR - 36), (GX0 - 7, KY - KR - 20), (GX0 + 7, KY - KR - 20)], fill=GRAU)
     for gg in (90, 180, 270, 360):
         b.linie([(gx(gg), KY - 7), (gx(gg), KY + 7)], GRAU, 3)
-        b.text(f'{gg}°', gx(gg), KY + 26, 20, INK, INTER_X)
-    for v, s in ((1, '1'), (-1, '−1')):
+        etikett(b, f'{gg}°', gx(gg) + 22, KY + 22, 18, INK)
+    for v, s_ in ((1, '1'), (-1, '−1')):
         b.linie([(GX0 - 7, KY - v * KR), (GX0 + 7, KY - v * KR)], GRAU, 3)
-        b.text(s, GX0 - 24, KY - v * KR, 20, INK, INTER_X)
-    b.text('α', GX1 + 40, KY + 26, 24, WINKEL, INTER_X, alpha=ein(t, w('Waagrecht')))
-    b.text('sin α', GX0 - 50, KY - KR - 34, 24, SIN, INTER_X, alpha=ein(t, w('senkrecht der Sinus')))
-    # Kosinus-Kurve (blau), nach links verschoben
-    ac = ein(t, w('Kosinus ergibt'), 0.4)
-    if ac > 0:
-        fc = glatt(p(t, w('Kosinus ergibt'), 1.6))
-        n = int(200 * fc)
-        if n > 1:
-            b.linie([(gx(360 * k / 200), KY - KR * math.cos(2 * math.pi * k / 200)) for k in range(n + 1)], COS, 5,
-                    alpha=ac)
-        etikett(b, 'cos α', gx(180), KY + KR + 30, 24, COS, ac)
-        av = ein(t, w('neunzig Grad nach links'), 0.4)
-        if av > 0:
-            y = KY - KR - 14
-            b.linie([(gx(0), y), (gx(90), y)], WINKEL, 4, alpha=av)
-            b.poly([(gx(0) - 2, y), (gx(0) + 12, y - 7), (gx(0) + 12, y + 7)], fill=WINKEL, alpha=av)
-            etikett(b, '90°', gx(45), y - 22, 22, WINKEL, av)
-
-    # Sinus-Kurve (rot) bis zum aktuellen Winkel
+        b.text(s_, GX0 - 24, KY - v * KR, 18, INK, INTER_X)
+    b.text('α', GX1 + 40, KY + 24, 22, WINKEL, INTER_X, alpha=ein(t, w('Waagrecht')))
+    b.text('sin α', GX0 - 46, KY - KR - 30, 22, SIN, INTER_X, alpha=ein(t, w('senkrecht der Sinus')))
+    # Kosinus-Achse unter dem Kreis (Winkel nach unten), blendet beim Kippen aus
+    kipp = glatt(p(t, tK, 1.8))
+    ach = 1 - kipp
+    if ach > 0:
+        b.linie([(KX, CY0 - 10), (KX, CY1 + 20)], GRAU, 3.5, alpha=ach)
+        b.poly([(KX, CY1 + 32), (KX - 7, CY1 + 16), (KX + 7, CY1 + 16)], fill=GRAU, alpha=ach)
+        for gg in (90, 180, 270, 360):
+            b.linie([(KX - 7, cyy(gg)), (KX + 7, cyy(gg))], GRAU, 3, alpha=ach)
+            etikett(b, f'{gg}°', KX - 40, cyy(gg), 18, INK, ach)
+        b.text('α', KX + 22, CY1 + 30, 22, WINKEL, INTER_X, alpha=ach)
+    # Sinus (rot) bis zum aktuellen Winkel
     n = int(200 * g / 360)
     if n > 1:
         b.linie([(gx(360 * k / 200), KY - KR * math.sin(2 * math.pi * k / 200)) for k in range(n + 1)], SIN, 6)
-    if t >= t0:
-        winkel(b, g % 360 if g < 360 else 0, 1.0 if g < 359 else 0, text='', cx=KX, cy=KY)
+    # Kosinus (blau): erst unter dem Kreis, dann gekippt auf die Sinus-Achsen
+    th = math.radians(90 * kipp)
+    O = (KX + (GX0 - KX) * kipp, CY0 + (KY - CY0) * kipp)
+    L = (CY1 - CY0) + ((GX1 - GX0) - (CY1 - CY0)) * kipp
+    d = (math.sin(th) * L, math.cos(th) * L)                # Winkel-Richtung: erst nach unten, dann nach rechts
+    e = (math.cos(th) * KR, -math.sin(th) * KR)             # Wert-Richtung: erst nach rechts, dann nach oben
+    ort = lambda u, v: (O[0] + d[0] * u + e[0] * v, O[1] + d[1] * u + e[1] * v)   # noqa: E731
+    n = int(200 * g / 360)
+    if n > 1:
+        b.linie([ort(k / 200, math.cos(2 * math.pi * k / 200)) for k in range(n + 1)], COS, 5)
+    aL = ein(t, tU, 0.4)
+    if aL > 0:
+        x_, y_ = ort(0.5, -1)
+        etikett(b, 'cos α', x_ + (30 if kipp < 0.5 else 0), y_ + (0 if kipp < 0.5 else 30), 22, COS, aL)
+    # Punkt P mit beiden Projektionen
+    if t >= t0 and g < 360:
+        winkel(b, g, 1.0, text='', cx=KX, cy=KY)
         px, py = punkt(g, KX, KY, KR)
-        b.linie([(px, py), (px, KY)], SIN, 6)
+        b.linie([(px, py), (px, KY)], SIN, 5)
+        b.linie([(KX, KY), (px, KY)], COS, 5)
         b.linie([(KX, KY), (px, py)], INK, 3.5)
         b.kreis(px, py, 7, INK)
-        qx = gx(g)
-        for k in range(0, 30, 2):
-            b.linie([(px + (qx - px) * k / 30, py), (px + (qx - px) * (k + 1) / 30, py)], SIN, 2, alpha=0.6)
-        b.kreis(qx, py, 7, SIN)
-    for wort, s, x in (('Welle: die', 'Sinuskurve', gx(120)),):
-        etikett(b, s, x, KY - KR - 6, 26, SIN, ein(t, w(wort)) * (1 - ein(t, w('Kosinus ergibt'), 0.4)))
+        gestrichelt(b, px, py, gx(g), py, SIN, 0.6, n=30)
+        b.kreis(gx(g), py, 6, SIN)
+        gestrichelt(b, px, py, px, cyy(g), COS, 0.6, n=30)
+        b.kreis(px, cyy(g), 6, COS)
+    etikett(b, 'Sinuskurve', gx(140), KY - KR - 2, 22, SIN, ein(t, w('Welle: die')) * (1 - ein(t, tV, 0.4)))
+    # Verschiebung: rote Kopie gleitet um 90° nach links auf die blaue Kurve
+    av = ein(t, tV, 0.3) * (1 - ein(t, w('Wechselstrom') + 0.5, 0.6))
+    if av > 0:
+        phi = 90 * glatt(p(t, tV + 0.2, 1.6))
+        pts = [(gx(360 * k / 200), KY - KR * math.sin(math.radians(360 * k / 200 + phi))) for k in range(201)]
+        for k in range(0, 200, 6):
+            b.linie(pts[k:k + 4], SIN, 4, alpha=0.8 * av)
+        y = KY - KR - 14
+        b.linie([(gx(90), y), (gx(90 - phi), y)], WINKEL, 4, alpha=av)
+        if phi > 5:
+            b.poly([(gx(90 - phi) - 2, y), (gx(90 - phi) + 12, y - 7), (gx(90 - phi) + 12, y + 7)], fill=WINKEL, alpha=av)
+        etikett(b, '90°', gx(45), y - 20, 20, WINKEL, ein(t, tV + 1.0, 0.4) * av)
     for i, wort in enumerate(('Wechselstrom', 'Schall', 'Riesenrad')):
         a = ein(t, w(wort))
         if a > 0:
-            x = 470 + 260 * i
-            band(b, x, 600, x + 230, 650, '#ffffff', 0.95 * a, r=14)
-            b.text(wort, x + 115, 625, 26, INK, INTER_X, alpha=a)
+            x = 460 + 260 * i
+            band(b, x, 520, x + 230, 570, '#ffffff', 0.95 * a, r=14)
+            b.text(wort, x + 115, 545, 26, INK, INTER_X, alpha=a)
 
 
 MERK = [  # Nutzer 13.11.: x/Kosinus blau, y/Sinus rot wie im Bild

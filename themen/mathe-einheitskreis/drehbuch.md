@@ -69,11 +69,14 @@ Bild: Quadrate an den Katheten (rot, blau) und an der Hypotenuse; Formel „sin�
 ## 7 kurve (≈ 35 s)
 > Jetzt lassen wir P einmal rundherum laufen und tragen seine Höhe rechts daneben ab. Waagrecht der Winkel, senkrecht
 > der Sinus. Es entsteht eine Welle: die Sinuskurve. Sie steigt bis eins, fällt bei hundertachtzig Grad durch null
-> bis minus eins und ist bei dreihundertsechzig Grad wieder bei null. Danach wiederholt sie sich. Der Kosinus
-> ergibt dieselbe Welle, nur um neunzig Grad nach links verschoben. Solche Wellen stecken überall, wo sich etwas dreht
-> oder schwingt: im Wechselstrom, im Schall, bei der Gondel im Riesenrad.
+> bis minus eins und ist bei dreihundertsechzig Grad wieder bei null. Danach wiederholt sie sich. Unter dem Kreis
+> entsteht gleichzeitig die Kurve der x-Werte: der Kosinus. Kippen wir sie nach oben, sieht man: Es ist dieselbe Welle,
+> nur um neunzig Grad nach links verschoben. Solche Wellen stecken überall, wo sich etwas dreht oder schwingt: im
+> Wechselstrom, im Schall, bei der Gondel im Riesenrad.
 
-Bild: Kreis links, Achse 0°–360° rechts, rote Höhe läuft mit und hinterlässt die Kurve; danach blaue Kosinuskurve.
+Bild (Nutzer 13.11., wie der Startbildschirm der App): Kreis oben links; rechts entsteht die Sinuskurve (Höhe von P),
+gleichzeitig unter dem Kreis die Kosinuskurve (x-Wert von P, Winkel nach unten). Bei „Kippen“ dreht sich die blaue
+Kurve um 90° auf die Sinus-Achsen; bei „verschoben“ gleitet eine Kopie der roten Kurve um 90° nach links auf die blaue.
 
 ## 8 merke (≈ 15 s)
 > Merke: Auf dem Einheitskreis ist x der Kosinus und y der Sinus. Sinus Quadrat plus Kosinus Quadrat ist eins. Die
