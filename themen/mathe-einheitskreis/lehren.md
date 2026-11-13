@@ -10,6 +10,10 @@ Wird nach „Video fertig“ (Nutzer) als Abschnitt „Gestaltungsregeln für Er
 - Beschriftungen dürfen sich nicht überlappen (z. B. 30° und 60° am selben Punkt: verschiedene Radien), auch nicht mit
   Achsenzahlen (1, −1, Gradzahlen, Achsennamen). Vor jedem Clip ein Kontaktbogen und gezielt danach suchen.
 - Bei schmalen Winkeln kleinere Schrift und weiter außen.
+- Gleiche Art Beschriftung immer gleich groß (Koordinaten nicht mal 30, mal 24).
+- Vor jedem Clip automatisch prüfen: `werkzeug/beschriftung_pruefen.py` (rendert alle 0,5 s ohne Text, misst Linien
+  unter jeder Beschriftung und Überlappungen); nur bewegte Linien dürfen kurz über eine Zahl streichen. Stichproben
+  allein reichen nicht (Nutzer 13.11.).
 - Was die Länge einer Seite ist, eindeutig zeigen (Klammer über die ganze Seite mit „1“), nicht eine Zahl, die man mit
   einer Achsenzahl verwechseln kann.
 - Winkelbögen ohne Pfeilspitze; rechter Winkel als Viertelbogen mit Punkt (deutsche Schulnotation).

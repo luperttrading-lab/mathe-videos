@@ -5,18 +5,18 @@
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
    "titel": "Animiert: Szenen 1–3 mit neuer Orientierung (1:39)",
-   "stand": "13.11., 19:20",
+   "stand": "13.11., 19:45",
    "pruefen": true,
    "poster_bei": 44,
-   "notiz": "Neu ab ≈ 0:29: Szene „Zur Orientierung“ – P läuft zu 0°, 90°, 180°, 270°, dann 30°, 45°, 60° und 135°; an jeder Stelle bleibt außen am Kreis ein oranger Strich mit Gradzahl stehen. Neu vertont nur dieser Teil (≈ 300 Zeichen). Außerdem „y“ an der Achse rechts neben dem Pfeil, „Gegenkathete“/„sin α“ außerhalb des Kreises."
+   "notiz": "Orientierungs-Szene ab ≈ 0:29 wie vorher. Neu: Gradzahl beim Drehen im Einstieg weicht der y-Achse aus; beim Kreisen am Ende von „Warum?“ blenden „x“ und „y“ aus, damit sie nicht über Linien fahren."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
    "titel": "Animiert: Szenen 4–10 (4:00)",
-   "stand": "13.11., 19:20",
+   "stand": "13.11., 19:45",
    "pruefen": true,
    "poster_bei": 88,
-   "notiz": "Alle Beschriftungen geprüft: keine Zahl mehr auf Linien oder Kreis, wo es vermeidbar war (z. B. „sin α“/„Gegenkathete“ außerhalb des Kreises, 60°-Winkel bei 30° außen neben dem Dreieck, Gradzahlen an der Sinuskurve dort, wo keine Kurve durchläuft, „α“ nicht mehr an „360°“, „y = sin α“ im Merkzettel-Bild außen). Inhalt wie vorher."
+   "notiz": "Ganzes Video automatisch geprüft (alle 0,5 s: liegt unter einer Beschriftung eine Linie, oder überlappen sich zwei?). Behoben: Koordinaten (−1|0), (1|0), (0|1), (0|−1) immer gleich groß und ganz außerhalb des Kreises; Gradzahlen an den Winkelbögen weichen den Achsen aus (180°, 150°, 270°); „Sinuskurve“ unter dem Tal statt auf der Kurve; Gradzahlen der Kosinus-Achse links neben der Kurve; „x = cos α“ im Merke-Bild nicht mehr an der y-Achse. Übrig bleiben nur Momente, in denen die mitlaufende Strichellinie oder der Zeiger kurz über eine Zahl streicht."
   }
  ]
 }
