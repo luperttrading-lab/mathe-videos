@@ -111,20 +111,24 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   ok(Math.abs(st - 203.4) < 0.3, `Touch-Zug von 60° nach 203,4°: ${st.toFixed(2)}°`);
   let txt = await page.textContent('#w-win');
   ok(txt === '203,4°', `Anzeige ohne Einrasten-Bereich: ${txt}`);
-  // Einrasten: 223° → 225°
-  await beruehre('touchStart', bei(223)); await beruehre('touchEnd');
-  ok(Math.abs(await page.evaluate(() => window.einheitskreis.stand.grad) - 223) < .01, '223° bleibt 223° (Raster nur ±1,5°)');
-  await beruehre('touchStart', bei(224)); await beruehre('touchEnd');
+  // Einrasten erst beim Loslassen: während des Ziehens kein Sprung
+  await beruehre('touchStart', bei(222)); await beruehre('touchMove', bei(222.5));
+  ok(Math.abs(await page.evaluate(() => window.einheitskreis.stand.grad) - 222.5) < .01, 'beim Ziehen bei 222,5° kein Sprung');
+  await beruehre('touchEnd'); await page.waitForTimeout(350);
+  ok(Math.abs(await page.evaluate(() => window.einheitskreis.stand.grad) - 222.5) < .01, '222,5° bleibt nach Loslassen (mehr als 2° von 225°)');
+  await beruehre('touchStart', bei(223.6));
+  ok(Math.abs(await page.evaluate(() => window.einheitskreis.stand.grad) - 223.6) < .01, '223,6° beim Halten: kein Sprung');
+  await beruehre('touchEnd'); await page.waitForTimeout(350);
   st = await page.evaluate(() => window.einheitskreis.stand.grad);
-  ok(st === 225, `Einrasten 224° → 225° (${st})`);
+  ok(st === 225, `nach Loslassen gleitet 223,6° → 225° (${st})`);
   ok(await page.textContent('#w-sin') === '−√2/2' && await page.textContent('#w-rad') === '5π/4', `225°: sin −√2/2, 5π/4`);
   await foto(page, 'kreis_225');
 
   // Sinus-Regler: Hälfte bleibt (links), Kosinus folgt mit √(1 − sin²)
   const regler = async (id, v) => page.evaluate(([id, v]) => {
     const e = document.querySelector(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true }));
-    return { ...window.Einheitskreis.werte(window.einheitskreis.stand.grad) };
-  }, [id, v]);
+    e.dispatchEvent(new Event('change', { bubbles: true }));
+  }, [id, v]).then(() => page.waitForTimeout(300)).then(() => page.evaluate(() => ({ ...window.Einheitskreis.werte(window.einheitskreis.stand.grad) })));
   let w = await regler('#r-sin', 0.3);
   ok(w.cos < 0 && Math.abs(w.sin - 0.3) < 1e-9 && Math.abs(w.sin ** 2 + w.cos ** 2 - 1) < 1e-12, `sin = 0,3 von 225° aus: bleibt links (cos ${w.cos.toFixed(4)}), θ = ${w.grad.toFixed(2)}°`);
   await foto(page, 'regler_sin');

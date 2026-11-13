@@ -29,3 +29,8 @@ Sinus und Kosinus verstellt … alles auf einen Bildschirm, Handy-App.“ Erklä
 Startanimation langsamer (eine Umdrehung in 9 s). Einrasten nur noch im Winkel, ±1,5° (vorher rasteten die sin-/cos-Regler
 im Wert ±0,02 ein, nahe sin = 1 sind das ±11,5°: „der Winkel springt“). Werte von sin, cos (und tan) direkt an den
 Strecken im Kreis. Kurvenbild höher (21 % der Bildhöhe), Kreis etwas kleiner und mit und ohne Tangens gleich groß.
+
+**v0.4 (Nutzer 13.11.: „beim Drehen soll nichts springen“, Beschriftung „sin ½“ vom Kreis durchgestrichen):** Beim
+Ziehen folgt P dem Finger genau; erst beim Loslassen gleitet er in 0,16 s zum besonderen Winkel, wenn er höchstens 2°
+daneben liegt (gilt für Kreis, Kurvenbild und alle drei Regler). Kleine Striche am Kreis zeigen die besonderen Winkel.
+Beschriftungen mit Papier-Rand (lesbar über Linien), sin-Beschriftung auf der Seite mit mehr Platz.

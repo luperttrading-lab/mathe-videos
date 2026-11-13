@@ -89,10 +89,15 @@
   // Wert für die Beschriftung: exakt (√3/2) oder drei Nachkommastellen wie unten
   function wertText(exakt, zahl) { return exakt || komma(zahl, 3); }
   // Name fett, Wert darunter etwas kleiner; (x, y) = Mitte des Blocks
+  // Mit Papier-Rand (Halo): bleibt lesbar, auch wenn eine Linie (Kreis, Achse) darunter durchläuft
   function zweiZeilen(ctx, name, wert, x, y, fs) {
-    ctx.textBaseline = 'middle';
-    ctx.font = schrift(fs, 800); ctx.fillText(name, x, y - fs * .55);
-    ctx.font = schrift(fs * .92, 700); ctx.fillText(wert, x, y + fs * .55);
+    ctx.save();
+    ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = FARBEN.papier; ctx.lineWidth = Math.max(4, fs * .45);
+    const zeile = (t, yy, f) => { ctx.font = f; ctx.strokeText(t, x, yy); ctx.fillText(t, x, yy); };
+    zeile(name, y - fs * .55, schrift(fs, 800));
+    zeile(wert, y + fs * .55, schrift(fs * .92, 700));
+    ctx.restore();
   }
   function schrift(px, dick = 700) { return `${dick} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`; }
 
@@ -149,6 +154,15 @@
       ctx.textBaseline = 'top'; ctx.fillText('−1', xl, my + r + 3 * u);
     }
 
+    // Kleine Striche an den besonderen Winkeln (Vielfache von 30° und 45°): zeigen, wo Einrasten greift
+    if (opt.marken) {
+      ctx.strokeStyle = 'rgba(43,45,66,.35)'; ctx.lineWidth = 1.3 * u;
+      for (let g = 0; g < 360; g += 15) {
+        if (g % 30 && g % 45) continue;
+        const a = g * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+        ctx.beginPath(); ctx.moveTo(mx + c * r, my - s * r); ctx.lineTo(mx + c * (r + 6 * u), my - s * (r + 6 * u)); ctx.stroke();
+      }
+    }
     // Kreis
     ctx.beginPath(); ctx.arc(mx, my, r, 0, 2 * Math.PI);
     ctx.strokeStyle = F.ink; ctx.lineWidth = 2.2 * u; ctx.stroke();
@@ -227,8 +241,13 @@
       ctx.font = schrift(fs, 800);
       if (Math.abs(w.sin) > .16) {
         ctx.fillStyle = F.sin; ctx.textBaseline = 'middle';
-        ctx.textAlign = w.cos >= 0 ? 'left' : 'right';
-        zweiZeilen(ctx, 'sin', wertText(w.sinText, w.sin), px + (w.cos >= 0 ? 8 : -8) * u, my - r * w.sin / 2, fs);
+        // Seite mit mehr Platz: innen (zwischen Radius und Strecke) oder außen (zwischen Strecke und Kreis)
+        const innen = Math.abs(w.cos) / 2;
+        const aussen = Math.sqrt(1 - (w.sin / 2) ** 2) - Math.abs(w.cos);
+        const nachAussen = aussen >= innen;
+        const rechts = (w.cos >= 0) === nachAussen;
+        ctx.textAlign = rechts ? 'left' : 'right';
+        zweiZeilen(ctx, 'sin', wertText(w.sinText, w.sin), px + (rechts ? 8 : -8) * u, my - r * w.sin / 2, fs);
       }
       if (Math.abs(w.cos) > .16) {
         ctx.fillStyle = F.cos; ctx.textAlign = 'center';

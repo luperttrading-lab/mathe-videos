@@ -153,7 +153,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.3';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.4';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 
@@ -170,9 +170,24 @@ let geist = null, geistTimer = null;
 /* ---------- Einrasten ---------- */
 const BESONDERE = [];
 for (let g = 0; g <= 360; g += 15) if (g % 30 === 0 || g % 45 === 0) BESONDERE.push(g);
-// Einrasten immer im Winkel gemessen, ±1,5° (v0.3, Nutzer 13.11.: „der Winkel springt“). Vorher rasteten sin/cos
-// im Wert ein (±0,02): nahe sin = 1 sind das ±11,5° Winkel – der Punkt sprang sichtbar.
-const RASTER = 1.5;
+// Einrasten (v0.4, Nutzer 13.11.: „beim Drehen soll nichts springen“): Während man zieht, folgt der Punkt dem Finger
+// genau. Erst beim Loslassen gleitet er, wenn er höchstens 2° neben einem besonderen Winkel liegt, sanft dorthin.
+// (v0.3 rastete schon beim Ziehen ein, ±1,5°; v0.2 rastete sin/cos im Wert ein, nahe sin = 1 waren das ±11,5°.)
+const RASTER = 2;
+let gleitAnim = null;
+function gleiteZumRaster({ roh = false } = {}) {
+  cancelAnimationFrame(gleitAnim);
+  if (!stand.einrasten) return;
+  const von = stand.grad, ziel = rasteGrad(von, RASTER);
+  if (ziel === von) return;
+  const t0 = performance.now(), dauer = 160;
+  const schritt = t => {
+    const k = Math.min(1, (t - t0) / dauer), e = 1 - (1 - k) ** 3;
+    if (k < 1) { setzeGrad(von + (ziel - von) * e, { roh: true }); gleitAnim = requestAnimationFrame(schritt); }
+    else setzeGrad(ziel, { roh });                            // genau der besondere Winkel, exakte Werte
+  };
+  gleitAnim = requestAnimationFrame(schritt);
+}
 function rasteGrad(g, tol) {
   if (!stand.einrasten) return g;
   for (const b of BESONDERE) if (Math.abs(g - b) <= tol) return b;
@@ -213,7 +228,7 @@ function zeichne() {
   if ($('#werkzeug').hidden) return;
   const g = stand.grad, w = EK.werte(g);
   const k = passe(kreisC);
-  EK.zeichneKreis(k.ctx, k.rahmen, g, { tan: stand.tan, geist });
+  EK.zeichneKreis(k.ctx, k.rahmen, g, { tan: stand.tan, geist, marken: stand.einrasten });
   const u = passe(kurvenC);
   EK.zeichneKurven(u.ctx, u.rahmen, g, { tan: stand.tan });
 
@@ -256,13 +271,13 @@ function ausFinger(e) {
   const m = EK.kreisMasse({ x: 0, y: 0, w: r.width, h: r.height }, { tan: stand.tan });
   const dx = e.clientX - r.left - m.mx, dy = m.my - (e.clientY - r.top);
   if (Math.hypot(dx, dy) < 4) return;                     // genau im Mittelpunkt: kein Winkel
-  setzeGrad(rasteGrad(EK.normiere(Math.atan2(dy, dx) * 180 / Math.PI), RASTER));
+  cancelAnimationFrame(gleitAnim); setzeGrad(EK.normiere(Math.atan2(dy, dx) * 180 / Math.PI));
 }
 kreisC.addEventListener('pointerdown', e => {
   zieht = true; kreisC.setPointerCapture(e.pointerId); ausFinger(e); erstesMal();
 });
 kreisC.addEventListener('pointermove', e => { if (zieht) ausFinger(e); });
-const loslassen = () => { zieht = false; };
+const loslassen = () => { if (zieht) gleiteZumRaster(); zieht = false; };
 kreisC.addEventListener('pointerup', loslassen);
 kreisC.addEventListener('pointercancel', loslassen);
 
@@ -272,15 +287,16 @@ function ausKurve(e) {
   const r = kurvenC.getBoundingClientRect();
   const m = EK.kurvenMasse({ x: 0, y: 0, w: r.width, h: r.height });
   const g = Math.max(0, Math.min(360, (e.clientX - r.left - m.links) / (m.rechts - m.links) * 360));
-  setzeGrad(rasteGrad(g, RASTER), { roh: true });
+  cancelAnimationFrame(gleitAnim); setzeGrad(g, { roh: true });
 }
 kurvenC.addEventListener('pointerdown', e => { ziehtKurve = true; kurvenC.setPointerCapture(e.pointerId); ausKurve(e); erstesMal(); });
 kurvenC.addEventListener('pointermove', e => { if (ziehtKurve) ausKurve(e); });
-kurvenC.addEventListener('pointerup', () => { ziehtKurve = false; });
+kurvenC.addEventListener('pointerup', () => { if (ziehtKurve) gleiteZumRaster({ roh: true }); ziehtKurve = false; });
 kurvenC.addEventListener('pointercancel', () => { ziehtKurve = false; });
 
 /* ---------- Regler ---------- */
-$('#r-win').addEventListener('input', e => { setzeGrad(rasteGrad(+e.target.value, RASTER), { roh: true }); erstesMal(); });
+$('#r-win').addEventListener('input', e => { cancelAnimationFrame(gleitAnim); setzeGrad(+e.target.value, { roh: true }); erstesMal(); });
+$('#r-win').addEventListener('change', () => gleiteZumRaster({ roh: true }));
 function zeigeGeist(welcher) {
   geist = welcher; clearTimeout(geistTimer);
 }
@@ -288,16 +304,16 @@ function geistWeg() { clearTimeout(geistTimer); geistTimer = setTimeout(() => { 
 let sinErklaert = false;
 $('#r-sin').addEventListener('input', e => {
   zeigeGeist('sin'); erstesMal();
-  setzeGrad(rasteGrad(ausSin(+e.target.value), RASTER));
+  cancelAnimationFrame(gleitAnim); setzeGrad(ausSin(+e.target.value));
   if (!sinErklaert) { sinErklaert = true;
     showInfo('Zu jedem Sinus gibt es zwei Punkte (der blasse ist der zweite). Der Regler bleibt auf deiner Kreishälfte – die Seite wechselst du mit cos.', 7); }   // oben: unten läge es über dem Regler, den man gerade schiebt
 });
 $('#r-cos').addEventListener('input', e => {
   zeigeGeist('cos'); erstesMal();
-  setzeGrad(rasteGrad(ausCos(+e.target.value), RASTER));
+  cancelAnimationFrame(gleitAnim); setzeGrad(ausCos(+e.target.value));
 });
 for (const id of ['#r-sin', '#r-cos']) {
-  $(id).addEventListener('change', geistWeg);
+  $(id).addEventListener('change', () => { gleiteZumRaster(); geistWeg(); });
   $(id).addEventListener('pointerup', geistWeg);
   $(id).addEventListener('touchend', geistWeg);
 }
