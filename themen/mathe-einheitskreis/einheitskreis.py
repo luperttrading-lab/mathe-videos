@@ -242,13 +242,25 @@ def s_warum(b, sc, t):
     strecken(b, g, f_sin=glatt(p(t, T['L'], 0.9)), f_cos=glatt(p(t, T['K'], 0.9)), lab_sin=lab_s, lab_cos=lab_c,
              la_s=ein(t, T['G'] if t < T['Ho'] else T['Ho'], 0.4), la_c=ein(t, T['K'] if t < T['Xk'] else T['Xk'], 0.4))
     zeiger(b, g)
-    ah = ein(t, T['H'], 0.4) * (1 - ein(t, T['F'], 0.4))
-    if ah > 0:
-        m = math.radians(g)
-        nx, ny = -math.sin(m), -math.cos(m)                 # Normale zur Hypotenuse, nach außen-oben
-        s = 'Hypotenuse = 1' if t < T['G1'] else '1'
-        etikett(b, s, (CX + px) / 2 + 26 * nx * (1 if px > CX else -1), (CY + py) / 2 + 26 * ny * (1 if px > CX else -1),
-                24, INK, ah)
+    # Hypotenuse: Linie leuchtet kurz auf, Name wird Buchstabe für Buchstabe entlang der Linie geschrieben
+    # (Nutzer 13.11.: „damit man weiß, wo sie ist“)
+    weg_h = 1 - ein(t, T['F'], 0.4)
+    hl = math.sin(math.pi * klemm((t - T['H']) / 1.6))
+    if hl > 0:
+        b.linie([(CX, CY), (px, py)], WINKEL, 14, alpha=0.35 * hl)
+    m = math.radians(g)
+    ux, uy = math.cos(m), -math.sin(m)                     # Richtung Ursprung → P (Bildschirm)
+    nx, ny = -math.sin(m), -math.cos(m)                    # Normale nach links oben (außerhalb des Dreiecks)
+    wort = 'Hypotenuse' + (' = 1' if t >= C(sc, 'genau eins') else '')
+    ws = [breite(ch, INTER_X, 26) for ch in wort]
+    pos = R / 2 - sum(ws) / 2
+    for i, (ch, w) in enumerate(zip(wort, ws)):
+        start = T['H'] + 0.07 * i if i < 10 else C(sc, 'genau eins') + 0.05 * (i - 10)
+        a_ch = ein(t, start, 0.18) * weg_h
+        mitte = pos + w / 2
+        if a_ch > 0 and ch != ' ':
+            b.text(ch, CX + ux * mitte + nx * 22, CY + uy * mitte + ny * 22, 26, INK, INTER_X, alpha=a_ch, dreh=g)
+        pos += w
     weg = T['N']
     zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = Gegenkathete : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
     zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = Gegenkathete : 1', INK)], 240, 28, INTER, ende=weg)
