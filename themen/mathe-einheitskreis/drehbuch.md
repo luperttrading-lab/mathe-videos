@@ -16,6 +16,13 @@ Bild: groß „sin 180° = ?“, darunter zwei Karten „0“ und „−1“; da
 
 Bild: Achsen, Kreis zeichnet sich, „r = 1“ am Radius; orangener Bogen öffnet sich bei „gegen den Uhrzeigersinn“; P.
 
+## 2 orientierung (≈ 20 s, Nutzer 13.11.: Gefühl, wo welcher Winkel liegt)
+> Zur Orientierung: Null Grad liegt rechts, neunzig Grad oben, hundertachtzig Grad links und zweihundertsiebzig Grad
+> unten. Dazwischen liegen zum Beispiel dreißig, fünfundvierzig und sechzig Grad im ersten Viertel, und
+> hundertfünfunddreißig Grad genau in der Mitte zwischen oben und links.
+
+Bild: P läuft zu jedem genannten Winkel, dort bleibt ein oranger Strich mit Gradzahl außen am Kreis stehen.
+
 ## 3 warum (≈ 45 s)
 > Von P aus ziehen wir eine Linie senkrecht nach unten auf die x-Achse. So entsteht ein rechtwinkliges Dreieck. Seine
 > Hypotenuse ist der Radius, also genau eins. Sinus ist Gegenkathete durch Hypotenuse, hier also Gegenkathete durch

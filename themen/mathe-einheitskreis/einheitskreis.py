@@ -41,6 +41,7 @@ for s in SZENEN:
 STAND = {
     'hook':       (180, False, False, ['sin 180° = ?', '0  oder  −1 ?']),
     'kreis':      (50, False, False, ['Radius 1', 'Winkel α ab der x-Achse']),
+    'orientierung': (135, False, False, ['']),
     'warum':      (50, True, False, ['P(cos α | sin α)', 'sin α = Gegenkathete / 1']),
     'werte':      (30, True, False, ['sin 30° = ½', 'cos 30° = √3 / 2 ≈ 0,87']),
     'vorzeichen': (150, True, False, ['sin 150° = ½', 'cos 150° = −√3 / 2']),
@@ -55,12 +56,12 @@ STAND = {
 from regel import BG, C, band, ein, zeile                 # noqa: E402
 from animationen import breite, glatt, klemm, p           # noqa: E402
 
-KICKER = {'hook': 'Einheitskreis', 'kreis': 'Der Kreis', 'warum': 'Warum?', 'werte': 'Besondere Winkel',
+KICKER = {'hook': 'Einheitskreis', 'kreis': 'Der Kreis', 'orientierung': 'Der Kreis', 'warum': 'Warum?', 'werte': 'Besondere Winkel',
           'vorzeichen': 'Vorzeichen', 'pythagoras': 'Pythagoras', 'kurve': 'Sinuskurve', 'merke': 'Merke',
           'schluss': 'Merke', 'app': 'Üben'}
 for s in SZENEN:
     s['kicker'] = KICKER.get(s['id'], 'Einheitskreis')
-    if s['id'] in ('schluss', 'app'):
+    if s['id'] in ('schluss', 'app', 'orientierung'):
         s['anhang'] = True
 
 CX, CY, R = 380, 385, 215                                  # Kreis links, rechts Platz für Formeln
@@ -94,7 +95,7 @@ def achsen(b, a=1.0, cx=CX, cy=CY, r=R):
     b.poly([(cx + L + 12, cy), (cx + L - 4, cy - 7), (cx + L - 4, cy + 7)], fill=GRAU, alpha=a)
     b.poly([(cx, cy - L - 12), (cx - 7, cy - L + 4), (cx + 7, cy - L + 4)], fill=GRAU, alpha=a)
     b.text('x', cx + L + 6, cy + 24, 24, GRAU, INTER_X, alpha=a)
-    b.text('y', cx - 22, cy - L - 2, 24, GRAU, INTER_X, alpha=a)
+    b.text('y', cx + 22, cy - L + 6, 24, GRAU, INTER_X, alpha=a)
     for v in (1, -1):
         b.linie([(cx + v * r, cy - 7), (cx + v * r, cy + 7)], GRAU, 3.5, alpha=a)
         b.linie([(cx - 7, cy - v * r), (cx + 7, cy - v * r)], GRAU, 3.5, alpha=a)
@@ -125,13 +126,14 @@ def winkel(b, grad, a=1.0, text='α', cx=CX, cy=CY):
         b.text(text, cx + rr2 * math.cos(m), cy - rr2 * math.sin(m), 20 if kl else 26, WINKEL, INTER_X, alpha=a)
 
 
-def zeiger(b, grad, a=1.0, mit_p=True, p_a=1.0, cx=CX, cy=CY, r=R):
+def zeiger(b, grad, a=1.0, mit_p=True, p_a=1.0, cx=CX, cy=CY, r=R, p_name=True):
     px, py = punkt(grad, cx, cy, r)
     b.linie([(cx, cy), (px, py)], INK, 4, alpha=a)
     if mit_p and p_a > 0:
         b.kreis(px, py, 9, INK, alpha=a * p_a)
         dx = 24 if px >= cx - 2 else -24
-        b.text('P', px + dx, py + (-22 if py <= cy + 1 else 24), 28, INK, INTER_X, alpha=a * p_a)
+        if p_name:
+            b.text('P', px + dx, py + (-22 if py <= cy + 1 else 24), 28, INK, INTER_X, alpha=a * p_a)
     return px, py
 
 
@@ -144,10 +146,14 @@ def strecken(b, grad, f_sin=1.0, f_cos=1.0, a=1.0, lab_sin='', lab_cos='', la_s=
         b.linie([(px, py), (px, py + (CY - py) * f_sin)], SIN, 8, alpha=a)
     if lab_sin and abs(CY - py) > 20:
         rechts = px >= CX
-        etikett(b, lab_sin, px + (16 if rechts else -16), (py + CY) / 2, 26, SIN, a * la_s,
-                anker='l' if rechts else 'r')
+        ym = (py + CY) / 2
+        rand = math.sqrt(max(R * R - (ym - CY) ** 2, 0))     # Kreislinie auf dieser Höhe
+        w_ = breite(lab_sin, INTER_X, 26)
+        innen = abs(px - CX) + 16 + w_ < rand - 6
+        x_ = (px + (16 if rechts else -16)) if innen else (CX + (rand + 12 if rechts else -rand - 12))
+        etikett(b, lab_sin, x_, ym, 26, SIN, a * la_s, anker='l' if rechts else 'r', grund=False)
     if lab_cos and abs(px - CX) > 30:
-        etikett(b, lab_cos, (px + CX) / 2, CY + (28 if py <= CY else -28), 26, COS, a * la_c)
+        etikett(b, lab_cos, (px + CX) / 2, CY + (28 if py <= CY else -28), 26, COS, a * la_c, grund=False)
 
 
 def zeit_zeile(b, t, start, teile, y, g=32, pfad=INTER_X, ende=None):
@@ -217,6 +223,34 @@ def s_kreis(b, sc, t):
     zeit_zeile(b, t, tX, [('Winkel ', INK), ('α', WINKEL), (' ab der positiven x-Achse', INK)], 340, 30, INTER)
     zeit_zeile(b, t, tU, [('gegen den Uhrzeigersinn ↺', WINKEL)], 400, 30, INTER)
     zeit_zeile(b, t, tP, [('P liegt auf dem Kreis', INK)], 470, 32)
+
+
+def s_orientierung(b, sc, t):
+    """Wo liegt welcher Winkel? P läuft hin, ein oranger Strich mit Gradzahl bleibt außen stehen (Nutzer 13.11.)."""
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    halte = [(0, 'Null Grad', 0), (90, 'neunzig Grad oben', 90), (180, 'hundertachtzig Grad links', 180),
+             (270, 'zweihundertsiebzig', 270), (30, 'dreißig', 390), (45, 'fünfundvierzig', 405), (60, 'sechzig', 420),
+             (135, 'hundertfünfunddreißig', 495)]
+    g = bahn(t, [(0, 50)] + [(w(wort) - 0.5, ziel) for _, wort, ziel in halte], 0.9)
+    achsen(b)
+    kreislinie(b)
+    for grad, wort, _ in halte:
+        a = ein(t, w(wort) + 0.3, 0.3)
+        if a > 0:
+            m = math.radians(grad)
+            b.linie([(CX + (R - 10) * math.cos(m), CY - (R - 10) * math.sin(m)),
+                     (CX + (R + 10) * math.cos(m), CY - (R + 10) * math.sin(m))], WINKEL, 4, alpha=a)
+            # Gradzahl außen; an den Achsen etwas seitlich, damit sie nicht auf Achse oder „1“ liegt
+            ox, oy = {0: (34, -22), 90: (34, -24), 180: (-40, -22), 270: (40, 30)}.get(
+                grad, (44 * math.cos(m), -44 * math.sin(m)))
+            etikett(b, f'{grad}°', CX + R * math.cos(m) + ox, CY - R * math.sin(m) + oy, 22, WINKEL, a, grund=False)
+    gm = g % 360
+    winkel(b, gm, 1.0, text='')
+    zeiger(b, gm, p_name=False)                            # hier stehen die Gradzahlen am Kreis
+    zeit_zeile(b, t, w('Null Grad'), [('0° rechts · 90° oben', INK)], 250, 32, INTER)
+    zeit_zeile(b, t, w('hundertachtzig Grad links'), [('180° links · 270° unten', INK)], 305, 32, INTER)
+    zeit_zeile(b, t, w('dreißig'), [('30°, 45°, 60°: erstes Viertel', INK)], 380, 30, INTER)
+    zeit_zeile(b, t, w('hundertfünfunddreißig'), [('135° = Mitte zwischen 90° und 180°', INK)], 435, 30, INTER)
 
 
 def s_warum(b, sc, t):
@@ -435,9 +469,9 @@ def s_werte(b, sc, t):
         if a60 > 0:
             n = 24
             # größerer Radius als der 30°-Bogen, Beschriftung im unteren Dreieck (Nutzer 13.11.: nicht übereinander)
-            b.linie([(CX + 100 * math.cos(math.radians(-30 + 60 * k / n)), CY - 100 * math.sin(math.radians(-30 + 60 * k / n)))
+            b.linie([(CX + 140 * math.cos(math.radians(-30 + 60 * k / n)), CY - 140 * math.sin(math.radians(-30 + 60 * k / n)))
                      for k in range(n + 1)], WINKEL, 5, alpha=a60)
-            etikett(b, '60°', CX + 128 * math.cos(math.radians(-14)), CY + 128 * math.sin(math.radians(14)), 22, WINKEL, a60,
+            etikett(b, '60°', CX + 112 * math.cos(math.radians(-15)), CY + 112 * math.sin(math.radians(15)), 22, WINKEL, a60,
                     grund=False)
         ar = ein(t, w('Radien'), 0.4) * weg
         if ar > 0:
@@ -457,7 +491,7 @@ def s_werte(b, sc, t):
                        for k in range(13)]
                 b.linie(pts, WINKEL, 5, alpha=aw0)
                 if aw > 0:
-                    etikett(b, '60°', x1 - 24, y1 + (44 if y1 < CY else -44), 20, WINKEL, aw)   # auf der Winkelhalbierenden
+                    etikett(b, '60°', x1 + 36, y1 + (34 if y1 < CY else -34), 20, WINKEL, aw, anker='l', grund=False)
         ag = ein(t, w('gleichseitiges'), 0.5) * weg
         if ag > 0:
             b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
@@ -610,7 +644,7 @@ def s_pythagoras(b, sc, t):
 # darunter (Winkel nach unten); die blaue Kurve kippt danach um 90° auf die Sinus-Achsen
 KX, KY, KR = 200, 215, 105
 GX0, GX1 = 380, 1190                                       # Sinus: 0° … 360° waagrecht
-CY0, CY1 = 372, 668                                        # Kosinus: 0° … 360° senkrecht unter dem Kreis
+CY0, CY1 = 392, 668                                        # Kosinus: 0° … 360° senkrecht unter dem Kreis
 
 
 def gestrichelt(b, x0, y0, x1, y1, c, a=1.0, n=24, lw=2):
@@ -635,11 +669,12 @@ def s_kurve(b, sc, t):
     b.poly([(GX0, KY - KR - 36), (GX0 - 7, KY - KR - 20), (GX0 + 7, KY - KR - 20)], fill=GRAU)
     for gg in (90, 180, 270, 360):
         b.linie([(gx(gg), KY - 7), (gx(gg), KY + 7)], GRAU, 3)
-        etikett(b, f'{gg}°', gx(gg) + 22, KY + 22, 18, INK)
+        dx_, dy_ = {90: (-24, 22), 180: (-26, 22), 270: (-26, -20), 360: (-26, -20)}[gg]
+        etikett(b, f'{gg}°', gx(gg) + dx_, KY + dy_, 18, INK, grund=False)
     for v, s_ in ((1, '1'), (-1, '−1')):
         b.linie([(GX0 - 7, KY - v * KR), (GX0 + 7, KY - v * KR)], GRAU, 3)
         b.text(s_, GX0 - 24, KY - v * KR, 18, INK, INTER_X)
-    b.text('α', GX1 + 40, KY + 24, 22, WINKEL, INTER_X, alpha=ein(t, w('Waagrecht')))
+    b.text('α', GX1 + 50, KY + 22, 22, WINKEL, INTER_X, alpha=ein(t, w('Waagrecht')))
     b.text('sin α', GX0 - 46, KY - KR - 30, 22, SIN, INTER_X, alpha=ein(t, w('senkrecht der Sinus')))
     # Kosinus-Achse unter dem Kreis (Winkel nach unten), blendet beim Kippen aus
     kipp = glatt(p(t, tK, 1.8))
@@ -678,7 +713,7 @@ def s_kurve(b, sc, t):
     aL = ein(t, tU, 0.4)
     if aL > 0:
         x_, y_ = ort(0.5, -1)
-        etikett(b, 'cos α', x_ + (30 if kipp < 0.5 else 0), y_ + (0 if kipp < 0.5 else 30), 22, COS, aL)
+        etikett(b, 'cos α', x_, y_ + 30, 22, COS, aL * klemm(2 * kipp - 1), grund=False)
     # Punkt P mit beiden Projektionen
     if t >= t0 and g < 360:
         winkel(b, g, 1.0, text='', cx=KX, cy=KY)
@@ -743,8 +778,8 @@ def kleiner_kreis(b):
     b.linie([(px, CY), (px, py)], SIN, 7)
     b.linie([(330, CY), (px, py)], INK, 4)
     b.kreis(px, py, 8, INK)
-    etikett(b, 'x = cos α', (330 + px) / 2, CY + 30, 24, COS)
-    etikett(b, 'y = sin α', px + 14, (CY + py) / 2, 24, SIN, anker='l')
+    etikett(b, 'x = cos α', (330 + px) / 2, CY + 30, 24, COS, grund=False)
+    etikett(b, 'y = sin α', 330 + math.sqrt(170 ** 2 - ((py - CY) / 2) ** 2) + 12, (CY + py) / 2, 24, SIN, anker='l', grund=False)
 
 
 def s_merke(b, sc, t):
@@ -829,7 +864,7 @@ def kreisbild(b, sc, t):
 
 
 ZEICHNER = {s['id']: kreisbild for s in SZENEN}
-ZEICHNER.update(hook=s_hook, kreis=s_kreis, warum=s_warum, **ZEICHNER_NEU)
+ZEICHNER.update(hook=s_hook, kreis=s_kreis, orientierung=s_orientierung, warum=s_warum, **ZEICHNER_NEU)
 KLAENGE = {}
 MERKSAETZE = []
 
