@@ -4,11 +4,11 @@
  "videos": [
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
-   "titel": "Animiert: Szenen 4–10 (2:58)",
-   "stand": "13.11., 16:55",
+   "titel": "Animiert: Szenen 4–10 (3:22)",
+   "stand": "13.11., 17:20",
    "pruefen": true,
-   "poster_bei": 4,
-   "notiz": "Neu ab 0:00: Der orange Winkelbogen mit Gradzahl läuft jetzt von Anfang an mit – P dreht sichtbar von 50° auf 180°, dann 0°, 90°, 270°. Vorher kam der Bogen erst bei 45°. Farbige Formeln wie in der letzten Fassung."
+   "poster_bei": 62,
+   "notiz": "Neu ab ≈ 0:47 (30°): Begründung, warum das Dreieck gleichseitig ist – Winkel am Ursprung 2 · 30° = 60°, zwei Radien sind 1, also zwei gleiche Winkel, (180° − 60°) : 2 = 60°, alle Winkel 60° → alle Seiten 1; die x-Achse halbiert die senkrechte Seite (Striche für „gleich lang“) → sin 30° = ½. Text neu vertont (nur diese Szene), Video jetzt ≈ 4:40."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",

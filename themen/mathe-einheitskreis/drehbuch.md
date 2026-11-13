@@ -35,8 +35,12 @@ rote und blaue Strecke bleiben.
 > und minus eins.
 > Und die Winkel dazwischen? Bei fünfundvierzig Grad sind beide Katheten gleich lang. Nach Pythagoras ist x Quadrat
 > plus x Quadrat gleich eins. Also ist x gleich Wurzel zwei durch zwei, ungefähr null Komma sieben.
-> Bei dreißig Grad spiegeln wir das Dreieck an der x-Achse. Es entsteht ein gleichseitiges Dreieck mit Seitenlänge
-> eins. Die Höhe von P ist genau die Hälfte einer Seite: Sinus dreißig Grad ist ein halb. Pythagoras liefert den
+> Bei dreißig Grad spiegeln wir das Dreieck an der x-Achse. Am Ursprung entsteht ein Winkel von zweimal dreißig, also
+> sechzig Grad. Die beiden Seiten daneben sind Radien, also beide eins lang. Ein Dreieck mit zwei gleich langen Seiten
+> hat auch zwei gleich große Winkel. Für die bleiben hundertachtzig minus sechzig, also hundertzwanzig Grad, für jeden
+> sechzig. Drei gleiche Winkel heißt: Es ist ein gleichseitiges Dreieck, alle Seiten sind eins lang. Die x-Achse teilt
+> die senkrechte Seite genau in der Mitte. Die Höhe von P ist also die Hälfte: Sinus dreißig Grad ist ein halb.
+> Pythagoras liefert den
 > Kosinus: Wurzel drei durch zwei. Bei sechzig Grad ist es dasselbe Dreieck, nur gekippt: Sinus und Kosinus tauschen
 > die Plätze.
 
