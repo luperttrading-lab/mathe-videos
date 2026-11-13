@@ -23,3 +23,8 @@ Recherche (6 meistgesehene deutsche Videos, 151 Tsd.–1,6 Mio. Aufrufe, Stand 1
 keines zeigt sin² + cos² = 1 am Kreis, keines Kreis und Kurve nebeneinander live, zwei tun so, als folge sin = y
 für alle Winkel aus dem Dreieck (in Wahrheit Definition). Häufigste Hänger: sin 180° = −1, sin/cos vertauscht,
 „woher kommen die Werte für 30/45/60°?“, „wozu das Ganze?“.
+
+App-Abgleich (Info App-Sitzung 13.11.): App 0.2 nutzt dieselben Farben, dazu Tangens #0f766e. App liegt bis zur
+Abnahme auf Zweig `einheitskreis`; QR auf …/einheitskreis/ funktioniert erst danach. Zeichencode zum Abgleich der
+Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt beim Python-Baukasten regel.py und
+übernimmt nur Farben und Strichbild.
