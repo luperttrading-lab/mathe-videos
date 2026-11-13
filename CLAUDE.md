@@ -40,8 +40,8 @@ nachziehen.
   1. Bilder und Dateien erst jetzt schicken (`SendUserFile`), nicht mitten im Text.
   2. **„Deine Aufgabe: …“** – jede offene Entscheidung oder Abnahme als kurzer Arbeitsauftrag: Link, Ort auf der Seite,
      Zahl der Stellen. Nie nur „bitte abnehmen“. Nichts offen: kein Aufgabenblock.
-  3. Die drei festen Links (unten) als beschriftete Liste, jeden **genau einmal**; der Arbeitsauftrag verweist darauf
-     („Auswahl-Seite, Link unten“).
+  3. **Nur der Link, den der Nutzer gerade braucht** (Nutzer 13.11.: „alle Links weglassen, nur den aktuellen Link“),
+     nicht mehr alle drei festen Links (unten) in jeder Antwort.
   4. Kostenzeile: `python3 tools/kosten.py` ausführen, Ausgabe wörtlich als letzte Zeile.
 - **Jeder offene Punkt mit eigenem Link:** Vergleichsbilder als Eintrag auf die Vorschau-Seite (Standbild als kurzes
   Video, „passt“ = übernehmen). Nie ein Kürzel („Variante D“) ohne Bild und Link. Reine Textentscheidungen (z. B. Titel)
