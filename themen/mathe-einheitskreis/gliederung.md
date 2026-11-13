@@ -34,4 +34,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
   eigenen Kanal zum Mathelernen (nicht Kopfrechnen).
 - Name der Reihe: **„Mathe verstehen“**, Thema **Trigonometrie**.
 - Sohn: 10. Klasse (13.11.).
+- Bogenmaß: eigenes Video. Tangens: weglassen. Abspann: weglassen. 480p-Datei für den Sohn: ja.
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
