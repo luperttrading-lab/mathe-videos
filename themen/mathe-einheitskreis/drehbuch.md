@@ -20,9 +20,9 @@ Bild: Achsen, Kreis zeichnet sich, „r = 1“ am Radius; orangener Bogen öffne
 
 ## 2 orientierung (≈ 20 s, Nutzer 13.11.: Gefühl, wo welcher Winkel liegt)
 > Zur Orientierung: Null Grad liegt rechts, neunzig Grad oben, hundertachtzig Grad links und zweihundertsiebzig Grad
-> unten. Dazwischen liegen zum Beispiel dreißig, fünfundvierzig und sechzig Grad im ersten Viertel, und
-> hundertfünfunddreißig Grad genau in der Mitte zwischen oben und links. In den anderen Vierteln zum Beispiel
-> hundertzwanzig Grad oben links, zweihundertvierzig Grad unten links und dreihundert Grad unten rechts.
+> unten. Im ersten Viertel liegen zum Beispiel dreißig, fünfundvierzig und sechzig Grad. Oben links liegen
+> hundertzwanzig Grad und hundertfünfunddreißig Grad, genau in der Mitte zwischen oben und links. Unten links liegen
+> zweihundertvierzig Grad, unten rechts dreihundert Grad.
 
 Bild: P läuft zu jedem genannten Winkel, dort bleibt ein oranger Strich mit Gradzahl außen am Kreis stehen.
 

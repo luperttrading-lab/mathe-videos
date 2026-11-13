@@ -251,7 +251,7 @@ def s_orientierung(b, sc, t):
     w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
     halte = [(0, 'Null Grad', 0), (90, 'neunzig Grad oben', 90), (180, 'hundertachtzig Grad links', 180),
              (270, 'zweihundertsiebzig', 270), (30, 'dreißig', 390), (45, 'fünfundvierzig', 405), (60, 'sechzig', 420),
-             (135, 'hundertfünfunddreißig', 495), (120, 'hundertzwanzig', 480), (240, 'zweihundertvierzig', 600),
+             (120, 'hundertzwanzig', 480), (135, 'hundertfünfunddreißig', 495), (240, 'zweihundertvierzig', 600),
              (300, 'dreihundert Grad', 660)]
     g = bahn(t, [(0, 50)] + [(w(wort) - 0.5, ziel) for _, wort, ziel in halte], 0.9)
     achsen(b)
@@ -269,12 +269,13 @@ def s_orientierung(b, sc, t):
     gm = g % 360
     winkel(b, gm, 1.0, text='')
     zeiger(b, gm, p_name=False)                            # hier stehen die Gradzahlen am Kreis
-    zeit_zeile(b, t, w('Null Grad'), [('0° rechts · 90° oben', INK)], 250, 32, INTER)
-    zeit_zeile(b, t, w('hundertachtzig Grad links'), [('180° links · 270° unten', INK)], 305, 32, INTER)
-    zeit_zeile(b, t, w('dreißig'), [('30°, 45°, 60°: erstes Viertel', INK)], 380, 30, INTER)
-    zeit_zeile(b, t, w('hundertfünfunddreißig'), [('135° = Mitte zwischen 90° und 180°', INK)], 435, 30, INTER)
-    zeit_zeile(b, t, w('hundertzwanzig'), [('120° oben links · 240° unten links', INK)], 510, 30, INTER)
-    zeit_zeile(b, t, w('dreihundert Grad'), [('300° unten rechts', INK)], 560, 30, INTER)
+    # Nutzer 13.11.: jedes Viertel genau einmal nennen (120° und 135° liegen beide oben links)
+    zeit_zeile(b, t, w('Null Grad'), [('0° rechts · 90° oben', INK)], 230, 32, INTER)
+    zeit_zeile(b, t, w('hundertachtzig Grad links'), [('180° links · 270° unten', INK)], 285, 32, INTER)
+    zeit_zeile(b, t, w('Im ersten Viertel'), [('rechts oben: 30°, 45°, 60°', INK)], 360, 30, INTER)
+    zeit_zeile(b, t, w('Oben links'), [('links oben: 120°, 135° (Mitte)', INK)], 410, 30, INTER)
+    zeit_zeile(b, t, w('Unten links'), [('links unten: 240°', INK)], 460, 30, INTER)
+    zeit_zeile(b, t, w('unten rechts'), [('rechts unten: 300°', INK)], 510, 30, INTER)
 
 
 def s_warum(b, sc, t):
