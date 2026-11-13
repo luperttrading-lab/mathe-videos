@@ -10,8 +10,8 @@ Sinus und Kosinus verstellt … alles auf einen Bildschirm, Handy-App.“ Erklä
 - **Start:** Punkt kreist, zeichnet die Sinuswelle (nach rechts) und die Kosinuswelle (nach unten), Knopf „Los“.
   Direktlink zur Hauptansicht: `#kreis`.
 - **Hauptansicht ohne Scrollen:** Kreis (Punkt P ziehen, Tippen irgendwo im Kreisfeld setzt den Winkel), darunter die
-  abgewickelten Kurven über 0 … 2π (auch dort ziehen), unten Regler θ, sin, cos mit Werten. Sinus orange (senkrecht),
-  Kosinus violett (waagrecht), Tangens grün (Zusatz, Schalter „tan“).
+  abgewickelten Kurven über 0 … 2π (auch dort ziehen), unten Regler θ, sin, cos mit Werten. Sinus rot #e63946 (senkrecht),
+  Kosinus blau #3a86ff (waagrecht), Winkel orange #ff9f1c (gemeinsam mit dem Erklärvideo, 13.11.), Tangens grün (Zusatz, Schalter „tan“).
 - **sin² + cos² = 1:** Der Sinus-Regler hält die Kreishälfte rechts/links (Kosinus = ±√(1 − sin²) mit dem bisherigen
   Vorzeichen), der Kosinus-Regler hält oben/unten. Während man schiebt, zeigt ein blasser zweiter Punkt die andere Lösung.
 - **Exakte Werte** nur an Vielfachen von 30° und 45° (½, √2/2, √3/2, √3/3, √3; tan bei 90°/270° „nicht definiert“),

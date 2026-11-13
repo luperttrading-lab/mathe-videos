@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Home-Bildschirm-Symbol der Einheitskreis-App: Papiergrund mit Punktraster wie die Kopfrechnen-App, Kreis mit Achsen,
-Kosinus (violett, waagrecht) und Sinus (orange, senkrecht) bei 50°, Punkt P. Keine Schrift (wäre zu klein).
+Kosinus (blau, waagrecht) und Sinus (rot, senkrecht), Winkel orange bei 50°, Punkt P. Keine Schrift (wäre zu klein).
 
 Aufruf: python3 tools/icon.py (aus dem Ordner einheitskreis/)"""
 import math
@@ -29,7 +29,7 @@ def symbol(groesse, inhalt=1.0):
     px, py = m + r * math.cos(w), m - r * math.sin(w)
     # Winkelbogen
     rb = r * .3
-    d.pieslice([m - rb, m - rb, m + rb, m + rb], -50, 0, fill=(15, 118, 110, 50))
+    d.pieslice([m - rb, m - rb, m + rb, m + rb], -50, 0, fill=(255, 159, 28, 70))
     d.ellipse([m - r, m - r, m + r, m + r], outline=INK, width=lw)
     d.line([m, m, px, py], fill=INK, width=int(lw * .9))
     d.line([m, m, px, m], fill=COS, width=int(lw * 1.9))

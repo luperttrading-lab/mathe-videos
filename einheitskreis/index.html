@@ -14,10 +14,10 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <style>
-/* Farben wie die Kopfrechnen-App und die Videos: Papiergrund, Tinte; Sinus orange, Kosinus violett, Tangens grün */
+/* Farben wie die Kopfrechnen-App und die Videos: Papiergrund, Tinte; Sinus rot, Kosinus blau, Winkel orange (wie das Erklärvideo), Tangens grün */
 :root {
   --grund: #f6f1e7; --karte: #ffffff; --ink: #2b2d42; --grau: #6f7380; --hell: #e6dfd2;
-  --sin: #e8890c; --cos: #8338ec; --tan: #0f766e; --rand: 16px;
+  --sin: #e63946; --cos: #3a86ff; --tan: #0f766e; --bogen: #ff9f1c; --rand: 16px;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -77,7 +77,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .wert .klein { display: block; font-size: 12px; color: var(--grau); font-weight: 600; min-height: 13px; }
 #z-sin label, #z-sin .gross { color: var(--sin); }
 #z-cos label, #z-cos .gross { color: var(--cos); }
-#z-win label { color: var(--tan); }
+#z-win label { color: #c96f00; }
 
 input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 42px; margin: 0; background: transparent;
   touch-action: pan-y; --f: var(--ink); --p: 50%; }
@@ -88,7 +88,7 @@ input[type=range]::-moz-range-progress { height: 6px; border-radius: 3px; backgr
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%;
   background: #fff; border: 3px solid var(--f); box-shadow: 0 2px 5px rgba(0,0,0,.2); }
 input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid var(--f); }
-#r-sin { --f: var(--sin); } #r-cos { --f: var(--cos); } #r-win { --f: var(--tan); }
+#r-sin { --f: var(--sin); } #r-cos { --f: var(--cos); } #r-win { --f: var(--bogen); }
 /* sin und cos: Füllung von der Mitte (0) aus, damit das Vorzeichen sichtbar ist */
 #r-sin::-webkit-slider-runnable-track, #r-cos::-webkit-slider-runnable-track {
   background: linear-gradient(90deg, var(--hell) var(--a), var(--f) var(--a), var(--f) var(--b), var(--hell) var(--b)); }
@@ -153,7 +153,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.1';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.2';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 

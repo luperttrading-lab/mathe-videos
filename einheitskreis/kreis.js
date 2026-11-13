@@ -7,10 +7,11 @@
 
   const FARBEN = {
     papier: '#f6f1e7', ink: '#2b2d42', grau: '#8a8d98', gitter: 'rgba(120,100,70,.16)',
-    sin: '#e8890c',     // Sinus orange (senkrechte Strecke)
-    cos: '#8338ec',     // Kosinus violett (waagrechte Strecke)
+    sin: '#e63946',     // Sinus rot (senkrechte Strecke) – gemeinsame Farben mit dem Erklärvideo (13.11.)
+    cos: '#3a86ff',     // Kosinus blau (waagrechte Strecke)
     tan: '#0f766e',     // Tangens grün (nur Zusatz)
-    winkel: 'rgba(15,118,110,.16)',
+    bogen: '#ff9f1c',   // Winkel θ und Bogen orange
+    winkel: 'rgba(255,159,28,.18)',
   };
 
   // ---------- Exakte Werte ----------
@@ -151,11 +152,11 @@
       ctx.arc(mx, my, rb, 0, grad >= 360 ? -2 * Math.PI + 1e-6 : bis, true);
       ctx.closePath(); ctx.fillStyle = F.winkel; ctx.fill();
       ctx.beginPath(); ctx.arc(mx, my, rb, 0, grad >= 360 ? -2 * Math.PI + 1e-6 : bis, true);
-      ctx.strokeStyle = F.tan; ctx.lineWidth = 1.6 * u; ctx.stroke();
+      ctx.strokeStyle = F.bogen; ctx.lineWidth = 1.8 * u; ctx.stroke();
       // θ in die Mitte des Bogens
       const mitte = -w.rad / 2 - (grad >= 360 ? Math.PI : 0);
       const rt = rb + 11 * u;
-      ctx.fillStyle = F.tan; ctx.font = schrift(fs * 1.05, 700);
+      ctx.fillStyle = '#c96f00'; ctx.font = schrift(fs * 1.05, 800);
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       if (Math.abs(w.grad) > 12 || grad >= 360) ctx.fillText('θ', mx + rt * Math.cos(mitte), my + rt * Math.sin(mitte));
     }
@@ -303,7 +304,7 @@
       punkt(ctx, gx, Y(w.sin), 5.5, F.sin);
       if (opt.tan && isFinite(w.tan) && Math.abs(w.tan) <= 1.15) punkt(ctx, gx, Y(w.tan), 4.5, F.tan);
     }
-    // Keine Legende im Bild: die Farben erklären die Regler direkt darunter (sin orange, cos violett)
+    // Keine Legende im Bild: die Farben erklären die Regler direkt darunter (sin rot, cos blau)
     ctx.restore();
   }
 
