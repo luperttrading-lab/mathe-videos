@@ -68,7 +68,7 @@ def zeichen(b, s, xc, y, g, c, pfad=INTER_X, alpha=1.0):
         l, o, r, u = sp.getchannel('A').getbbox()
         _kl[(pfad, g)] = ((o - sp.height / 2) / 2, (u - sp.height / 2) / 2)
     o, u = _kl[(pfad, g)]
-    b.linie([(xc, y + o + g * 0.04), (xc, y + u - g * 0.04)], c, max(2.0, g * 0.09), alpha=alpha)
+    b.linie([(xc, y + o + g * 0.04), (xc, y + u - g * 0.04)], c, max(2.5, g * 0.11), alpha=alpha)   # so kräftig wie die Schrift
 
 
 def zeile(b, teile, x, y, g, pfad, alpha=1.0, anker='m'):      # ersetzt regel.zeile in diesem Video
@@ -103,6 +103,13 @@ def etikett(b, s, x, y, g, c, a=1.0, pfad=INTER_X, anker='m', grund=True):
     """Text mit Papier-Hintergrund, damit er über Linien lesbar bleibt; grund=False für Stellen im freien Raum
     (Nutzer 13.11.: Beschriftungen sollen Linien und Kreis nicht unterbrechen)."""
     if a <= 0:
+        return
+    if ' / ' in s:                                          # Nutzer 13.11.: Brüche immer übereinander
+        z, n = s.split(' / ')
+        el = ([('t', '−', c, 1)] if z.startswith('−') else []) + [('b', [(z.lstrip('−'), c)], [(n, c)], 1)]
+        w = formel(b, el, 0, 0, g, messen=True)
+        x0 = x - w / 2 if anker == 'm' else (x if anker == 'l' else x - w)
+        formel(b, el, x0, y, g, a)
         return
     w = breite(s, pfad, g)
     x0 = x - w / 2 if anker == 'm' else (x if anker == 'l' else x - w)
@@ -188,7 +195,16 @@ def strecken(b, grad, f_sin=1.0, f_cos=1.0, a=1.0, lab_sin='', lab_cos='', la_s=
         wc = breite(lab_cos, INTER_X, 26)
         xm = (px + CX) / 2
         xm = max(xm, CX + wc / 2 + 10) if px > CX else min(xm, CX - wc / 2 - 10)
-        etikett(b, lab_cos, xm, CY + (28 if py <= CY else -28), 26, COS, a * la_c, grund=False)
+        dy = 42 if ' / ' in lab_cos else 28                 # Bruch ist höher: weiter weg von der Linie
+        etikett(b, lab_cos, xm, CY + (dy if py <= CY else -dy), 26, COS, a * la_c, grund=False)
+
+
+def zeit_formel(b, t, start, el, y, g=32, ende=None):
+    """Wie zeit_zeile, aber mit echten Brüchen (formel)."""
+    a = ein(t, start) * (1 - (ein(t, ende, 0.4) if ende is not None else 0))
+    if a > 0:
+        w_ = formel(b, el, 0, 0, g, messen=True)
+        formel(b, el, RX - w_ / 2, y + 14 * (1 - ein(t, start)), g, a)
 
 
 def zeit_zeile(b, t, start, teile, y, g=32, pfad=INTER_X, ende=None):
@@ -390,14 +406,17 @@ def s_warum(b, sc, t):
     if a1 > 0:
         etikett(b, '1', CX + ux * R / 2 + nx * 24, CY + uy * R / 2 + ny * 24, 26, INK, a1, grund=False)
     weg = T['N']
-    zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
-    zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : 1', INK)], 240, 28, INTER, ende=weg)
-    zeit_zeile(b, t, T['Ho'], [('sin α', SIN), (' = ', INK), ('Höhe von P', SIN), (' = ', INK), ('y', SIN)], 300, 34, ende=weg)
-    zeit_zeile(b, t, T['K'], [('cos α', COS), (' = ', INK), ('Ankathete', COS), (' : 1 = ', INK), ('x', COS)], 360, 34, ende=weg)
+    zeit_formel(b, t, T['G'], [('t', 'sin α', SIN, 1), ('t', ' = ', INK, 1),
+                               ('b', [('Gegenkathete', SIN)], [('Hypotenuse', INK)], 1)], 185, 30, ende=weg)
+    zeit_formel(b, t, T['G1'], [('t', 'sin α', SIN, 1), ('t', ' = ', INK, 1),
+                                ('b', [('Gegenkathete', SIN)], [('1', INK)], 1)], 265, 30, ende=weg)
+    zeit_zeile(b, t, T['Ho'], [('sin α', SIN), (' = ', INK), ('Höhe von P', SIN), (' = ', INK), ('y', SIN)], 330, 34, ende=weg)
+    zeit_formel(b, t, T['K'], [('t', 'cos α', COS, 1), ('t', ' = ', INK, 1), ('b', [('Ankathete', COS)], [('1', INK)], 1),
+                               ('t', ' = ', INK, 1), ('t', 'x', COS, 1)], 400, 32, ende=weg)
     zeit_zeile(b, t, T['N'], [('im rechtwinkligen Dreieck: 0° < ', INK), ('α', WINKEL), (' < 90°', INK)], 200, 28, INTER)
     zeit_zeile(b, t, T['G2'] + 1.6, [('bei ', INK), ('α', WINKEL), (' = 140°: Winkel im Dreieck 40°', INK)], 250, 28, INTER)
     zeit_zeile(b, t, T['F'], [('deshalb festgelegt, für jedes ', GRAU), ('α', WINKEL), (':', GRAU)], 310, 28, INTER)
-    zeit_zeile(b, t, T['Ko'], [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 450, 46)
+    zeit_zeile(b, t, T['Ko'], [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 470, 46)
     a = ein(t, T['Al'])
     if a > 0:
         band(b, RX - 190, 520, RX + 190, 576, '#ffffff', 0.95 * a, r=16)
@@ -580,11 +599,11 @@ def s_werte(b, sc, t):
             b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
             for yy in ((CY + py) / 2, (CY + qy) / 2):       # Gleich-lang-Striche auf beiden Hälften
                 b.linie([(px - 9, yy - 4), (px + 9, yy + 4)], INK, 3, alpha=hl)
-            for yy in ((CY + py) / 2, (CY + qy) / 2):       # außerhalb des Kreises, nicht auf der Kreislinie
-                etikett(b, '½', CX + R + 14, yy, 26, SIN, hl, anker='l', grund=False)
+            for yy in ((CY + py) / 2, (CY + qy) / 2 + 12):  # außerhalb des Kreises; unten Abstand zur Achsen-„1“
+                etikett(b, '1 / 2', CX + R + 14, yy, 22, SIN, hl, anker='l', grund=False)
         ac3 = ein(t, w('Wurzel drei'), 0.4) * weg
         if ac3 > 0:                                        # √3/2 im oberen Dreieck, nicht auf der unteren Seite
-            etikett(b, '√3 / 2', CX + 140, CY - 22, 24, COS, ac3, grund=False)
+            etikett(b, '√3 / 2', CX + 140, CY - 36, 22, COS, ac3, grund=False)
     # Linien und Dreieck
     zeig = t < w('Genauso') or t > tB - 0.2
     if zeig:
@@ -593,9 +612,9 @@ def s_werte(b, sc, t):
         if t > tB:
             lab_s = lab_c = 'x' if t < t30 else ''
         if t > w('Sinus dreißig'):
-            lab_s, lab_c = ('', '') if t < t60 else ('½', '√3 / 2')    # im Spiegel-Teil eigene Beschriftung
+            lab_s, lab_c = ('', '') if t < t60 else ('1 / 2', '√3 / 2')    # im Spiegel-Teil eigene Beschriftung
         if t > t60 + 1.2:
-            lab_s, lab_c = '√3 / 2', '½'
+            lab_s, lab_c = '√3 / 2', '1 / 2'
         strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
     winkel(b, g, 1.0, text=f'{int(round(g)) % 360}°')                 # Nutzer 13.11.: Bogen und Grad immer mitzeigen
     zeiger(b, g)
@@ -617,9 +636,9 @@ def s_werte(b, sc, t):
     zeit_zeile(b, t, w('dritte Winkel'), [('180° − 90° − 45° = 45°', WINKEL)], 175, 28, ende=t30)
     zeit_zeile(b, t, w('beide Katheten'), [('→ beide Katheten gleich lang: ', INK), ('x', COS), (' und ', INK), ('x', SIN)],
                220, 26, INTER, ende=t30)
-    zeit_zeile(b, t, w('x Quadrat plus'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 280, 34, ende=t30)
-    zeit_zeile(b, t, w('zwei x Quadrat'), [('2x² = 1', INK)], 325, 30, ende=t30)
-    zeit_zeile(b, t, w('Geteilt durch zwei'), [('x² = ½', INK)], 370, 30, ende=t30)
+    zeit_zeile(b, t, w('x Quadrat plus'), [('x²', COS), (' + ', INK), ('x²', SIN), (' = 1', INK)], 268, 34, ende=t30)
+    zeit_zeile(b, t, w('zwei x Quadrat'), [('2x² = 1', INK)], 312, 30, ende=t30)
+    zeit_formel(b, t, w('Geteilt durch zwei'), [('t', 'x² = ', INK, 1), ('b', [('1', INK)], [('2', INK)], 1)], 365, 30, ende=t30)
     # echte Brüche, Erweitern animiert (Nutzer 13.11.): 1/√2 · √2/√2 = √2/(√2·√2) → √2/2
     weg45 = 1 - ein(t, t30, 0.4)
     a1 = ein(t, w('Wurzel aus einem halb')) * weg45
@@ -648,12 +667,14 @@ def s_werte(b, sc, t):
     zeit_zeile(b, t, w('Radien'), [('zwei Seiten = 1', INK)], 240, 28, INTER, ende=ende_b)
     zeit_zeile(b, t, w('zwei gleich große'), [('→ zwei gleiche Winkel', INK)], 285, 28, INTER, ende=ende_b)
     zeit_zeile(b, t, w('hundertzwanzig'), [('(180° − 60°) : 2 = 60°', WINKEL)], 340, 30, ende=ende_b)
-    zeit_zeile(b, t, ende_b, [('alle Winkel 60° → alle Seiten 1', WINKEL)], 190, 28, INTER, ende=t60)
-    zeit_zeile(b, t, w('Sinus dreißig'), [('sin', SIN), (' 30° = ', INK), ('½', GRUEN)], 260, 46, ende=t60 + 1.2)
-    zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ', INK), ('¼', SIN), (')', INK)], 330, 32, INTER, ende=t60 + 1.2)
-    zeit_zeile(b, t, w('Wurzel drei'), [('= √3 / 2 ≈ 0,87', GRUEN)], 380, 36, ende=t60 + 1.2)
-    zeit_zeile(b, t, t60 + 1.2, [('sin', SIN), (' 60° = √3 / 2', INK)], 260, 40)
-    zeit_zeile(b, t, w('tauschen'), [('cos', COS), (' 60° = ½', INK)], 330, 40)
+    zeit_zeile(b, t, ende_b, [('alle Winkel 60° → alle Seiten 1', WINKEL)], 168, 28, INTER, ende=t60)
+    zeit_formel(b, t, w('Sinus dreißig'), [('t', 'sin', SIN, 1), ('t', ' 30° = ', INK, 1), ('b', [('1', GRUEN)], [('2', GRUEN)], 1)],
+                250, 44, ende=t60 + 1.2)
+    zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ', INK), ('¼', SIN), (')', INK)], 335, 32, INTER, ende=t60 + 1.2)
+    zeit_formel(b, t, w('Wurzel drei'), [('t', '= ', GRUEN, 1), ('b', [('√3', GRUEN)], [('2', GRUEN)], 1),
+                                         ('t', ' ≈ 0,87', GRUEN, 1)], 400, 36, ende=t60 + 1.2)
+    zeit_formel(b, t, t60 + 1.2, [('t', 'sin', SIN, 1), ('t', ' 60° = ', INK, 1), ('b', [('√3', INK)], [('2', INK)], 1)], 250, 40)
+    zeit_formel(b, t, w('tauschen'), [('t', 'cos', COS, 1), ('t', ' 60° = ', INK, 1), ('b', [('1', INK)], [('2', INK)], 1)], 345, 40)
 
 
 def s_vorzeichen(b, sc, t):
@@ -677,7 +698,7 @@ def s_vorzeichen(b, sc, t):
     strecken(b, 30, a=0.35 * geist)
     zeiger(b, 30, 0.35 * geist)
     dreieck_fuell(b, g, ein(t, w('gespiegelt'), 0.4) * geist)
-    strecken(b, g, lab_sin='½' if t > w('Sinus ein halb') else '', lab_cos='−√3 / 2' if t > w('Kosinus minus') else '')
+    strecken(b, g, lab_sin='1 / 2' if t > w('Sinus ein halb') else '', lab_cos='−√3 / 2' if t > w('Kosinus minus') else '')
     winkel(b, g, 1.0, text=f'{int(round(g))}°')
     zeiger(b, g)
     ah = ein(t, w('Gleiche Höhe'), 0.4) * geist
@@ -693,8 +714,10 @@ def s_vorzeichen(b, sc, t):
             x, y = punkt(gg, r=R * 1.33)
             band(b, x - 52, y - 22, x + 52, y + 22, '#ffffff', 0.92 * a, r=12)
             zeile(b, [('(', INK), (sc_, COS), (' | ', INK), (ss, SIN), (')', INK)], x, y, 30, INTER_X, alpha=a)
-    zeit_zeile(b, t, w('Sinus ein halb'), [('sin', SIN), (' 150° = ½', INK)], 200, 36, ende=tV)
-    zeit_zeile(b, t, w('Kosinus minus'), [('cos', COS), (' 150° = −√3 / 2', INK)], 260, 36, ende=tV)
+    zeit_formel(b, t, w('Sinus ein halb'), [('t', 'sin', SIN, 1), ('t', ' 150° = ', INK, 1), ('b', [('1', INK)], [('2', INK)], 1)],
+                195, 36, ende=tV)
+    zeit_formel(b, t, w('Kosinus minus'), [('t', 'cos', COS, 1), ('t', ' 150° = −', INK, 1), ('b', [('√3', INK)], [('2', INK)], 1)],
+                270, 36, ende=tV)
     zeit_zeile(b, t, w('ersten Viertel'), [('Werte aus 0° bis 90° reichen', INK)], 340, 28, INTER, ende=tV)
     zeit_zeile(b, t, w('Oben ist'), [('sin', SIN), (': oben +, unten −', INK)], 230, 36)
     zeit_zeile(b, t, w('Rechts ist'), [('cos', COS), (': rechts +, links −', INK)], 300, 36)

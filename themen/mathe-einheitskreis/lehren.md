@@ -10,6 +10,8 @@ Wird nach „Video fertig“ (Nutzer) als Abschnitt „Gestaltungsregeln für Er
 - Beschriftungen dürfen sich nicht überlappen (z. B. 30° und 60° am selben Punkt: verschiedene Radien), auch nicht mit
   Achsenzahlen (1, −1, Gradzahlen, Achsennamen). Vor jedem Clip ein Kontaktbogen und gezielt danach suchen.
 - Bei schmalen Winkeln kleinere Schrift und weiter außen.
+- Trennstrich in Koordinaten (P(x | y)) als eigener Strich so hoch wie die Klammern (der Schrift-Strich „|“ ragt
+  unten heraus).
 - Gleiche Art Beschriftung immer gleich groß (Koordinaten nicht mal 30, mal 24).
 - Vor jedem Clip automatisch prüfen: `werkzeug/beschriftung_pruefen.py` (rendert alle 0,5 s ohne Text, misst Linien
   unter jeder Beschriftung und Überlappungen); nur bewegte Linien dürfen kurz über eine Zahl streichen. Stichproben
@@ -28,7 +30,8 @@ Wird nach „Video fertig“ (Nutzer) als Abschnitt „Gestaltungsregeln für Er
 - Nichts behaupten, was man begründen kann: „gleichseitig“, „gleich lang“, „ist die Hälfte“ immer mit Grund
   (Winkelsumme, gleichschenklig, Symmetrie).
 - Rechenwege lückenlos, jeder Schritt eine Zeile: 2x² = 1 → x² = ½ → x = √½ = 1/√2 → mit √2 erweitern → √2/2.
-- Brüche als echte Brüche (übereinander), nicht mit Schrägstrich; Erweitern animieren (· √2/√2 einblenden, dann
+- Brüche als echte Brüche (übereinander), nicht mit Schrägstrich und nicht als ½-Zeichen – auch in kleinen
+  Beschriftungen und bei sin = Gegenkathete/Hypotenuse; Erweitern animieren (· √2/√2 einblenden, dann
   zusammenfassen) und lange genug stehen lassen (Pausen an echten Sprechpausen, `pause_nach` je Szene).
 - Herkunft zeigen statt nur benennen: Koordinaten mit Strecken auf den Achsen aufbauen, x-Wert blau, y-Wert rot, beim
   Sprechen Wert für Wert; Kurven aus dem Kreis entstehen lassen (Sinus rechts, Kosinus darunter und dann kippen).
