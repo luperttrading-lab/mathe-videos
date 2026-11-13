@@ -33,8 +33,11 @@ rote und blaue Strecke bleiben.
 > Die Höhe ist null. Also ist Sinus von hundertachtzig Grad null. Minus eins ist der Kosinus. Genauso liest du ab:
 > Bei null Grad liegt P bei eins und null, bei neunzig Grad bei null und eins, bei zweihundertsiebzig Grad bei null
 > und minus eins.
-> Und die Winkel dazwischen? Bei fünfundvierzig Grad sind beide Katheten gleich lang. Nach Pythagoras ist x Quadrat
-> plus x Quadrat gleich eins. Also ist x gleich Wurzel zwei durch zwei, ungefähr null Komma sieben.
+> Und die Winkel dazwischen? Bei fünfundvierzig Grad ist der dritte Winkel im Dreieck hundertachtzig minus neunzig minus
+> fünfundvierzig, also auch fünfundvierzig Grad. Zwei gleiche Winkel, also sind beide Katheten gleich lang. Nennen wir
+> sie x. Nach Pythagoras ist x Quadrat plus x Quadrat gleich eins, also zwei x Quadrat gleich eins. Geteilt durch zwei:
+> x Quadrat ist ein halb. Also ist x die Wurzel aus einem halb, und das ist eins durch Wurzel zwei. Mit Wurzel zwei
+> erweitert: Wurzel zwei durch zwei, ungefähr null Komma sieben.
 > Bei dreißig Grad spiegeln wir das Dreieck an der x-Achse. Am Ursprung entsteht ein Winkel von zweimal dreißig, also
 > sechzig Grad. Die beiden Seiten daneben sind Radien, also beide eins lang. Ein Dreieck mit zwei gleich langen Seiten
 > hat auch zwei gleich große Winkel. Für die bleiben hundertachtzig minus sechzig, also hundertzwanzig Grad, für jeden
