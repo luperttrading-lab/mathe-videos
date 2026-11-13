@@ -241,11 +241,8 @@
       ctx.font = schrift(fs, 800);
       if (Math.abs(w.sin) > .16) {
         ctx.fillStyle = F.sin; ctx.textBaseline = 'middle';
-        // Seite mit mehr Platz: innen (zwischen Radius und Strecke) oder außen (zwischen Strecke und Kreis)
-        const innen = Math.abs(w.cos) / 2;
-        const aussen = Math.sqrt(1 - (w.sin / 2) ** 2) - Math.abs(w.cos);
-        const nachAussen = aussen >= innen;
-        const rechts = (w.cos >= 0) === nachAussen;
+        // Nutzerwahl 13.11.: von 0° bis unter 90° links der Strecke (innen), ab 90° rechts – nur ein Wechsel, kein Hin und Her
+        const rechts = normiere(grad) >= 90;
         ctx.textAlign = rechts ? 'left' : 'right';
         zweiZeilen(ctx, 'sin', wertText(w.sinText, w.sin), px + (rechts ? 8 : -8) * u, my - r * w.sin / 2, fs);
       }

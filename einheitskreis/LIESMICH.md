@@ -34,3 +34,5 @@ Strecken im Kreis. Kurvenbild höher (21 % der Bildhöhe), Kreis etwas kleiner u
 Ziehen folgt P dem Finger genau; erst beim Loslassen gleitet er in 0,16 s zum besonderen Winkel, wenn er höchstens 2°
 daneben liegt (gilt für Kreis, Kurvenbild und alle drei Regler). Kleine Striche am Kreis zeigen die besonderen Winkel.
 Beschriftungen mit Papier-Rand (lesbar über Linien), sin-Beschriftung auf der Seite mit mehr Platz.
+
+**v0.5 (Nutzerwahl 13.11.):** sin-Beschriftung von 0° bis unter 90° links der Strecke (innen), ab 90° rechts – ein fester Wechsel statt Platzautomatik.
