@@ -70,13 +70,15 @@ def punkt(grad, cx=CX, cy=CY, r=R):
     return cx + r * math.cos(a), cy - r * math.sin(a)
 
 
-def etikett(b, s, x, y, g, c, a=1.0, pfad=INTER_X, anker='m'):
-    """Text mit Papier-Hintergrund, damit er über Linien lesbar bleibt."""
+def etikett(b, s, x, y, g, c, a=1.0, pfad=INTER_X, anker='m', grund=True):
+    """Text mit Papier-Hintergrund, damit er über Linien lesbar bleibt; grund=False für Stellen im freien Raum
+    (Nutzer 13.11.: Beschriftungen sollen Linien und Kreis nicht unterbrechen)."""
     if a <= 0:
         return
     w = breite(s, pfad, g)
     x0 = x - w / 2 if anker == 'm' else (x if anker == 'l' else x - w)
-    band(b, x0 - 6, y - g * 0.62, x0 + w + 6, y + g * 0.62, BG, 0.92 * a, r=8)
+    if grund:
+        band(b, x0 - 6, y - g * 0.62, x0 + w + 6, y + g * 0.62, BG, 0.92 * a, r=8)
     b.text(s, x0 + w / 2, y, g, c, pfad, alpha=a)
 
 
@@ -399,12 +401,13 @@ def s_werte(b, sc, t):
             # größerer Radius als der 30°-Bogen, Beschriftung im unteren Dreieck (Nutzer 13.11.: nicht übereinander)
             b.linie([(CX + 100 * math.cos(math.radians(-30 + 60 * k / n)), CY - 100 * math.sin(math.radians(-30 + 60 * k / n)))
                      for k in range(n + 1)], WINKEL, 5, alpha=a60)
-            etikett(b, '60°', CX + 128 * math.cos(math.radians(-14)), CY + 128 * math.sin(math.radians(14)), 22, WINKEL, a60)
+            etikett(b, '60°', CX + 128 * math.cos(math.radians(-14)), CY + 128 * math.sin(math.radians(14)), 22, WINKEL, a60,
+                    grund=False)
         ar = ein(t, w('Radien'), 0.4) * weg
         if ar > 0:
             for (x1, y1) in ((px, py), (qx, qy)):
                 b.linie([(CX, CY), (x1, y1)], WINKEL, 9, alpha=0.55 * ar * (1 - ein(t, w('zwei gleich große'), 0.4)))
-                etikett(b, '1', (CX + x1) / 2 - 6, (CY + y1) / 2 + (-22 if y1 < CY else 22), 26, INK, ar)
+                etikett(b, '1', (CX + x1) / 2 - 12, (CY + y1) / 2 + (-26 if y1 < CY else 26), 26, INK, ar, grund=False)
         # dritte Seite (senkrecht von P zum Spiegelpunkt) zuerst zeichnen, dann erst die Winkel daran (Nutzer 13.11.)
         a3 = ein(t, w('Ein Dreieck mit'), 0.4) * weg
         if a3 > 0:
@@ -422,13 +425,17 @@ def s_werte(b, sc, t):
         ag = ein(t, w('gleichseitiges'), 0.5) * weg
         if ag > 0:
             b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
-            etikett(b, '1', px - 22, CY + 58, 26, INK, ag, anker='r')
+            etikett(b, '1', px - 22, CY + 58, 26, INK, ag, anker='r', grund=False)
         hl = ein(t, w('teilt die senkrechte'), 0.4) * weg
         if hl > 0:
             b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
             for yy in ((CY + py) / 2, (CY + qy) / 2):       # Gleich-lang-Striche auf beiden Hälften
                 b.linie([(px - 9, yy - 4), (px + 9, yy + 4)], INK, 3, alpha=hl)
-            etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
+            for yy in ((CY + py) / 2, (CY + qy) / 2):       # außerhalb des Kreises, nicht auf der Kreislinie
+                etikett(b, '½', CX + R + 14, yy, 26, SIN, hl, anker='l', grund=False)
+        ac3 = ein(t, w('Wurzel drei'), 0.4) * weg
+        if ac3 > 0:                                        # √3/2 im oberen Dreieck, nicht auf der unteren Seite
+            etikett(b, '√3 / 2', CX + 140, CY - 22, 24, COS, ac3, grund=False)
     # Linien und Dreieck
     zeig = t < w('Genauso') or t > tB - 0.2
     if zeig:
@@ -437,7 +444,7 @@ def s_werte(b, sc, t):
         if t > tB:
             lab_s = lab_c = 'x' if t < t30 else ''
         if t > w('Sinus dreißig'):
-            lab_s, lab_c = '½', ('√3 / 2' if t > w('Wurzel drei') else '')
+            lab_s, lab_c = ('', '') if t < t60 else ('½', '√3 / 2')    # im Spiegel-Teil eigene Beschriftung
         if t > t60 + 1.2:
             lab_s, lab_c = '√3 / 2', '½'
         strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
