@@ -71,30 +71,69 @@ def zeichen(b, s, xc, y, g, c, pfad=INTER_X, alpha=1.0):
     b.linie([(xc, y + o + g * 0.04), (xc, y + u - g * 0.04)], c, max(2.5, g * 0.11), alpha=alpha)   # so kräftig wie die Schrift
 
 
-def breiten(teile, pfad, g):
-    """Satz wie im Mathe-Satz (Nutzer 13.11.): um „|“ ein mittlerer Abstand (≈ 0,28 em je Seite, wie \\mid in LaTeX),
-    innen an den Klammern ein Haarabstand (≈ 0,07 em). Ergibt je Teil (Breite, Versatz vor dem Text)."""
-    aus = []
-    for s_, _ in teile:
-        if s_.strip() == '|':
-            aus.append((0.62 * g, 0.0))                 # ≈ 0,28 em Luft je Seite wie \mid im Mathe-Satz
-            continue
-        vor = 0.07 * g if s_.startswith(')') else 0.0
-        nach = 0.07 * g if s_.endswith('(') else 0.0
-        aus.append((breite(s_, pfad, g) + vor + nach, vor))
-    return aus
+from animationen import K as _K                             # noqa: E402
+_tinte = {}
+
+
+def tinte(s, pfad, g):
+    """Sichtbare Tinte eines Texts: (links, rechts) ab Textanfang, in Bildpunkten der Zeichenfläche."""
+    key = (s, pfad, g)
+    if key not in _tinte:
+        bb = _sprite(s, pfad, g, '#000000').getchannel('A').getbbox()
+        _tinte[key] = ((bb[0] - 4) / _K, (bb[2] - 4) / _K) if bb else (0.0, breite(s, pfad, g))
+    return _tinte[key]
+
+
+def satz(teile, pfad, g):
+    """Optischer Satz wie im Mathe-Satz (Nutzer 13.11.): An Klammern und Trennstrich zählt der Abstand der sichtbaren
+    Tinte, nicht der Zeichenkästen – sonst klebt „1)“ und „(0“ hat Luft. Klammern sind in der Mitte gewölbt, darum innen 0,10 em zur Kastenkante (optisch ≈ so viel wie am Strich); um „|“ 0,26 em Tinte bis Strichmitte.
+    Ergibt je Teil die x-Lage (Textanfang bzw. Strichmitte) und die Spanne der Tinte."""
+    xs, prev = [], None
+    for i, (s_, _) in enumerate(teile):
+        strich = s_.strip() == '|'
+        il, ir = (0.0, 0.0) if strich else tinte(s_, pfad, g)
+        adv = 0.0 if strich else breite(s_, pfad, g)
+        if prev is None:
+            x = 0.0
+        else:
+            ps, px_, padv, pr = prev
+            p_strich = ps.strip() == '|'
+            if strich or p_strich:
+                x = pr + 0.26 * g - il
+            elif ps.endswith('(') or s_.startswith(')'):
+                x = pr + 0.10 * g - il
+            else:
+                x = px_ + padv
+        xs.append(x)
+        if i == 0:
+            links = x + il
+        prev = (s_, x, adv, x + ir)
+    return xs, links, prev[3]
+
+
+def zeile_breite(teile, pfad, g):
+    _, l, r = satz(teile, pfad, g)
+    return r - l
 
 
 def zeile(b, teile, x, y, g, pfad, alpha=1.0, anker='m', alphas=None):   # ersetzt regel.zeile in diesem Video
-    bw = breiten(teile, pfad, g)
-    x0 = x - sum(w_ for w_, _ in bw) / 2 if anker == 'm' else x
+    besonders = any(s_.strip() == '|' or s_.endswith('(') or s_.startswith(')') for s_, _ in teile)
+    if besonders:
+        xs, l, r = satz(teile, pfad, g)
+        d = x - (l + r) / 2 if anker == 'm' else x - l
+    else:                                                  # gewöhnlicher Text: Zeichenbreiten wie bisher
+        ws = [breite(s_, pfad, g) for s_, _ in teile]
+        xs = [sum(ws[:i]) for i in range(len(teile))]
+        d = x - sum(ws) / 2 if anker == 'm' else x
     pos = []
-    for i, ((s_, c), (w_, vor)) in enumerate(zip(teile, bw)):
-        kern = w_ if s_.strip() == '|' else breite(s_, pfad, g)
-        xc = x0 + vor + kern / 2
-        zeichen(b, s_, xc, y, g, c, pfad, alpha * (alphas[i] if alphas else 1.0))
+    for i, (s_, c) in enumerate(teile):
+        a_ = alpha * (alphas[i] if alphas else 1.0)
+        if s_.strip() == '|':
+            xc = xs[i] + d
+        else:
+            xc = xs[i] + d + breite(s_, pfad, g) / 2
+        zeichen(b, s_, xc, y, g, c, pfad, a_)
         pos.append(xc)
-        x0 += w_
     return pos
 from animationen import breite, glatt, klemm, p           # noqa: E402
 
@@ -547,7 +586,7 @@ def s_werte(b, sc, t):
             g_ = 26                                        # immer gleich groß (Nutzer 13.11.)
             teile = [('(', INK), (xs, COS)] + ([(' | ', INK), (ys, SIN), (')', INK)] if ay > 0 else [])
             voll = [('(', INK), (xs, COS), (' | ', INK), (ys, SIN), (')', INK)]
-            w_ = sum(w for w, _ in breiten(voll, INTER_X, g_))
+            w_ = zeile_breite(voll, INTER_X, g_)
             # ganz außerhalb des Kreises, nicht auf Achse, Kreis oder dem Namen P
             if gg == 0:
                 lx, ly = CX + R + 14 + w_ / 2, CY - 54
