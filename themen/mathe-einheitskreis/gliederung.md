@@ -33,4 +33,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
 - Erstmal **kein YouTube-Kanal**: Das Video ist für den Sohn des Nutzers. Falls später veröffentlicht, dann auf einem
   eigenen Kanal zum Mathelernen (nicht Kopfrechnen).
 - Name der Reihe: **„Mathe verstehen“**, Thema **Trigonometrie**.
+- Sohn: 10. Klasse (13.11.).
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
