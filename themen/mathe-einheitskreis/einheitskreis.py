@@ -335,7 +335,7 @@ def dreieck_fuell(b, grad, a, rw=True):
 def s_werte(b, sc, t):
     w = lambda s, nach=None: C(sc, s, nach)                 # noqa: E731
     tA, tB = w('Und die Winkel'), w('fünfundvierzig')
-    t30, t60 = w('dreißig Grad spiegeln'), w('sechzig')
+    t30, t60 = w('dreißig Grad spiegeln'), w('Bei sechzig')
     g = bahn(t, [(0, 50), (w('hundertachtzig Grad liegt'), 180), (w('null Grad liegt'), 0), (w('neunzig Grad bei'), 90),
                  (w('zweihundertsiebzig'), 270), (tB - 0.2, 405), (t30, 390), (t60, 420)])
     g = g % 360
@@ -384,16 +384,39 @@ def s_werte(b, sc, t):
         b.poly([(CX, CY), (qx, CY), (qx, qy)], fill=WINKEL, alpha=0.10 * sp)
         b.linie([(CX, CY), (qx, qy)], INK, 4, alpha=sp)
         b.kreis(qx, qy, 8, INK, alpha=sp)
-        ag = ein(t, w('gleichseitiges'), 0.5) * (1 - ein(t, t60, 0.4))
+        # Begründung (Nutzer 13.11.): Winkel am Ursprung 2 · 30° = 60°, zwei Radien = 1 → gleichschenklig → beide
+        # anderen Winkel (180° − 60°) : 2 = 60° → gleichseitig → senkrechte Seite 1, die x-Achse halbiert sie
+        weg = 1 - ein(t, t60, 0.4)
+        a60 = ein(t, w('zweimal dreißig'), 0.4) * weg * (1 - ein(t, w('Pythagoras liefert'), 0.4))
+        if a60 > 0:
+            n = 24
+            b.linie([(CX + 62 * math.cos(math.radians(-30 + 60 * k / n)), CY - 62 * math.sin(math.radians(-30 + 60 * k / n)))
+                     for k in range(n + 1)], WINKEL, 5, alpha=a60)
+            etikett(b, '60°', CX + 112, CY + 40, 24, WINKEL, a60)
+        ar = ein(t, w('Radien'), 0.4) * weg
+        if ar > 0:
+            for (x1, y1) in ((px, py), (qx, qy)):
+                b.linie([(CX, CY), (x1, y1)], WINKEL, 9, alpha=0.55 * ar * (1 - ein(t, w('zwei gleich große'), 0.4)))
+                etikett(b, '1', (CX + x1) / 2 - 6, (CY + y1) / 2 + (-22 if y1 < CY else 22), 26, INK, ar)
+        aw = ein(t, w('für jeden'), 0.4) * weg * (1 - ein(t, w('gleichseitiges'), 0.4))
+        aw0 = ein(t, w('zwei gleich große'), 0.4) * weg * (1 - ein(t, w('Pythagoras liefert'), 0.4))
+        if aw0 > 0:                                        # Winkel an P und am Spiegelpunkt
+            for (x1, y1), r0 in (((px, py), 210), ((qx, qy), 90)):
+                pts = [(x1 + 30 * math.cos(math.radians(r0 + 60 * k / 12)), y1 - 30 * math.sin(math.radians(r0 + 60 * k / 12)))
+                       for k in range(13)]
+                b.linie(pts, WINKEL, 5, alpha=aw0)
+                if aw > 0:
+                    etikett(b, '60°', x1 - 28, y1 + (60 if y1 < CY else -60), 22, WINKEL, aw)
+        ag = ein(t, w('gleichseitiges'), 0.5) * weg
         if ag > 0:
             b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
-            for (x0, y0), (x1, y1) in (((CX, CY), (px, py)), ((CX, CY), (qx, qy))):
-                etikett(b, '1', (x0 + x1) / 2 - 6, (y0 + y1) / 2 + (-22 if y1 < CY else 22), 26, INK, ag)
             etikett(b, '1', px - 22, CY + 58, 26, INK, ag, anker='r')
-            hl = ein(t, w('Hälfte'), 0.4) * (1 - ein(t, t60, 0.4))
-            if hl > 0:
-                b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
-                etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
+        hl = ein(t, w('teilt die senkrechte'), 0.4) * weg
+        if hl > 0:
+            b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
+            for yy in ((CY + py) / 2, (CY + qy) / 2):       # Gleich-lang-Striche auf beiden Hälften
+                b.linie([(px - 9, yy - 4), (px + 9, yy + 4)], INK, 3, alpha=hl)
+            etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
     # Linien und Dreieck
     zeig = t < w('Genauso') or t > tB - 0.2
     if zeig:
@@ -427,7 +450,12 @@ def s_werte(b, sc, t):
     zeit_zeile(b, t, w('Wurzel zwei'), [('x = √2 / 2 ≈ 0,71', GRUEN)], 360, 40, ende=t30)
     zeit_zeile(b, t, w('Wurzel zwei') + 1.2, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)], 430,
                30, INTER, ende=t30)
-    zeit_zeile(b, t, w('gleichseitiges'), [('gleichseitig: alle Seiten 1', WINKEL)], 190, 28, INTER, ende=t60)
+    ende_b = w('gleichseitiges')
+    zeit_zeile(b, t, w('zweimal dreißig'), [('Winkel am Ursprung: 2 · 30° = 60°', WINKEL)], 190, 28, INTER, ende=ende_b)
+    zeit_zeile(b, t, w('Radien'), [('zwei Seiten = 1', INK)], 240, 28, INTER, ende=ende_b)
+    zeit_zeile(b, t, w('zwei gleich große'), [('→ zwei gleiche Winkel', INK)], 285, 28, INTER, ende=ende_b)
+    zeit_zeile(b, t, w('hundertzwanzig'), [('(180° − 60°) : 2 = 60°', WINKEL)], 340, 30, ende=ende_b)
+    zeit_zeile(b, t, ende_b, [('alle Winkel 60° → alle Seiten 1', WINKEL)], 190, 28, INTER, ende=t60)
     zeit_zeile(b, t, w('Sinus dreißig'), [('sin', SIN), (' 30° = ', INK), ('½', GRUEN)], 260, 46, ende=t60 + 1.2)
     zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ', INK), ('¼', SIN), (')', INK)], 330, 32, INTER, ende=t60 + 1.2)
     zeit_zeile(b, t, w('Wurzel drei'), [('= √3 / 2 ≈ 0,87', GRUEN)], 380, 36, ende=t60 + 1.2)
