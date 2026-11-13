@@ -267,14 +267,14 @@ def s_warum(b, sc, t):
     ux, uy = math.cos(m), -math.sin(m)                     # Richtung Ursprung → P (Bildschirm)
     nx, ny = -math.sin(m), -math.cos(m)                    # Normale nach links oben (außerhalb des Dreiecks)
     wort = 'Hypotenuse' + (' = 1' if t >= C(sc, 'genau eins') else '')
-    ws = [breite(ch, INTER_X, 26) for ch in wort]
+    ws = [breite(ch, INTER_X, 22) for ch in wort]
     pos = R / 2 - sum(ws) / 2
     for i, (ch, w) in enumerate(zip(wort, ws)):
         start = T['H'] + 0.07 * i if i < 10 else C(sc, 'genau eins') + 0.05 * (i - 10)
         a_ch = ein(t, start, 0.18) * weg_h
         mitte = pos + w / 2
         if a_ch > 0 and ch != ' ':
-            b.text(ch, CX + ux * mitte + nx * 22, CY + uy * mitte + ny * 22, 26, INK, INTER_X, alpha=a_ch, dreh=g)
+            b.text(ch, CX + ux * mitte + nx * 20, CY + uy * mitte + ny * 20, 22, INK, INTER_X, alpha=a_ch, dreh=g)
         pos += w
     weg = T['N']
     zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = Gegenkathete : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
@@ -289,6 +289,315 @@ def s_warum(b, sc, t):
         band(b, RX - 190, 520, RX + 190, 576, '#ffffff', 0.95 * a, r=16)
         zeile(b, [('K', COS), (' vor ', INK), ('S', SIN), ('   wie   ', GRAU), ('x', COS), (' vor ', INK), ('y', SIN)],
               RX, 548, 30, INTER_X, alpha=a)
+
+
+# ---------------------------------------------------------------- Szenen 4–10
+from regel import GRUEN, TEAL, karte              # noqa: E402
+from animationen import einfuegen                         # noqa: E402
+from motivation import spruch                              # noqa: E402
+from PIL import Image                                      # noqa: E402
+SPRUCH = spruch('mathe-einheitskreis', 'schluss')
+QR_BILD = os.path.join(HIER, 'bilder', 'qr_einheitskreis.png')   # …/mathe-videos/einheitskreis/ (App-Sitzung)
+
+
+def bahn(t, punkte, dauer=1.2):
+    """Winkel aus Stützpunkten [(zeit, grad), …]: weich von einem zum nächsten."""
+    prev = punkte[0][1]
+    for t1, g1 in punkte[1:]:
+        f = glatt(p(t, t1, dauer))
+        g = prev + (g1 - prev) * f
+        if f < 1:
+            return g
+        prev = g1
+    return prev
+
+
+def koord(b, grad, s, a=1.0, g=24, c=INK, abst=46):
+    if a <= 0:
+        return
+    x, y = punkt(grad, r=R + abst)
+    etikett(b, s, x, y, g, c, a)
+
+
+def dreieck_fuell(b, grad, a, rw=True):
+    if a <= 0:
+        return
+    px, py = punkt(grad)
+    b.poly([(CX, CY), (px, CY), (px, py)], fill=WINKEL, alpha=0.10 * a)
+    if rw and abs(px - CX) > 40 and abs(py - CY) > 40:
+        sx = -1 if px > CX else 1
+        sy = -1 if py < CY else 1
+        b.linie([(px + sx * 28 * math.cos(math.pi / 2 * k / 12), CY + sy * 28 * math.sin(math.pi / 2 * k / 12))
+                 for k in range(13)], INK, 2.5, alpha=a)
+        b.kreis(px + sx * 11, CY + sy * 11, 3.5, INK, alpha=a)
+
+
+def s_werte(b, sc, t):
+    w = lambda s, nach=None: C(sc, s, nach)                 # noqa: E731
+    tA, tB = w('Und die Winkel'), w('fünfundvierzig')
+    t30, t60 = w('dreißig Grad spiegeln'), w('sechzig')
+    g = bahn(t, [(0, 50), (w('hundertachtzig Grad liegt'), 180), (w('null Grad liegt'), 0), (w('neunzig Grad bei'), 90),
+                 (w('zweihundertsiebzig'), 270), (tB - 0.2, 405), (t30, 390), (t60, 420)])
+    g = g % 360
+    achsen(b)
+    kreislinie(b)
+    teil1 = 1 - ein(t, tA, 0.4)                            # Achsenpunkte
+    teil2 = ein(t, tB - 0.2, 0.4)                          # Dreiecke
+    # Achsenpunkte: Koordinaten bleiben stehen, sobald P dort war
+    for gg, s, wort in ((180, '(−1 | 0)', 'minus eins und null'), (0, '(1 | 0)', 'null Grad liegt'),
+                        (90, '(0 | 1)', 'neunzig Grad bei'), (270, '(0 | −1)', 'zweihundertsiebzig')):
+        a = ein(t, w(wort) + (0.9 if gg != 180 else 0), 0.4) * teil1
+        if a > 0:
+            x, y = punkt(gg)
+            b.kreis(x, y, 8, GRUEN, alpha=a)
+            if gg in (0, 180):
+                etikett(b, s, x + (14 if gg == 0 else -14), CY - 62, 24, INK, a)
+            else:
+                etikett(b, s, x + 62, y + (-10 if gg == 90 else 10), 24, INK, a, anker='l')
+    # Linien und Dreieck
+    zeig = t < tA or t > tB - 0.2
+    if zeig:
+        dreieck_fuell(b, g, teil2 * (1 - ein(t, t30 + 0.2, 0.3)) + ein(t, t60 + 1.2, 0.4))
+        lab_s = lab_c = ''
+        if t > tB:
+            lab_s = lab_c = 'x' if t < t30 else ''
+        if t > w('Sinus dreißig'):
+            lab_s, lab_c = '½', ('√3 / 2' if t > w('Wurzel drei') else '')
+        if t > t60 + 1.2:
+            lab_s, lab_c = '√3 / 2', '½'
+        strecken(b, g, a=1.0, lab_sin=lab_s, lab_cos=lab_c)
+    winkel(b, g, ein(t, tB - 0.2, 0.4), text=f'{int(round(g))}°' if t > tB else '')
+    # 30°: Spiegelbild unter der x-Achse → gleichseitiges Dreieck
+    sp = ein(t, t30 + 0.4, 0.6) * (1 - ein(t, t60, 0.4))
+    if sp > 0:
+        px, py = punkt(30)
+        qx, qy = punkt(-30)
+        b.poly([(CX, CY), (qx, CY), (qx, qy)], fill=WINKEL, alpha=0.10 * sp)
+        b.linie([(CX, CY), (qx, qy)], INK, 4, alpha=sp)
+        b.kreis(qx, qy, 8, INK, alpha=sp)
+        ag = ein(t, w('gleichseitiges'), 0.5) * (1 - ein(t, t60, 0.4))
+        if ag > 0:
+            b.linie([(CX, CY), (px, py), (qx, qy), (CX, CY)], WINKEL, 9, alpha=0.55 * ag)
+            for (x0, y0), (x1, y1) in (((CX, CY), (px, py)), ((CX, CY), (qx, qy))):
+                etikett(b, '1', (x0 + x1) / 2 - 6, (y0 + y1) / 2 + (-22 if y1 < CY else 22), 26, INK, ag)
+            etikett(b, '1', px - 22, CY + 58, 26, INK, ag, anker='r')
+            hl = ein(t, w('Hälfte'), 0.4) * (1 - ein(t, t60, 0.4))
+            if hl > 0:
+                b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
+                etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
+    zeiger(b, g)
+    # rechte Spalte
+    zeit_zeile(b, t, w('Die Höhe ist null'), [('Höhe von P = 0', INK)], 210, 32, INTER, ende=w('Genauso'))
+    zeit_zeile(b, t, w('Also ist Sinus'), [('sin', SIN), (' 180° = ', INK), ('0', GRUEN)], 280, 52, ende=w('Genauso'))
+    zeit_zeile(b, t, w('Minus eins ist'), [('cos', COS), (' 180° = −1', INK)], 360, 40, ende=w('Genauso'))
+    zeit_zeile(b, t, w('Genauso'), [('P = (', INK), ('cos', COS), (' | ', INK), ('sin', SIN), (')', INK)], 230, 40,
+               ende=tA)
+    zeit_zeile(b, t, tB + 0.4, [('45°: beide Katheten gleich lang', INK)], 190, 28, INTER, ende=t30)
+    zeit_zeile(b, t, w('x Quadrat'), [('x² + x² = 1', INK)], 250, 36, ende=t30)
+    zeit_zeile(b, t, w('x Quadrat') + 1.6, [('2x² = 1', GRAU)], 300, 30, INTER, ende=t30)
+    zeit_zeile(b, t, w('Wurzel zwei'), [('x = √2 / 2 ≈ 0,71', GRUEN)], 360, 40, ende=t30)
+    zeit_zeile(b, t, w('Wurzel zwei') + 1.2, [('sin', SIN), (' 45° = ', INK), ('cos', COS), (' 45° = √2 / 2', INK)], 430,
+               30, INTER, ende=t30)
+    zeit_zeile(b, t, w('gleichseitiges'), [('gleichseitig: alle Seiten 1', WINKEL)], 190, 28, INTER, ende=t60)
+    zeit_zeile(b, t, w('Sinus dreißig'), [('sin', SIN), (' 30° = ', INK), ('½', GRUEN)], 260, 46, ende=t60 + 1.2)
+    zeit_zeile(b, t, w('Pythagoras liefert'), [('cos', COS), (' 30° = √(1 − ¼)', INK)], 330, 32, INTER, ende=t60 + 1.2)
+    zeit_zeile(b, t, w('Wurzel drei'), [('= √3 / 2 ≈ 0,87', GRUEN)], 380, 36, ende=t60 + 1.2)
+    zeit_zeile(b, t, t60 + 1.2, [('sin', SIN), (' 60° = √3 / 2', INK)], 260, 40)
+    zeit_zeile(b, t, w('tauschen'), [('cos', COS), (' 60° = ½', INK)], 330, 40)
+
+
+def s_vorzeichen(b, sc, t):
+    w = lambda s: C(sc, s)                                  # noqa: E731
+    tV = w('Vorzeichen')
+    achsen(b)
+    # Halbebenen tönen: oben/unten rot, rechts/links blau
+    for wort, wort_ende, farbe_, ecken in (
+            ('Oben ist', 'unten negativ', SIN, (0, 180)), ('unten negativ', 'Rechts ist', SIN, (180, 360)),
+            ('Rechts ist', 'links negativ', COS, (-90, 90)), ('links negativ', None, COS, (90, 270))):
+        a = ein(t, w(wort), 0.3) * (1 - (ein(t, w(wort_ende), 0.3) if wort_ende else ein(t, w(wort) + 1.6, 0.4)))
+        if a > 0:
+            g0, g1 = ecken
+            pts = [(CX, CY)] + [punkt(g0 + (g1 - g0) * k / 40) for k in range(41)]
+            b.poly(pts, fill=farbe_, alpha=0.13 * a)
+    kreislinie(b)
+    # Geist bei 30°, P bei 150°
+    geist = 1 - ein(t, w('ersten Viertel') + 1.0, 0.5)
+    g = bahn(t, [(0, 30), (w('hundertfünfzig') + 0.2, 150)], 1.6)
+    dreieck_fuell(b, 30, 0.6 * geist)
+    strecken(b, 30, a=0.35 * geist)
+    zeiger(b, 30, 0.35 * geist)
+    dreieck_fuell(b, g, ein(t, w('gespiegelt'), 0.4) * geist)
+    strecken(b, g, lab_sin='½' if t > w('Sinus ein halb') else '', lab_cos='−√3 / 2' if t > w('Kosinus minus') else '')
+    winkel(b, g, 1.0, text=f'{int(round(g))}°')
+    zeiger(b, g)
+    ah = ein(t, w('Gleiche Höhe'), 0.4) * geist
+    if ah > 0:
+        x0, y0 = punkt(150)
+        x1, _ = punkt(30)
+        for k in range(0, 24, 2):
+            b.linie([(x0 + (x1 - x0) * k / 24, y0), (x0 + (x1 - x0) * (k + 1) / 24, y0)], SIN, 3, alpha=0.8 * ah)
+    # Vorzeichen je Viertel
+    for i, (gg, sc_, ss) in enumerate(((45, '+', '+'), (135, '−', '+'), (225, '−', '−'), (315, '+', '−'))):
+        a = ein(t, tV + 0.25 * i, 0.4)
+        if a > 0:
+            x, y = punkt(gg, r=R * 1.33)
+            band(b, x - 52, y - 22, x + 52, y + 22, '#ffffff', 0.92 * a, r=12)
+            zeile(b, [('(', INK), (sc_, COS), (' | ', INK), (ss, SIN), (')', INK)], x, y, 30, INTER_X, alpha=a)
+    zeit_zeile(b, t, w('Sinus ein halb'), [('sin', SIN), (' 150° = ½', INK)], 200, 36, ende=tV)
+    zeit_zeile(b, t, w('Kosinus minus'), [('cos', COS), (' 150° = −√3 / 2', INK)], 260, 36, ende=tV)
+    zeit_zeile(b, t, w('ersten Viertel'), [('Werte aus 0° bis 90° reichen', INK)], 340, 28, INTER, ende=tV)
+    zeit_zeile(b, t, w('Oben ist'), [('sin', SIN), (': oben +, unten −', INK)], 230, 36)
+    zeit_zeile(b, t, w('Rechts ist'), [('cos', COS), (': rechts +, links −', INK)], 300, 36)
+
+
+def s_pythagoras(b, sc, t):
+    w = lambda s: C(sc, s)                                  # noqa: E731
+    g = 50 if t < w('jeden Winkel') else 50 + 60 * (t - w('jeden Winkel'))
+    achsen(b)
+    kreislinie(b)
+    dreieck_fuell(b, g % 360, 1 - ein(t, w('jeden Winkel'), 0.4))
+    strecken(b, g % 360, lab_sin='sin α', lab_cos='cos α')
+    winkel(b, g % 360, 1.0)
+    px, py = zeiger(b, g % 360)
+    a1 = 1 - ein(t, w('jeden Winkel'), 0.4)
+    if a1 > 0:
+        etikett(b, '1', (CX + px) / 2 - 22, (CY + py) / 2 - 14, 28, INK, a1)
+    zeit_zeile(b, t, w('Pythagoras sagt'), [('a² + b² = c²', GRAU)], 220, 34, INTER)
+    zeit_zeile(b, t, w('Sinus Quadrat'), [('sin²α', SIN), (' + ', INK), ('cos²α', COS), (' = 1', INK)], 320, 52)
+    zeit_zeile(b, t, w('jeden Winkel'), [('für jeden Winkel α', WINKEL)], 410, 30, INTER)
+
+
+KX, KY, KR = 230, 375, 150                                 # Kreis links in der Kurven-Szene
+GX0, GX1 = 470, 1210                                       # 0° … 360°
+
+
+def s_kurve(b, sc, t):
+    w = lambda s: C(sc, s)                                  # noqa: E731
+    t0, t1 = w('tragen'), w('wiederholt') - 0.2
+    g = 360 * klemm((t - t0) / (t1 - t0))
+    achsen(b, cx=KX, cy=KY, r=KR)
+    kreislinie(b, cx=KX, cy=KY, r=KR)
+    gx = lambda grad: GX0 + (GX1 - GX0) * grad / 360       # noqa: E731
+    # Diagramm-Achsen
+    b.linie([(GX0, KY), (GX1 + 30, KY)], GRAU, 3.5)
+    b.poly([(GX1 + 42, KY), (GX1 + 26, KY - 7), (GX1 + 26, KY + 7)], fill=GRAU)
+    b.linie([(GX0, KY + KR + 30), (GX0, KY - KR - 30)], GRAU, 3.5)
+    b.poly([(GX0, KY - KR - 42), (GX0 - 7, KY - KR - 26), (GX0 + 7, KY - KR - 26)], fill=GRAU)
+    for gg in (90, 180, 270, 360):
+        b.linie([(gx(gg), KY - 7), (gx(gg), KY + 7)], GRAU, 3)
+        b.text(f'{gg}°', gx(gg), KY + 26, 20, INK, INTER_X)
+    for v, s in ((1, '1'), (-1, '−1')):
+        b.linie([(GX0 - 7, KY - v * KR), (GX0 + 7, KY - v * KR)], GRAU, 3)
+        b.text(s, GX0 - 24, KY - v * KR, 20, INK, INTER_X)
+    b.text('α', GX1 + 40, KY + 26, 24, WINKEL, INTER_X, alpha=ein(t, w('Waagrecht')))
+    b.text('sin α', GX0 - 50, KY - KR - 34, 24, SIN, INTER_X, alpha=ein(t, w('senkrecht der Sinus')))
+    # Kosinus-Kurve (blau), nach links verschoben
+    ac = ein(t, w('Kosinus ergibt'), 0.4)
+    if ac > 0:
+        fc = glatt(p(t, w('Kosinus ergibt'), 1.6))
+        n = int(200 * fc)
+        if n > 1:
+            b.linie([(gx(360 * k / 200), KY - KR * math.cos(2 * math.pi * k / 200)) for k in range(n + 1)], COS, 5,
+                    alpha=ac)
+        etikett(b, 'cos α', gx(180), KY + KR + 30, 24, COS, ac)
+        av = ein(t, w('neunzig Grad nach links'), 0.4)
+        if av > 0:
+            y = KY - KR - 14
+            b.linie([(gx(0), y), (gx(90), y)], WINKEL, 4, alpha=av)
+            b.poly([(gx(0) - 2, y), (gx(0) + 12, y - 7), (gx(0) + 12, y + 7)], fill=WINKEL, alpha=av)
+            etikett(b, '90°', gx(45), y - 22, 22, WINKEL, av)
+
+    # Sinus-Kurve (rot) bis zum aktuellen Winkel
+    n = int(200 * g / 360)
+    if n > 1:
+        b.linie([(gx(360 * k / 200), KY - KR * math.sin(2 * math.pi * k / 200)) for k in range(n + 1)], SIN, 6)
+    if t >= t0:
+        winkel(b, g % 360 if g < 360 else 0, 1.0 if g < 359 else 0, text='', cx=KX, cy=KY)
+        px, py = punkt(g, KX, KY, KR)
+        b.linie([(px, py), (px, KY)], SIN, 6)
+        b.linie([(KX, KY), (px, py)], INK, 3.5)
+        b.kreis(px, py, 7, INK)
+        qx = gx(g)
+        for k in range(0, 30, 2):
+            b.linie([(px + (qx - px) * k / 30, py), (px + (qx - px) * (k + 1) / 30, py)], SIN, 2, alpha=0.6)
+        b.kreis(qx, py, 7, SIN)
+    for wort, s, x in (('Welle: die', 'Sinuskurve', gx(120)),):
+        etikett(b, s, x, KY - KR - 6, 26, SIN, ein(t, w(wort)) * (1 - ein(t, w('Kosinus ergibt'), 0.4)))
+    for i, wort in enumerate(('Wechselstrom', 'Schall', 'Riesenrad')):
+        a = ein(t, w(wort))
+        if a > 0:
+            x = 470 + 260 * i
+            band(b, x, 600, x + 230, 650, '#ffffff', 0.95 * a, r=14)
+            b.text(wort, x + 115, 625, 26, INK, INTER_X, alpha=a)
+
+
+MERK = [('Auf dem Einheitskreis ist x der Kosinus', 'und y der Sinus.'),
+        ('Sinus Quadrat plus Kosinus Quadrat', 'ist eins.'),
+        ('Die Werte im ersten Viertel reichen,', 'die Vorzeichen zeigt das Viertel,', 'in dem P liegt.')]
+
+
+def merkzettel(b, sc, t, alle=False):
+    karte(b, 640, 120, 590, 460, alpha=1.0, r=22)
+    b.text('Merke', 935, 160, 30, TEAL, INTER_X)
+    y = 215
+    for i, zeilen in enumerate(MERK):
+        start = 0 if alle else C(sc, ('Auf dem Einheitskreis', 'Sinus Quadrat', 'Die Werte')[i])
+        a = ein(t, start)
+        for z in zeilen:
+            b.text(z, 935, y + 10 * (1 - a), 25, INK, INTER_X if len(zeilen) < 3 or z == zeilen[0] else INTER_X, alpha=a)
+            y += 36
+        y += 26
+
+
+def kleiner_kreis(b):
+    achsen(b, cx=330, cy=CY, r=170)
+    kreislinie(b, cx=330, cy=CY, r=170)
+    g = 50
+    a = math.radians(g)
+    px, py = 330 + 170 * math.cos(a), CY - 170 * math.sin(a)
+    b.linie([(330, CY), (px, CY)], COS, 7)
+    b.linie([(px, CY), (px, py)], SIN, 7)
+    b.linie([(330, CY), (px, py)], INK, 4)
+    b.kreis(px, py, 8, INK)
+
+
+def s_merke(b, sc, t):
+    kleiner_kreis(b)
+    merkzettel(b, sc, t)
+
+
+def s_schluss(b, sc, t):
+    kleiner_kreis(b)
+    merkzettel(b, sc, t, alle=True)
+    a = ein(t, 0.1)
+    if a > 0:
+        band(b, 190, 604 + 10 * (1 - a), 1090, 684 + 10 * (1 - a), TEAL, 0.94 * a, r=20)
+        w2 = ein(t, C(sc, 'Übung macht'), 0.5)
+        b.text('Nicht sofort alles klar? Ganz normal.', 640, 644, 30, '#ffffff', INTER_X, alpha=a * (1 - klemm(w2 * 2)))
+        b.text(SPRUCH, 640, 644, 32, '#ffffff', INTER_X, alpha=a * klemm(w2 * 2 - 1))
+
+
+_qr = {}
+
+
+def s_app(b, sc, t):
+    a = ein(t, 0.05, 0.6)
+    b.text('Kostenlose App', 140, 260 + 12 * (1 - a), 58, INK, INTER_X, anker='l', alpha=a)
+    a2 = ein(t, C(sc, 'kostenlosen'))
+    b.text('zum Einheitskreis', 140, 330 + 10 * (1 - a2), 46, TEAL, INTER_X, anker='l', alpha=a2)
+    aq = ein(t, C(sc, 'Scann'))
+    if aq > 0:
+        if 'qr' not in _qr:
+            _qr['qr'] = Image.open(QR_BILD).convert('RGBA').resize((int(260 * 2),) * 2, Image.NEAREST)
+        sp = _qr['qr'].copy()
+        sp.putalpha(sp.getchannel('A').point(lambda v: int(v * aq)))
+        karte(b, 780, 170, 300, 300, alpha=aq, r=18)
+        einfuegen(b.img, sp, 800 * 2, 190 * 2)
+        b.text('QR-Code scannen', 930, 510, 30, INK, INTER_X, alpha=aq)
+
+
+ZEICHNER_NEU = dict(werte=s_werte, vorzeichen=s_vorzeichen, pythagoras=s_pythagoras, kurve=s_kurve, merke=s_merke,
+                    schluss=s_schluss, app=s_app)
 
 
 def kreisbild(b, sc, t):
@@ -334,7 +643,7 @@ def kreisbild(b, sc, t):
 
 
 ZEICHNER = {s['id']: kreisbild for s in SZENEN}
-ZEICHNER.update(hook=s_hook, kreis=s_kreis, warum=s_warum)
+ZEICHNER.update(hook=s_hook, kreis=s_kreis, warum=s_warum, **ZEICHNER_NEU)
 KLAENGE = {}
 MERKSAETZE = []
 
