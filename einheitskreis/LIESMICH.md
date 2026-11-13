@@ -24,3 +24,8 @@ Sinus und Kosinus verstellt … alles auf einen Bildschirm, Handy-App.“ Erklä
 - **Tests:** `node einheitskreis/tests/einheitskreis.mjs [bildordner]` muss „Alles grün“ melden (exakte Werte gegen
   Math.sin/cos/tan, fünf Hochformate ohne Scrollen, Touch-Ziehen, Halbseiten-Regel, Einrasten, Update-Tipp).
 - Symbol: `python3 tools/icon.py` im Ordner `einheitskreis/`.
+
+**v0.3 (Nutzer 13.11.):** eigene App „Einheitskreis“ bestätigt, Startbildschirm bei jedem Öffnen, Einrasten an.
+Startanimation langsamer (eine Umdrehung in 9 s). Einrasten nur noch im Winkel, ±1,5° (vorher rasteten die sin-/cos-Regler
+im Wert ±0,02 ein, nahe sin = 1 sind das ±11,5°: „der Winkel springt“). Werte von sin, cos (und tan) direkt an den
+Strecken im Kreis. Kurvenbild höher (21 % der Bildhöhe), Kreis etwas kleiner und mit und ohne Tangens gleich groß.

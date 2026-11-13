@@ -67,7 +67,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .ecke { position: absolute; font-size: 13px; font-weight: 700; pointer-events: none; line-height: 1.25; }
 #tanwert { left: 0; top: 0; color: var(--tan); }
 #hinweis { left: 0; bottom: 0; color: var(--grau); font-weight: 600; transition: opacity .6s; }
-#kurven { display: block; width: 100%; height: clamp(92px, 15vh, 150px); flex: none; touch-action: none; }
+#kurven { display: block; width: 100%; height: clamp(110px, 21vh, 200px); flex: none; touch-action: none; }
 
 .regler { display: flex; flex-direction: column; gap: 2px; flex: none; }
 .zeile { display: grid; grid-template-columns: 42px 1fr 86px; align-items: center; gap: 8px; height: 42px; }
@@ -153,7 +153,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 <script src="kreis.js"></script>
 <script>
-const APP_VERSION = '0.2';          // bei JEDER Änderung hochzählen
+const APP_VERSION = '0.3';          // bei JEDER Änderung hochzählen
 const $ = s => document.querySelector(s);
 const EK = window.Einheitskreis;
 
@@ -170,16 +170,13 @@ let geist = null, geistTimer = null;
 /* ---------- Einrasten ---------- */
 const BESONDERE = [];
 for (let g = 0; g <= 360; g += 15) if (g % 30 === 0 || g % 45 === 0) BESONDERE.push(g);
-const BES_WERTE = [0, .5, Math.SQRT2 / 2, Math.sqrt(3) / 2, 1].flatMap(v => v ? [v, -v] : [0]);
+// Einrasten immer im Winkel gemessen, ±1,5° (v0.3, Nutzer 13.11.: „der Winkel springt“). Vorher rasteten sin/cos
+// im Wert ein (±0,02): nahe sin = 1 sind das ±11,5° Winkel – der Punkt sprang sichtbar.
+const RASTER = 1.5;
 function rasteGrad(g, tol) {
   if (!stand.einrasten) return g;
   for (const b of BESONDERE) if (Math.abs(g - b) <= tol) return b;
   return g;
-}
-function rasteWert(v, tol = .02) {
-  if (!stand.einrasten) return v;
-  for (const b of BES_WERTE) if (Math.abs(v - b) <= tol) return b;
-  return v;
 }
 
 function setzeGrad(g, { roh = false } = {}) {
@@ -240,8 +237,8 @@ function zeichne() {
   zeige('#w-sin', '#w-sin2', w.sinText, w.sin);
   zeige('#w-cos', '#w-cos2', w.cosText, w.cos);
   const tw = $('#tanwert');
-  tw.hidden = !stand.tan;
-  if (stand.tan) {
+  tw.hidden = !stand.tan || isFinite(w.tan);          // Wert steht an der Tangente; hier nur „nicht definiert“
+  if (!tw.hidden) {
     tw.textContent = 'tan θ = ' + (w.tanText === 'nicht definiert' || !isFinite(w.tan) ? 'nicht definiert'
       : w.tanText ? w.tanText + (/^−?[01]$/.test(w.tanText) ? '' : ' ≈ ' + EK.komma(w.tan)) : EK.komma(w.tan));
   }
@@ -259,7 +256,7 @@ function ausFinger(e) {
   const m = EK.kreisMasse({ x: 0, y: 0, w: r.width, h: r.height }, { tan: stand.tan });
   const dx = e.clientX - r.left - m.mx, dy = m.my - (e.clientY - r.top);
   if (Math.hypot(dx, dy) < 4) return;                     // genau im Mittelpunkt: kein Winkel
-  setzeGrad(rasteGrad(EK.normiere(Math.atan2(dy, dx) * 180 / Math.PI), 3));
+  setzeGrad(rasteGrad(EK.normiere(Math.atan2(dy, dx) * 180 / Math.PI), RASTER));
 }
 kreisC.addEventListener('pointerdown', e => {
   zieht = true; kreisC.setPointerCapture(e.pointerId); ausFinger(e); erstesMal();
@@ -275,7 +272,7 @@ function ausKurve(e) {
   const r = kurvenC.getBoundingClientRect();
   const m = EK.kurvenMasse({ x: 0, y: 0, w: r.width, h: r.height });
   const g = Math.max(0, Math.min(360, (e.clientX - r.left - m.links) / (m.rechts - m.links) * 360));
-  setzeGrad(rasteGrad(g, 3), { roh: true });
+  setzeGrad(rasteGrad(g, RASTER), { roh: true });
 }
 kurvenC.addEventListener('pointerdown', e => { ziehtKurve = true; kurvenC.setPointerCapture(e.pointerId); ausKurve(e); erstesMal(); });
 kurvenC.addEventListener('pointermove', e => { if (ziehtKurve) ausKurve(e); });
@@ -283,7 +280,7 @@ kurvenC.addEventListener('pointerup', () => { ziehtKurve = false; });
 kurvenC.addEventListener('pointercancel', () => { ziehtKurve = false; });
 
 /* ---------- Regler ---------- */
-$('#r-win').addEventListener('input', e => { setzeGrad(rasteGrad(+e.target.value, 2), { roh: true }); erstesMal(); });
+$('#r-win').addEventListener('input', e => { setzeGrad(rasteGrad(+e.target.value, RASTER), { roh: true }); erstesMal(); });
 function zeigeGeist(welcher) {
   geist = welcher; clearTimeout(geistTimer);
 }
@@ -291,19 +288,13 @@ function geistWeg() { clearTimeout(geistTimer); geistTimer = setTimeout(() => { 
 let sinErklaert = false;
 $('#r-sin').addEventListener('input', e => {
   zeigeGeist('sin'); erstesMal();
-  const s = rasteWert(+e.target.value);
-  let g = ausSin(s);
-  if (stand.einrasten && BES_WERTE.includes(s)) g = rasteGrad(g, .01);
-  setzeGrad(g);
+  setzeGrad(rasteGrad(ausSin(+e.target.value), RASTER));
   if (!sinErklaert) { sinErklaert = true;
     showInfo('Zu jedem Sinus gibt es zwei Punkte (der blasse ist der zweite). Der Regler bleibt auf deiner Kreishälfte – die Seite wechselst du mit cos.', 7); }   // oben: unten läge es über dem Regler, den man gerade schiebt
 });
 $('#r-cos').addEventListener('input', e => {
   zeigeGeist('cos'); erstesMal();
-  const c = rasteWert(+e.target.value);
-  let g = ausCos(c);
-  if (stand.einrasten && BES_WERTE.includes(c)) g = rasteGrad(g, .01);
-  setzeGrad(g);
+  setzeGrad(rasteGrad(ausCos(+e.target.value), RASTER));
 });
 for (const id of ['#r-sin', '#r-cos']) {
   $(id).addEventListener('change', geistWeg);
@@ -334,7 +325,7 @@ function startbild(t) {
   const oben = Math.max(12, $('#sat').offsetHeight);
   const cx = Math.max(24, w * 0.06) + R, cy = oben + 30 + R;
   const k = R * 0.42;                                  // Pixel je Bogenmaß-Einheit der Wellen
-  const a = (t / 1000) * 1.1;                          // Winkel in rad, gut eine Umdrehung in 6 s
+  const a = (t / 1000) * 0.7;                          // Winkel in rad, eine Umdrehung in 9 s (Nutzer 13.11.: etwas langsamer)
   const x0 = cx + R + 22, y0 = cy + R + 22;            // Beginn der beiden Wellen
   const px = cx + R * Math.cos(a), py = cy - R * Math.sin(a);
   const u = R / 100;
@@ -445,7 +436,7 @@ $('#version').addEventListener('click', e => checkForUpdate(true, e.currentTarge
 if ('serviceWorker' in navigator) { try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (_) {} }
 
 location.hash === '#kreis' ? zeigeWerkzeug() : zeigeStart();
-window.einheitskreis = { stand, setzeGrad, ausSin, ausCos, rasteGrad, rasteWert };   // für Tests
+window.einheitskreis = { stand, setzeGrad, ausSin, ausCos, rasteGrad };   // für Tests
 </script>
 </body>
 </html>

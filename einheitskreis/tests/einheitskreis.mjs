@@ -113,8 +113,10 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   ok(txt === '203,4°', `Anzeige ohne Einrasten-Bereich: ${txt}`);
   // Einrasten: 223° → 225°
   await beruehre('touchStart', bei(223)); await beruehre('touchEnd');
+  ok(Math.abs(await page.evaluate(() => window.einheitskreis.stand.grad) - 223) < .01, '223° bleibt 223° (Raster nur ±1,5°)');
+  await beruehre('touchStart', bei(224)); await beruehre('touchEnd');
   st = await page.evaluate(() => window.einheitskreis.stand.grad);
-  ok(st === 225, `Einrasten 223° → 225° (${st})`);
+  ok(st === 225, `Einrasten 224° → 225° (${st})`);
   ok(await page.textContent('#w-sin') === '−√2/2' && await page.textContent('#w-rad') === '5π/4', `225°: sin −√2/2, 5π/4`);
   await foto(page, 'kreis_225');
 
@@ -127,7 +129,9 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   ok(w.cos < 0 && Math.abs(w.sin - 0.3) < 1e-9 && Math.abs(w.sin ** 2 + w.cos ** 2 - 1) < 1e-12, `sin = 0,3 von 225° aus: bleibt links (cos ${w.cos.toFixed(4)}), θ = ${w.grad.toFixed(2)}°`);
   await foto(page, 'regler_sin');
   w = await regler('#r-sin', 0.51);
-  ok(w.grad === 150 && await page.textContent('#w-sin') === '½', `sin 0,51 rastet ein: 150°, ½ (${w.grad})`);
+  ok(w.grad === 150 && await page.textContent('#w-sin') === '½', `sin 0,51 (149,3°) rastet ein: 150°, ½ (${w.grad})`);
+  w = await regler('#r-sin', 0.985);
+  ok(w.grad > 90 && w.grad < 100, `sin 0,985 springt nicht mehr auf 90° (${w.grad.toFixed(1)}°)`);
   w = await regler('#r-sin', 1);
   ok(w.grad === 90, `sin = 1 → 90° (${w.grad})`);
   w = await regler('#r-sin', 0.2);
@@ -139,6 +143,11 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   w = await regler('#r-win', 359.9);
   ok(w.grad === 360 || w.grad === 0, `Winkel-Regler 359,9 rastet auf 360/0 (${w.grad})`);
   ok(await page.textContent('#w-rad') === '2π' || await page.textContent('#w-rad') === '0', `Bogenmaß dort: ${await page.textContent('#w-rad')}`);
+  // Kreis gleich groß mit und ohne Tangens
+  const gr = async () => page.evaluate(() => { const r = document.querySelector('#kreis').getBoundingClientRect();
+    return window.Einheitskreis.kreisMasse({ x: 0, y: 0, w: r.width, h: r.height }, { tan: window.einheitskreis.stand.tan }).r; });
+  const r1 = await gr(); await page.click('#tan'); const r2 = await gr(); await page.click('#tan');
+  ok(r1 === r2, `Kreis mit und ohne tan gleich groß (${r1.toFixed(1)} / ${r2.toFixed(1)})`);
   // Ohne Einrasten: keine exakten Werte bei krummen Winkeln
   await page.click('#einrasten');
   w = await regler('#r-win', 29.9);
@@ -147,7 +156,7 @@ console.log('Ziehen per Touch, Regler, Halbseite');
   await page.click('#einrasten');
   await page.click('#tan');
   await regler('#r-win', 60);
-  ok((await page.textContent('#tanwert')).startsWith('tan θ = √3'), `tan 60° = ${await page.textContent('#tanwert')}`);
+  ok(await page.isHidden('#tanwert'), 'tan 60°: Wert an der Tangente, keine Ecke');
   await foto(page, 'tan_60');
   await regler('#r-win', 90);
   ok((await page.textContent('#tanwert')).includes('nicht definiert'), 'tan 90°: nicht definiert');

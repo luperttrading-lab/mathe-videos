@@ -86,12 +86,20 @@
     ctx.fillStyle = farbe; ctx.fill();
     if (rand) { ctx.lineWidth = Math.max(1.5, r * .3); ctx.strokeStyle = rand; ctx.stroke(); }
   }
+  // Wert für die Beschriftung: exakt (√3/2) oder drei Nachkommastellen wie unten
+  function wertText(exakt, zahl) { return exakt || komma(zahl, 3); }
+  // Name fett, Wert darunter etwas kleiner; (x, y) = Mitte des Blocks
+  function zweiZeilen(ctx, name, wert, x, y, fs) {
+    ctx.textBaseline = 'middle';
+    ctx.font = schrift(fs, 800); ctx.fillText(name, x, y - fs * .55);
+    ctx.font = schrift(fs * .92, 700); ctx.fillText(wert, x, y + fs * .55);
+  }
   function schrift(px, dick = 700) { return `${dick} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`; }
 
   // Geometrie des Kreises in einem Rahmen (auch für die Bedienung: Finger → Winkel)
   function kreisMasse(rahmen, opt = {}) {
     const { x, y, w, h } = rahmen;
-    const rand = opt.tan ? 0.16 : 0.12;          // mit Tangens etwas mehr Platz rechts
+    const rand = 0.15;                           // immer gleich groß, auch mit Tangens (Nutzer 13.11.); Platz für Beschriftung
     const r = Math.min(w, h) / 2 * (1 - rand * 2);
     return { mx: x + w / 2, my: y + h / 2, r };
   }
@@ -118,7 +126,7 @@
     ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     ctx.fillText('x', mx + ax - 2 * u, my + 6 * u);
     ctx.textAlign = 'right'; ctx.textBaseline = 'top';
-    ctx.fillText('y', mx - 7 * u, my - ax);
+    ctx.textAlign = w.cos < 0 ? 'right' : 'left'; ctx.fillText('y', mx + (w.cos < 0 ? -7 : 7) * u, my - ax - 2 * u);   // gegenüber der 1
     // Striche bei ±1
     ctx.strokeStyle = F.ink; ctx.lineWidth = 1.4 * u;
     for (const [sx, sy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
@@ -134,10 +142,11 @@
       ctx.fillText('1', mx + r + 4 * u, my + (w.sin < 0 ? -fs - 4 * u : 4 * u));
       ctx.textAlign = 'right';
       ctx.fillText('−1', mx - r - 4 * u, my + (w.sin < 0 ? -fs - 4 * u : 4 * u));
-      ctx.textAlign = w.cos < 0 ? 'left' : 'right'; ctx.textBaseline = 'middle';
-      const xl = w.cos < 0 ? mx + 7 * u : mx - 7 * u;
-      ctx.fillText('1', xl, my - r);
-      ctx.fillText('−1', xl, my + r);
+      // y-Achse: 1 knapp über, −1 knapp unter dem Kreis, auf der Seite ohne Punkt
+      ctx.textAlign = w.cos < 0 ? 'left' : 'right';
+      const xl = w.cos < 0 ? mx + 6 * u : mx - 6 * u;
+      ctx.textBaseline = 'bottom'; ctx.fillText('1', xl, my - r - 3 * u);
+      ctx.textBaseline = 'top'; ctx.fillText('−1', xl, my + r + 3 * u);
     }
 
     // Kreis
@@ -178,8 +187,8 @@
       if (Math.abs(t) <= grenze) {
         punkt(ctx, mx + r, my - r * t, 4.5 * u, F.tan);
       }
-      ctx.fillStyle = F.tan; ctx.font = schrift(fs, 700); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-      ctx.fillText('tan θ', mx + r + 7 * u, my - r * tz / 2 + (Math.abs(tz) < .25 ? -12 * u : 0));
+      ctx.fillStyle = F.tan; ctx.textAlign = 'left';
+      zweiZeilen(ctx, 'tan θ', wertText(w.tanText, w.tan), mx + r + 7 * u, my - r * tz / 2 + (Math.abs(tz) < .35 ? -22 * u : 0), fs);
     }
 
     // Geist: der zweite Punkt mit gleichem Sinus (bzw. Kosinus) – zeigt, warum ein Wert nicht reicht
@@ -219,12 +228,12 @@
       if (Math.abs(w.sin) > .16) {
         ctx.fillStyle = F.sin; ctx.textBaseline = 'middle';
         ctx.textAlign = w.cos >= 0 ? 'left' : 'right';
-        ctx.fillText('sin', px + (w.cos >= 0 ? 8 : -8) * u, my - r * w.sin / 2);
+        zweiZeilen(ctx, 'sin', wertText(w.sinText, w.sin), px + (w.cos >= 0 ? 8 : -8) * u, my - r * w.sin / 2, fs);
       }
       if (Math.abs(w.cos) > .16) {
         ctx.fillStyle = F.cos; ctx.textAlign = 'center';
-        ctx.textBaseline = w.sin >= 0 ? 'top' : 'bottom';
-        ctx.fillText('cos', mx + r * w.cos / 2, my + (w.sin >= 0 ? 7 : -7) * u);
+        const h2 = fs * 2.1;                                   // Höhe der zwei Zeilen
+        zweiZeilen(ctx, 'cos', wertText(w.cosText, w.cos), mx + r * w.cos / 2, my + (w.sin >= 0 ? 7 * u + h2 / 2 : -7 * u - h2 / 2), fs);
       }
     }
 
