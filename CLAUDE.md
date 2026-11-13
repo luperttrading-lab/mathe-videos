@@ -43,6 +43,8 @@ nachziehen.
      Zahl der Stellen. Nie nur „bitte abnehmen“. Nichts offen: kein Aufgabenblock.
   3. **Nur der Link, den der Nutzer gerade braucht** (Nutzer 13.11.: „alle Links weglassen, nur den aktuellen Link“),
      nicht mehr alle drei festen Links (unten) in jeder Antwort.
+     Links zu einer App immer mit dem Wort „App“ beschriften (Nutzer 13.11.), z. B. „App: Einheitskreis“,
+     „App: Kopfrechnen üben“, „App-Vorschau: Einheitskreis“.
   4. Kostenzeile: `python3 tools/kosten.py` ausführen, Ausgabe wörtlich als letzte Zeile.
 - **Jeder offene Punkt mit eigenem Link:** Vergleichsbilder als Eintrag auf die Vorschau-Seite (Standbild als kurzes
   Video, „passt“ = übernehmen). Nie ein Kürzel („Variante D“) ohne Bild und Link. Reine Textentscheidungen (z. B. Titel)
