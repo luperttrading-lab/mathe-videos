@@ -122,8 +122,14 @@ def winkel(b, grad, a=1.0, text='α', cx=CX, cy=CY):
     m = math.radians(grad / 2)
     if text:
         kl = grad < 40                                     # schmaler Winkel: kleiner und weiter außen (Nutzer 13.11.)
-        rr2 = 88 if kl else 74
-        b.text(text, cx + rr2 * math.cos(m), cy - rr2 * math.sin(m), 20 if kl else 26, WINKEL, INTER_X, alpha=a)
+        rr2, gs = (88, 20) if kl else (82, 26)
+        x_, y_ = cx + rr2 * math.cos(m), cy - rr2 * math.sin(m)
+        w_ = breite(text, INTER_X, gs)
+        if abs(x_ - cx) < w_ / 2 + 8:                      # nicht auf der y-Achse (z. B. 180°, 150°)
+            x_ = cx + (w_ / 2 + 10) * (1 if math.cos(m) >= 0 else -1)
+        if abs(y_ - cy) < gs * 0.5 + 8:                    # nicht auf der x-Achse (z. B. 360°)
+            y_ = cy + (gs * 0.5 + 10) * (-1 if math.sin(m) >= 0 else 1)
+        b.text(text, x_, y_, gs, WINKEL, INTER_X, alpha=a)
 
 
 def zeiger(b, grad, a=1.0, mit_p=True, p_a=1.0, cx=CX, cy=CY, r=R, p_name=True):
@@ -153,7 +159,10 @@ def strecken(b, grad, f_sin=1.0, f_cos=1.0, a=1.0, lab_sin='', lab_cos='', la_s=
         x_ = (px + (16 if rechts else -16)) if innen else (CX + (rand + 12 if rechts else -rand - 12))
         etikett(b, lab_sin, x_, ym, 26, SIN, a * la_s, anker='l' if rechts else 'r', grund=False)
     if lab_cos and abs(px - CX) > 30:
-        etikett(b, lab_cos, (px + CX) / 2, CY + (28 if py <= CY else -28), 26, COS, a * la_c, grund=False)
+        wc = breite(lab_cos, INTER_X, 26)
+        xm = (px + CX) / 2
+        xm = max(xm, CX + wc / 2 + 10) if px > CX else min(xm, CX - wc / 2 - 10)
+        etikett(b, lab_cos, xm, CY + (28 if py <= CY else -28), 26, COS, a * la_c, grund=False)
 
 
 def zeit_zeile(b, t, start, teile, y, g=32, pfad=INTER_X, ende=None):
@@ -182,10 +191,7 @@ def s_hook(b, sc, t):
     za = ein(t, d0 - 0.2, 0.3)
     if za > 0:
         gm = g % 360
-        winkel(b, gm, za, text='')
-        m = math.radians(gm / 2)
-        etikett(b, f'{int(round(gm)) % 360}°', CX + 82 * math.cos(m), CY - 82 * math.sin(m),
-                26, WINKEL, za)
+        winkel(b, gm, za, text=f'{int(round(gm)) % 360}°')      # Beschriftung weicht den Achsen aus
         ls = ein(t, tJ, 0.5)
         strecken(b, g, a=ls)
         zeiger(b, g, za)
@@ -281,7 +287,7 @@ def s_warum(b, sc, t):
              la_s=ein(t, T['G'] if t < T['Ho'] else T['Ho'], 0.4), la_c=ein(t, T['K'] if t < T['Xk'] else T['Xk'], 0.4))
     # y-Wert an der y-Achse ablesen (Nutzer 13.11.): gestrichelt von P waagrecht zur y-Achse, dort der Sinus als rote
     # Strecke. Der x-Wert braucht keine Hilfslinie: Die rote Senkrechte trifft die x-Achse genau dort (Fußpunkt).
-    ay = ein(t, C(sc, 'y-Koordinate'), 0.5)
+    ay = ein(t, C(sc, 'y-Koordinate'), 0.5) * (1 - ein(t, T['J'], 0.4))   # beim Kreisen ausblenden
     if ay > 0:
         n = 14
         for k in range(n):
@@ -292,7 +298,7 @@ def s_warum(b, sc, t):
         b.kreis(CX, py, 7, SIN, alpha=ay)
         rechts = px >= CX
         etikett(b, 'y', CX + (-20 if rechts else 20), py, 28, SIN, ay, anker='r' if rechts else 'l')
-    ax_ = ein(t, C(sc, 'x-Koordinate'), 0.5)
+    ax_ = ein(t, C(sc, 'x-Koordinate'), 0.5) * (1 - ein(t, T['J'], 0.4))
     if ax_ > 0:
         b.kreis(px, CY, 7, COS, alpha=ax_)
         etikett(b, 'x', px, CY + (58 if py <= CY else -58), 28, COS, ax_)
@@ -435,14 +441,16 @@ def s_werte(b, sc, t):
         a = ein(t, tx, 0.3) * teil1
         if a > 0:
             b.kreis(x, y, 8, GRUEN, alpha=a * (1 - hell))
-            g_ = 30 if hell > 0.5 else 24
+            g_ = 26                                        # immer gleich groß (Nutzer 13.11.)
             teile = [('(', INK), (xs, COS)] + ([(' | ', INK), (ys, SIN), (')', INK)] if ay > 0 else [])
-            if gg in (0, 180):
-                lx, ly = x + (30 if gg == 0 else -30), CY - 62
-            else:
-                lx, ly = x + 118, y + (-12 if gg == 90 else 12)
             w_ = sum(breite(s_, INTER_X, g_) for s_, _ in [('(', 0), (xs, 0), (' | ', 0), (ys, 0), (')', 0)])
-            band(b, lx - w_ / 2 - 6, ly - g_ * 0.62, lx + w_ / 2 + 6, ly + g_ * 0.62, BG, 0.92 * a, r=8)
+            # ganz außerhalb des Kreises, nicht auf Achse, Kreis oder dem Namen P
+            if gg == 0:
+                lx, ly = CX + R + 14 + w_ / 2, CY - 54
+            elif gg == 180:
+                lx, ly = CX - R - 14 - w_ / 2, CY - 54
+            else:
+                lx, ly = CX + 48 + w_ / 2, y + (-34 if gg == 90 else 34)
             x0 = lx - w_ / 2
             for s_, c_ in teile:
                 ww = breite(s_, INTER_X, g_)
@@ -684,7 +692,7 @@ def s_kurve(b, sc, t):
         b.poly([(KX, CY1 + 32), (KX - 7, CY1 + 16), (KX + 7, CY1 + 16)], fill=GRAU, alpha=ach)
         for gg in (90, 180, 270, 360):
             b.linie([(KX - 7, cyy(gg)), (KX + 7, cyy(gg))], GRAU, 3, alpha=ach)
-            etikett(b, f'{gg}°', KX - 40, cyy(gg), 18, INK, ach)
+            etikett(b, f'{gg}°', KX - KR - 14, cyy(gg), 18, INK, ach, anker='r', grund=False)
         b.text('α', KX + 22, CY1 + 30, 22, WINKEL, INTER_X, alpha=ach)
     # Sinus (rot) bis zum aktuellen Winkel
     n = int(200 * g / 360)
@@ -726,7 +734,7 @@ def s_kurve(b, sc, t):
         b.kreis(gx(g), py, 6, SIN)
         gestrichelt(b, px, py, px, cyy(g), COS, 0.6, n=30)
         b.kreis(px, cyy(g), 6, COS)
-    etikett(b, 'Sinuskurve', gx(140), KY - KR - 2, 22, SIN, ein(t, w('Welle: die')) * (1 - ein(t, tV, 0.4)))
+    etikett(b, 'Sinuskurve', gx(300), KY + KR + 30, 22, SIN, ein(t, w('Welle: die')) * (1 - ein(t, tV, 0.4)), grund=False)
     # Verschiebung: rote Kopie gleitet um 90° nach links auf die blaue Kurve
     av = ein(t, tV, 0.3) * (1 - ein(t, tV + 2.6, 0.6))      # Nutzer 13.11.: nach dem Ankommen bald ausblenden
     if av > 0:
@@ -778,7 +786,7 @@ def kleiner_kreis(b):
     b.linie([(px, CY), (px, py)], SIN, 7)
     b.linie([(330, CY), (px, py)], INK, 4)
     b.kreis(px, py, 8, INK)
-    etikett(b, 'x = cos α', (330 + px) / 2, CY + 30, 24, COS, grund=False)
+    etikett(b, 'x = cos α', 342, CY + 30, 24, COS, anker='l', grund=False)
     etikett(b, 'y = sin α', 330 + math.sqrt(170 ** 2 - ((py - CY) / 2) ** 2) + 12, (CY + py) / 2, 24, SIN, anker='l', grund=False)
 
 
