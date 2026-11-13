@@ -40,4 +40,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
 - App ist live (13.11., App 0.8): https://luperttrading-lab.github.io/mathe-videos/einheitskreis/ – der QR-Code im Video zeigt dorthin.
 - Nutzer 13.11.: Wenn das Video fertig ist, `lehren.md` als Gestaltungsregeln in die CLAUDE.md übernehmen (für alle
   künftigen Videos und Apps).
+- Startbild: A „Kreis und Welle“ (Nutzer 13.11., Vorschau-Seite „passt“), `startbild.py` → `startbild_welle.png`.
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
