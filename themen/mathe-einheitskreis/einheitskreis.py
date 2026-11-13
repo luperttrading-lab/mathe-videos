@@ -200,13 +200,6 @@ def s_kreis(b, sc, t):
     if ax > 0:
         b.linie([(CX, CY), (CX + 1.32 * R, CY)], WINKEL, 10, alpha=0.45 * ax)
     winkel(b, g, ein(t, tU, 0.3))
-    if g > 1:                                              # Drehpfeil gegen den Uhrzeigersinn
-        aa = ein(t, tU, 0.3) * (1 - ein(t, tP + 0.8, 0.5))
-        m = math.radians(g)
-        x1, y1 = CX + 48 * math.cos(m), CY - 48 * math.sin(m)
-        tx, ty = -math.sin(m), -math.cos(m)                 # Tangente in Drehrichtung (Bildschirm-y nach unten)
-        b.poly([(x1 + tx * 12, y1 + ty * 12), (x1 - ty * 7, y1 + tx * 7), (x1 + ty * 7, y1 - tx * 7)], fill=WINKEL,
-               alpha=aa)
     if f > 0:
         px, py = punkt(g)
         ap = ein(t, tP, 0.3)
@@ -234,8 +227,13 @@ def s_warum(b, sc, t):
     dreieck = ein(t, T['D'], 0.4) * (1 - ein(t, T['F'], 0.4))
     if dreieck > 0:
         b.poly([(CX, CY), (px, CY), (px, py)], fill=WINKEL, alpha=0.10 * dreieck)
-        q = 16 if px > CX else -16
-        b.linie([(px - q, CY), (px - q, CY - 16), (px, CY - 16)], INK, 2.5, alpha=dreieck)
+        # rechter Winkel wie in der Schule: Viertelbogen mit Punkt (Nutzer 13.11.)
+        sx = -1 if px > CX else 1                          # Richtung zum Ursprung
+        sy = -1 if py < CY else 1                          # Richtung zu P
+        rw = 28
+        b.linie([(px + sx * rw * math.cos(math.pi / 2 * k / 12), CY + sy * rw * math.sin(math.pi / 2 * k / 12))
+                 for k in range(13)], INK, 2.5, alpha=dreieck)
+        b.kreis(px + sx * 11, CY + sy * 11, 3.5, INK, alpha=dreieck)
     winkel(b, g % 360, 1.0)
     lab_s = 'Gegenkathete' if t < T['Ho'] else 'sin α'
     lab_c = 'Ankathete' if t < T['Xk'] else 'cos α'
