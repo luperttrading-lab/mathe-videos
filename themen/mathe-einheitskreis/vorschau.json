@@ -1,14 +1,30 @@
 {
  "titel": "Einheitskreis-Video",
- "aufgabe": "2 Einträge zu prüfen: Szenen 1–3 mit neuer Orientierungs-Szene (ab ≈ 0:29) und Szenen 4–10 mit bereinigten Beschriftungen. Je Eintrag „✓ passt“ oder „ändern“ mit Sekunde.",
+ "aufgabe": "Neu oben: zwei Startbild-Entwürfe (A oder B wählen). Darunter: Szenen 1–3 mit erweiterter Orientierung (ab ≈ 0:29), Szenen 4–10 wie vorher.",
  "videos": [
   {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
-   "titel": "Animiert: Szenen 1–3 mit neuer Orientierung (1:39)",
-   "stand": "13.11., 19:45",
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/startbild_welle.mp4",
+   "titel": "Startbild A: Kreis und Welle",
+   "stand": "13.11., 20:00",
    "pruefen": true,
-   "poster_bei": 44,
-   "notiz": "Orientierungs-Szene ab ≈ 0:29 wie vorher. Neu: Gradzahl beim Drehen im Einstieg weicht der y-Achse aus; beim Kreisen am Ende von „Warum?“ blenden „x“ und „y“ aus, damit sie nicht über Linien fahren."
+   "poster_bei": 1,
+   "notiz": "Entwurf Startbild/Titelkarte: Kreis mit Sinus und Kosinus, daraus läuft die Sinuswelle. „Der Einheitskreis – Sinus und Kosinus verstehen“, grüne Leiste „MATHE VERSTEHEN · TRIGONOMETRIE“. „passt“ = dieses nehmen."
+  },
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/startbild_riesenrad.mp4",
+   "titel": "Startbild B: Riesenrad",
+   "stand": "13.11., 20:00",
+   "pruefen": true,
+   "poster_bei": 1,
+   "notiz": "Entwurf Startbild/Titelkarte passend zum Einstieg „Riesenrad“: Der Einheitskreis als Riesenrad, Gondel am Punkt P, rote Höhe = Sinus. „Wie hoch ist die Gondel?“ „passt“ = dieses nehmen."
+  },
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
+   "titel": "Animiert: Szenen 1–3 (1:47)",
+   "stand": "13.11., 20:00",
+   "pruefen": true,
+   "poster_bei": 50,
+   "notiz": "Neu ab ≈ 0:29 (Orientierung): zusätzlich 120° oben links, 240° unten links, 300° unten rechts – P läuft hin, Strich und Gradzahl bleiben stehen. Satz neu vertont („In den anderen Vierteln zum Beispiel …“)."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
