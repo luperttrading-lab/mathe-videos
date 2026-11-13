@@ -241,6 +241,23 @@ def s_warum(b, sc, t):
     lab_c = 'Ankathete' if t < T['Xk'] else 'cos α'
     strecken(b, g, f_sin=glatt(p(t, T['L'], 0.9)), f_cos=glatt(p(t, T['K'], 0.9)), lab_sin=lab_s, lab_cos=lab_c,
              la_s=ein(t, T['G'] if t < T['Ho'] else T['Ho'], 0.4), la_c=ein(t, T['K'] if t < T['Xk'] else T['Xk'], 0.4))
+    # y-Wert an der y-Achse ablesen (Nutzer 13.11.): gestrichelt von P waagrecht zur y-Achse, dort der Sinus als rote
+    # Strecke. Der x-Wert braucht keine Hilfslinie: Die rote Senkrechte trifft die x-Achse genau dort (Fußpunkt).
+    ay = ein(t, C(sc, 'y-Koordinate'), 0.5)
+    if ay > 0:
+        n = 14
+        for k in range(n):
+            if k % 2 == 0:
+                x0_, x1_ = px + (CX - px) * k / n, px + (CX - px) * (k + 1) / n
+                b.linie([(x0_, py), (x1_, py)], SIN, 3, alpha=0.8 * ay)
+        b.linie([(CX, CY), (CX, CY + (py - CY) * glatt(p(t, C(sc, 'y-Koordinate') + 0.3, 0.6)))], SIN, 8, alpha=0.75 * ay)
+        b.kreis(CX, py, 7, SIN, alpha=ay)
+        rechts = px >= CX
+        etikett(b, 'y', CX + (-20 if rechts else 20), py, 28, SIN, ay, anker='r' if rechts else 'l')
+    ax_ = ein(t, C(sc, 'x-Koordinate'), 0.5)
+    if ax_ > 0:
+        b.kreis(px, CY, 7, COS, alpha=ax_)
+        etikett(b, 'x', px, CY + (58 if py <= CY else -58), 28, COS, ax_)
     zeiger(b, g)
     # Hypotenuse: Linie leuchtet kurz auf, Name wird Buchstabe für Buchstabe entlang der Linie geschrieben
     # (Nutzer 13.11.: „damit man weiß, wo sie ist“)
