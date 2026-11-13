@@ -25,6 +25,9 @@ nachziehen.
 - `themen/mathe-tricks/` – Folgenplan und Recherche der 127 Tricks
 - `uebung/` – App „Kopfrechnen üben“ (GitHub Pages), Details `uebung/LIESMICH.md`
 - `index.html` im Hauptordner leitet auf `uebung/` weiter
+- `einheitskreis/` – eigene App „Einheitskreis“ (13.11., Details `einheitskreis/LIESMICH.md`); bis zur Abnahme nur Vorschau
+  [Einheitskreis · Vorschau](https://claude.ai/artifact/43jaMqCCrmXtqx6TYuqET3) (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`)
+  und Zweig `einheitskreis`, erst nach Abnahme auf `main` (GitHub Pages).
 
 ## Antworten an den Nutzer
 - Kurz halten und Bilder zeigen statt viel Text (Kontaktbogen, Stichbilder, Vorher/nachher).
