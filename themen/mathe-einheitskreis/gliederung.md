@@ -37,4 +37,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
 - Bogenmaß: eigenes Video. Tangens: weglassen. Abspann: weglassen. 480p-Datei für den Sohn: ja.
 - Vorschau-Seite nur für dieses Video (Nutzer 13.11.: die alten Kopfrechnen-Links nicht mehr zeigen): [Einheitskreis · Vorschau](https://claude.ai/artifact/2zRnaGCW6fr3xH48QPsMXc), Slug `101dceed-779d-4835-8c36-388133b01b8f`, `vorschau.json` hier.
 - Notiz zur Hörprobe (13.11.): 180° per Drehung zeigen, beschriften statt nur reden, Sinus von P senkrecht nach unten, Zahlen 1/−1 außerhalb des Kreises → Szenen 1–3 animiert.
+- App ist live (13.11., App 0.8): https://luperttrading-lab.github.io/mathe-videos/einheitskreis/ – der QR-Code im Video zeigt dorthin.
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.
