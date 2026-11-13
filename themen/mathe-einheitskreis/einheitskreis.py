@@ -531,9 +531,11 @@ def s_kurve(b, sc, t):
             b.text(wort, x + 115, 625, 26, INK, INTER_X, alpha=a)
 
 
-MERK = [('Auf dem Einheitskreis ist x der Kosinus', 'und y der Sinus.'),
-        ('Sinus Quadrat plus Kosinus Quadrat', 'ist eins.'),
-        ('Die Werte im ersten Viertel reichen,', 'die Vorzeichen zeigt das Viertel,', 'in dem P liegt.')]
+MERK = [  # Nutzer 13.11.: x/Kosinus blau, y/Sinus rot wie im Bild
+    ([('Auf dem Einheitskreis ist ', INK), ('x der Kosinus', COS)], [('und ', INK), ('y der Sinus', SIN), ('.', INK)]),
+    ([('Sinus Quadrat', SIN), (' plus ', INK), ('Kosinus Quadrat', COS)], [('ist eins.', INK)]),
+    ([('Die Werte im ersten Viertel reichen,', INK)], [('die Vorzeichen zeigt das Viertel,', INK)],
+     [('in dem P liegt.', INK)])]
 
 
 def merkzettel(b, sc, t, alle=False):
@@ -543,8 +545,9 @@ def merkzettel(b, sc, t, alle=False):
     for i, zeilen in enumerate(MERK):
         start = 0 if alle else C(sc, ('Auf dem Einheitskreis', 'Sinus Quadrat', 'Die Werte')[i])
         a = ein(t, start)
-        for z in zeilen:
-            b.text(z, 935, y + 10 * (1 - a), 25, INK, INTER_X if len(zeilen) < 3 or z == zeilen[0] else INTER_X, alpha=a)
+        for teile in zeilen:
+            if a > 0:
+                zeile(b, teile, 935, y + 10 * (1 - a), 25, INTER_X, alpha=a)
             y += 36
         y += 26
 
@@ -559,6 +562,8 @@ def kleiner_kreis(b):
     b.linie([(px, CY), (px, py)], SIN, 7)
     b.linie([(330, CY), (px, py)], INK, 4)
     b.kreis(px, py, 8, INK)
+    etikett(b, 'x = cos α', (330 + px) / 2, CY + 30, 24, COS)
+    etikett(b, 'y = sin α', px + 14, (CY + py) / 2, 24, SIN, anker='l')
 
 
 def s_merke(b, sc, t):
