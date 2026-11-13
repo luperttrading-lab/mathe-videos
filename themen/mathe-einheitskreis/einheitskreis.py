@@ -343,19 +343,41 @@ def s_werte(b, sc, t):
     kreislinie(b)
     teil1 = 1 - ein(t, tA, 0.4)                            # Achsenpunkte
     teil2 = ein(t, tB - 0.2, 0.4)                          # Dreiecke
-    # Achsenpunkte: Koordinaten bleiben stehen, sobald P dort war
-    for gg, s, wort in ((180, '(−1 | 0)', 'minus eins und null'), (0, '(1 | 0)', 'null Grad liegt'),
-                        (90, '(0 | 1)', 'neunzig Grad bei'), (270, '(0 | −1)', 'zweihundertsiebzig')):
-        a = ein(t, w(wort) + (0.9 if gg != 180 else 0), 0.4) * teil1
+    # Achsenpunkte (Nutzer 13.11.: zeigen, wo die Koordinaten herkommen, und erst schreiben, wenn sie gesprochen
+    # werden): Beim ersten Wert läuft eine blaue Strecke auf der x-Achse, beim zweiten eine rote auf der y-Achse;
+    # die Koordinaten entstehen Teil für Teil in denselben Farben und bleiben danach klein stehen.
+    PUNKTE = [  # Winkel, x, y, Zeit erster Wert, Zeit zweiter Wert
+        (180, '−1', '0', w('minus eins und null'), w('null', 'minus eins und ')),
+        (0, '1', '0', w('eins und null', 'P bei '), w('null', 'P bei eins und ')),
+        (90, '0', '1', w('null und eins', 'neunzig Grad bei '), w('eins', 'neunzig Grad bei null und ')),
+        (270, '0', '−1', w('null und minus', 'zweihundertsiebzig Grad bei '),
+         w('minus eins', 'zweihundertsiebzig Grad bei null und '))]
+    spaeter = []                                           # Strecken über dem Zeiger zeichnen
+    for i, (gg, xs, ys, tx, ty) in enumerate(PUNKTE):
+        x, y = punkt(gg)
+        ende = PUNKTE[i + 1][3] - 0.6 if i + 1 < len(PUNKTE) else tA
+        hell = ein(t, tx - 0.1, 0.3) * (1 - ein(t, ende, 0.4))      # Hervorhebung, solange P dort steht
+        ax, ay = ein(t, tx, 0.3), ein(t, ty, 0.3)
+        if hell > 0:
+            spaeter.append((x, y, hell, ax, ay, glatt(p(t, tx, 0.6)), glatt(p(t, ty, 0.6))))
+        a = ein(t, tx, 0.3) * teil1
         if a > 0:
-            x, y = punkt(gg)
-            b.kreis(x, y, 8, GRUEN, alpha=a)
+            b.kreis(x, y, 8, GRUEN, alpha=a * (1 - hell))
+            g_ = 30 if hell > 0.5 else 24
+            teile = [('(', INK), (xs, COS)] + ([(' | ', INK), (ys, SIN), (')', INK)] if ay > 0 else [])
             if gg in (0, 180):
-                etikett(b, s, x + (14 if gg == 0 else -14), CY - 62, 24, INK, a)
+                lx, ly = x + (30 if gg == 0 else -30), CY - 62
             else:
-                etikett(b, s, x + 62, y + (-10 if gg == 90 else 10), 24, INK, a, anker='l')
+                lx, ly = x + 118, y + (-12 if gg == 90 else 12)
+            w_ = sum(breite(s_, INTER_X, g_) for s_, _ in [('(', 0), (xs, 0), (' | ', 0), (ys, 0), (')', 0)])
+            band(b, lx - w_ / 2 - 6, ly - g_ * 0.62, lx + w_ / 2 + 6, ly + g_ * 0.62, BG, 0.92 * a, r=8)
+            x0 = lx - w_ / 2
+            for s_, c_ in teile:
+                ww = breite(s_, INTER_X, g_)
+                b.text(s_, x0 + ww / 2, ly, g_, c_, INTER_X, alpha=a if s_ not in (ys, ' | ', ')') else a * ay)
+                x0 += ww
     # Linien und Dreieck
-    zeig = t < tA or t > tB - 0.2
+    zeig = t < w('Genauso') or t > tB - 0.2
     if zeig:
         dreieck_fuell(b, g, teil2 * (1 - ein(t, t30 + 0.2, 0.3)) + ein(t, t60 + 1.2, 0.4))
         lab_s = lab_c = ''
@@ -386,11 +408,18 @@ def s_werte(b, sc, t):
                 b.linie([(px, CY), (qx, qy)], SIN, 8, alpha=0.45 * hl)
                 etikett(b, '½', px + 26, (CY + qy) / 2, 26, SIN, hl, anker='l')
     zeiger(b, g)
+    for x, y, hell, ax, ay, fx, fy in spaeter:
+        if x != CX:
+            b.linie([(CX, CY), (CX + (x - CX) * fx, CY)], COS, 9, alpha=hell)
+        if y != CY:
+            b.linie([(CX, CY), (CX, CY + (y - CY) * fy)], SIN, 9, alpha=hell)
+        b.kreis(x if x != CX else CX, CY, 9, COS, alpha=hell * ax)
+        b.kreis(CX, y if y != CY else CY, 7 if y == CY else 9, SIN, alpha=hell * ay)
     # rechte Spalte
     zeit_zeile(b, t, w('Die Höhe ist null'), [('Höhe von P = 0', INK)], 210, 32, INTER, ende=w('Genauso'))
     zeit_zeile(b, t, w('Also ist Sinus'), [('sin', SIN), (' 180° = ', INK), ('0', GRUEN)], 280, 52, ende=w('Genauso'))
     zeit_zeile(b, t, w('Minus eins ist'), [('cos', COS), (' 180° = −1', INK)], 360, 40, ende=w('Genauso'))
-    zeit_zeile(b, t, w('Genauso'), [('P = (', INK), ('cos', COS), (' | ', INK), ('sin', SIN), (')', INK)], 230, 40,
+    zeit_zeile(b, t, w('Genauso'), [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 230, 40,
                ende=tA)
     zeit_zeile(b, t, tB + 0.4, [('45°: beide Katheten gleich lang', INK)], 190, 28, INTER, ende=t30)
     zeit_zeile(b, t, w('x Quadrat'), [('x² + x² = 1', INK)], 250, 36, ende=t30)
