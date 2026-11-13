@@ -9,7 +9,7 @@ G.ton_und_zeitplan()
 K = A.K
 KAESTEN = []
 def text_mess(self, s, x, y, g, c, pfad=A.INTER, anker='m', alpha=1.0, skala=1.0, dreh=0.0):
-    if alpha <= 0.5 or skala <= 0.01 or dreh or not s.strip():
+    if alpha <= 0.5 or skala <= 0.01 or not s.strip():   # gedrehte Buchstaben zählen mit (Hypotenuse, 13.11.)
         return 0
     w = A.breite(s, pfad, g * skala)
     x0 = {'m': x - w / 2, 'l': x, 'r': x - w}[anker]

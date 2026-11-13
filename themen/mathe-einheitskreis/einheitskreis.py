@@ -320,11 +320,14 @@ def s_warum(b, sc, t):
     pos = R / 2 - sum(ws) / 2
     for i, (ch, w) in enumerate(zip(wort, ws)):
         start = T['H'] + 0.07 * i if i < 10 else C(sc, 'genau eins') + 0.05 * (i - 10)
-        a_ch = ein(t, start, 0.18) * weg_h
+        a_ch = ein(t, start, 0.18) * weg_h * (1 - ein(t, C(sc, 'y-Koordinate'), 0.4))   # Platz für die y-Linie
         mitte = pos + w / 2
         if a_ch > 0 and ch != ' ':
             b.text(ch, CX + ux * mitte + nx * 20, CY + uy * mitte + ny * 20, 22, INK, INTER_X, alpha=a_ch, dreh=g)
         pos += w
+    a1 = ein(t, C(sc, 'y-Koordinate'), 0.4) * weg_h          # danach nur noch „1“ neben der Hypotenuse
+    if a1 > 0:
+        etikett(b, '1', CX + ux * R / 2 + nx * 24, CY + uy * R / 2 + ny * 24, 26, INK, a1, grund=False)
     weg = T['N']
     zeit_zeile(b, t, T['G'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : Hypotenuse', INK)], 190, 28, INTER, ende=weg)
     zeit_zeile(b, t, T['G1'], [('sin α', SIN), (' = ', INK), ('Gegenkathete', SIN), (' : 1', INK)], 240, 28, INTER, ende=weg)
