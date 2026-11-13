@@ -1,22 +1,22 @@
 {
  "titel": "Einheitskreis · Vorschau",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: Szenen 1–3, Winkelbogen ohne Pfeil, rechter Winkel als Bogen mit Punkt. „✓ passt“ oder „ändern“ mit Sekunde.",
+ "aufgabe": "2 Einträge zu prüfen: oben Szenen 4–10 (neu), darunter Szenen 1–3 mit kleinerer Hypotenusen-Schrift. Je Eintrag „✓ passt“ oder „ändern“ mit Sekunde.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_rest.mp4",
+   "titel": "Animiert: Szenen 4–10 (2:58)",
+   "stand": "13.11., 15:25",
+   "pruefen": true,
+   "poster_bei": 45,
+   "notiz": "Zweiter Teil, nach demselben Prinzip wie der Anfang. 0:00 Besondere Winkel: P läuft zu 180°, 0°, 90°, 270° (Koordinaten bleiben stehen), dann 45° mit x² + x² = 1, 30° mit Spiegelbild zum gleichseitigen Dreieck, 60° mit getauschten Werten. 1:07 Vorzeichen: 30° und 150° gestrichelt auf gleicher Höhe, Halbebenen eingefärbt, Vorzeichen je Viertel. 1:34 Pythagoras. 1:51 Sinuskurve: Kreis links, Kurve entsteht rechts, dann der Kosinus mit 90°-Pfeil. 2:26 Merkzettel, Schluss, App mit QR-Code."
+  },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",
    "titel": "Animiert: Szenen 1–3 (1:19)",
-   "stand": "13.11., 15:10",
+   "stand": "13.11., 15:25",
    "pruefen": true,
-   "poster_bei": 36,
-   "notiz": "Neu: Der orange Winkelbogen geht nur noch von der x-Achse bis zum Radius, ohne Pfeilspitze (ab ≈ 0:25). Der rechte Winkel im Dreieck ist jetzt ein Viertelbogen mit Punkt (ab ≈ 0:33). Achsen etwas dicker, y-Wert gestrichelt, Hypotenuse Buchstabe für Buchstabe wie vorher."
-  },
-  {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/hoerprobe_einheitskreis.mp4",
-   "titel": "Hörprobe: Einheitskreis (4:17)",
-   "stand": "13.11., 14:30",
-   "pruefen": false,
-   "poster_bei": 85,
-   "notiz": "Nur Ton und Standbilder, noch keine Animation. Prüfen: Stimme, Tempo, Betonung, ob alles verständlich ist. Die Bilder zeigen nur Stil und Farben (Sinus rot, Kosinus blau, Winkel orange)."
+   "poster_bei": 40,
+   "notiz": "Abgenommen bis auf: „Hypotenuse = 1“ jetzt etwas kleiner geschrieben (ab ≈ 0:35), damit es nicht über die Achse ragt."
   }
  ]
 }
