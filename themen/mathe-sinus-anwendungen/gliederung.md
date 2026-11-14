@@ -47,7 +47,9 @@ sin 60° ≈ 0,866, cos 60° = 0,5; Zahlenstrahl 0 bis 1; Begründung „Strecke
 kürzer als die Hypotenuse“; im Einheitskreis-Vergleich das erste Viertel eingefärbt; Gegenstück im Riesenrad bei 210°
 („negativ: Die Gondel hängt unter der Achse.“). Drei Nachkommastellen, damit das Produkt zum Ergebnis passt
 (5 · 0,34 = 1,70 ≠ 1,71); Schiff jetzt 8,66 km statt 8,7 km. Länge damit 3:41 (514 Wörter). Stand: zwei Clips auf der
-Vorschau-Seite zur Abnahme, **ganzes Video noch nicht neu gerendert** (erst nach „passt“/„rendern“).
+Vorschau-Seite, beide vom Nutzer mit „passt“ abgenommen (14.11., 15:44/15:45, Sammlung `vorschau_urteile`). Danach
+**ganzes Video neu gerendert (3:41)**, liegt als oberster Eintrag auf der Vorschau-Seite zur Abnahme; 1080p und 480p
+im Scratchpad der Sitzung.
 
 Dateien: `sinus_anwendungen.py` (Video; Baukasten regel.py und Zeichenhilfen aus einheitskreis.py nur importiert),
 `drehbuch.md` (Sprechtext), `startbild.py` → `bilder/startbild.png`, `pruefen.py` (Beschriftungs-Check, muss außer
