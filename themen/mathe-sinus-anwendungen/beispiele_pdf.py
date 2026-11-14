@@ -46,25 +46,25 @@ def svg(inhalt, w=420, h=300):
 
 # ---------------------------------------------------------------- Bilder
 def bild_leiter():
+    """Wand rechts, Leiterfuß links: der Winkel öffnet sich wie im ersten Quadranten des Einheitskreises."""
     k = 52  # Pixel pro Meter
-    wx, by = 120, 270  # Wand x, Boden y
-    fx = wx + 1.71 * k
+    fx, by = 150, 270  # Leiterfuß x, Boden y
+    wx = fx + 1.71 * k
     ty = by - 4.70 * k
-    s = f'<rect x="{wx - 18}" y="20" width="18" height="{by - 20}" fill="#d9d2c3"/>'
-    s += f'<line x1="40" y1="{by}" x2="400" y2="{by}" stroke="{INK}" stroke-width="3.5"/>'
-    s += f'<line x1="{wx}" y1="{by}" x2="{wx}" y2="{ty}" stroke="{ROT}" stroke-width="8" stroke-linecap="round"/>'
-    s += f'<line x1="{wx}" y1="{by}" x2="{fx}" y2="{by}" stroke="{BLAU}" stroke-width="8" stroke-linecap="round"/>'
-    s += f'<line x1="{fx}" y1="{by}" x2="{wx}" y2="{ty}" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>'
+    s = f'<rect x="{wx:.1f}" y="14" width="18" height="{by - 14}" fill="#d9d2c3"/>'
+    s += f'<line x1="30" y1="{by}" x2="400" y2="{by}" stroke="{INK}" stroke-width="3.5"/>'
+    s += f'<line x1="{wx:.1f}" y1="{by}" x2="{wx:.1f}" y2="{ty:.1f}" stroke="{ROT}" stroke-width="8" stroke-linecap="round"/>'
+    s += f'<line x1="{fx}" y1="{by}" x2="{wx:.1f}" y2="{by}" stroke="{BLAU}" stroke-width="8" stroke-linecap="round"/>'
+    s += f'<line x1="{fx}" y1="{by}" x2="{wx:.1f}" y2="{ty:.1f}" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>'
     for i in range(1, 9):  # Sprossen
         t = i / 9
-        x, y = fx + (wx - fx) * t, by + (ty - by) * t
-        s += f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="{INK}"/>'
-    s += bogen(fx, by, 34, 110, 180)
-    s += text(fx - 52, by - 14, '70°', ORANGE, 18)
-    s += rechter_winkel(wx, by, 22, 0)
-    s += text(wx - 30, (by + ty) / 2, 'Höhe', ROT, 18, 'end') + text(wx - 30, (by + ty) / 2 + 22, '≈ 4,70 m', ROT, 18, 'end')
+        s += f'<circle cx="{fx + (wx - fx) * t:.1f}" cy="{by + (ty - by) * t:.1f}" r="3" fill="{INK}"/>'
+    s += bogen(fx, by, 34, 0, 70)
+    s += text(fx + 47, by - 26, '70°', ORANGE, 17)
+    s += rechter_winkel(wx, by, 20, 90)
+    s += text(wx + 30, (by + ty) / 2, 'Höhe', ROT, 18, 'start') + text(wx + 30, (by + ty) / 2 + 22, '≈ 4,70 m', ROT, 18, 'start')
     s += text((wx + fx) / 2, by + 26, '≈ 1,71 m', BLAU, 18)
-    s += text((wx + fx) / 2 + 40, (by + ty) / 2 - 10, 'Leiter 5 m', INK, 18, 'start')
+    s += text((wx + fx) / 2 - 36, (by + ty) / 2 - 10, 'Leiter 5 m', INK, 18, 'end')
     return svg(s, 420, 300)
 
 
@@ -237,7 +237,8 @@ BEISPIELE = [
                      f'<mspace width="1em"/>{r("Höhe")}<mo>=</mo><mn>5</mn><mi>m</mi><mo>·</mo><mi>sin</mi><mn>70°</mn><mo>≈</mo><mn>4,70</mn><mi>m</mi>'),
                    m(f'<mi>cos</mi><mn>70°</mn><mo>=</mo>{bruch(b("Abstand"), "<mn>5</mn><mi>m</mi>")}<mspace width="1em"/><mo>⇒</mo>'
                      f'<mspace width="1em"/>{b("Abstand")}<mo>=</mo><mn>5</mn><mi>m</mi><mo>·</mo><mi>cos</mi><mn>70°</mn><mo>≈</mo><mn>1,71</mn><mi>m</mi>')],
-         pfiff='Es ist genau das Dreieck aus dem Einheitskreis – nur fünfmal so groß. Deshalb „mal 5“.'),
+         pfiff='Es ist genau das Dreieck aus dem Einheitskreis – nur fünfmal so groß, deshalb „mal 5“. Der Leiterfuß ist der '
+               'Mittelpunkt, die Leiter der Radius, und der Winkel liegt im ersten Viertel.'),
     dict(nr=2, titel='Kiste auf der Rampe', bereich='Physik: Goldene Regel der Mechanik', dauer='≈ 40 s',
          typ='Dreieck', lehrplan='Physik Kl. 10 (Hessen): „Arbeit und Energie … Goldene Regel der Mechanik“', drin=True,
          bild=bild_rampe(),

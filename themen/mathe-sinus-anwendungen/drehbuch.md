@@ -17,7 +17,8 @@ Bild: Titel „Wofür braucht man Sinus und Kosinus?“, links kleines Dreieck, 
 > zur Wand fünf Meter mal Kosinus siebzig Grad, ungefähr ein Meter einundsiebzig. Es ist das Dreieck aus dem
 > Einheitskreis, nur fünfmal so groß.
 
-Bild: Wand, Boden, Leiter (Hypotenuse INK), Winkel 70° orange am Boden (erst wenn Leiter steht), Höhe rot, Abstand
+Bild: **Wand rechts, Leiterfuß links** (Nutzer 14.11.: dann öffnet sich der Winkel wie im ersten Quadranten des
+Einheitskreises, nicht im zweiten), Boden, Leiter (Hypotenuse INK), Winkel 70° orange am Boden (erst wenn Leiter steht), Höhe rot, Abstand
 blau; Rechnung als echter Bruch sin 70° = Höhe/5 m → Höhe = 5 m · sin 70° ≈ 4,70 m; dann cos. Zum Schluss schrumpft das
 Dreieck auf den Einheitskreis (Hypotenuse 1).
 
