@@ -35,10 +35,19 @@ Energie (Goldene Regel, Generator), Radioaktivität, Energieversorgung – Rampe
 | # | Szene | Start | Dauer | Inhalt | Bezug Mathe Klasse 10 Hessen |
 |---|---|---|---|---|---|
 | – | einstieg | 0:00 | 15 s | Startbild entsteht: Einheitskreis aus Video 1, Dreieck löst sich heraus, P kreist | – |
-| 1 | leiter | 0:16 | 44 s | 5-m-Leiter, 70°, Wand rechts: Höhe 5 m · sin 70° ≈ 4,70 m, Abstand 5 m · cos 70° ≈ 1,71 m; Einheitskreis mal 5 | „Anwendungen aus Technik“ |
-| 2 | kurs | 1:01 | 45 s | Seekarte mit km-Gitter: 10 km auf Kurs 60° → Osten 10 km · sin 60° ≈ 8,7 km, Norden 10 km · cos 60° = 5 km | „Berechnungen in Dreiecken“ |
-| 3 | riesenrad | 1:46 | 56 s | Höhe = 32 m + 30 m · sin α: 30° → 47 m, 90° → 62 m, 210° → 17 m; Höhe über der Zeit = Sinuskurve; QR der App | „senkrechte Projektion einer Kreisbewegung“ |
-| 4 | merke + schluss | 2:45 | 22 s | Merkzettel (gesprochen wie geschrieben), Motivationssatz + Spruch „Das kann jeder lernen.“ | – |
+| 1 | leiter | 0:16 | 64 s | 5-m-Leiter, 70°, Wand rechts: Höhe 5 m · sin 70° ≈ 5 m · 0,940 = 4,70 m, Abstand ≈ 5 m · 0,342 = 1,71 m; Einheitskreis mal 5 | „Anwendungen aus Technik“ |
+| 2 | kurs | 1:21 | 56 s | Seekarte mit km-Gitter: 10 km auf Kurs 60° → Osten ≈ 10 km · 0,866 = 8,66 km, Norden = 10 km · 0,5 = 5 km | „Berechnungen in Dreiecken“ |
+| 3 | riesenrad | 2:17 | 56 s | Höhe = 32 m + 30 m · sin α: 30° → 47 m, 90° → 62 m, 210° → 17 m; Höhe über der Zeit = Sinuskurve; QR der App | „senkrechte Projektion einer Kreisbewegung“ |
+| 4 | merke + schluss | 3:16 | 22 s | Merkzettel (gesprochen wie geschrieben), Motivationssatz + Spruch „Das kann jeder lernen.“ | – |
+
+**Nutzer 14.11. mittags: Zwischenschritt mit dem Zahlenwert** („Sinus und Kosinus von 70° und 60° als Zahl nennen,
+immer ein Wert zwischen null und eins, wir sind ja nur im positiven Quadranten, keine negativen Strecken“). Eingebaut
+in Leiter und Schiffskurs (neu vertont, 749 Zeichen): „Der Taschenrechner zeigt …“, sin 70° ≈ 0,940, cos 70° ≈ 0,342,
+sin 60° ≈ 0,866, cos 60° = 0,5; Zahlenstrahl 0 bis 1; Begründung „Strecken sind nie negativ, eine Kathete ist immer
+kürzer als die Hypotenuse“; im Einheitskreis-Vergleich das erste Viertel eingefärbt; Gegenstück im Riesenrad bei 210°
+(„negativ: Die Gondel hängt unter der Achse.“). Drei Nachkommastellen, damit das Produkt zum Ergebnis passt
+(5 · 0,34 = 1,70 ≠ 1,71); Schiff jetzt 8,66 km statt 8,7 km. Länge damit 3:41 (514 Wörter). Stand: zwei Clips auf der
+Vorschau-Seite zur Abnahme, **ganzes Video noch nicht neu gerendert** (erst nach „passt“/„rendern“).
 
 Dateien: `sinus_anwendungen.py` (Video; Baukasten regel.py und Zeichenhilfen aus einheitskreis.py nur importiert),
 `drehbuch.md` (Sprechtext), `startbild.py` → `bilder/startbild.png`, `pruefen.py` (Beschriftungs-Check, muss außer

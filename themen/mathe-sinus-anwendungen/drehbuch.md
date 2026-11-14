@@ -20,30 +20,38 @@ dreht“ beginnt P rechts zu kreisen. Grüne Leiste „MATHE VERSTEHEN · TRIGON
 > Eine Leiter ist fünf Meter lang und steht im Winkel von siebzig Grad zum Boden. Wie hoch reicht sie? Leiter, Wand
 > und Boden bilden ein rechtwinkliges Dreieck. Die Leiter ist die Hypotenuse. Sinus ist Gegenkathete durch
 > Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Mal fünf Meter: Die Höhe ist fünf Meter mal Sinus
-> siebzig Grad, ungefähr vier Meter siebzig. Genauso ist der Kosinus Ankathete durch Hypotenuse. Der Abstand zur Wand
-> ist also fünf Meter mal Kosinus siebzig Grad, ungefähr ein Meter einundsiebzig. Es ist das Dreieck aus dem
+> siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier null. Im rechtwinkligen
+> Dreieck liegt dieser Wert immer zwischen null und eins: Strecken sind nie negativ, und eine Kathete ist immer kürzer
+> als die Hypotenuse. Fünf Meter mal null Komma neun vier null sind vier Meter siebzig. Genauso ist der Kosinus
+> Ankathete durch Hypotenuse. Der Abstand zur Wand ist also fünf Meter mal Kosinus siebzig Grad. Kosinus siebzig Grad
+> ist ungefähr null Komma drei vier zwei, das ergibt ein Meter einundsiebzig. Es ist das Dreieck aus dem
 > Einheitskreis, nur fünfmal so groß.
 
 Bild: **Wand rechts, Leiterfuß links** (Nutzer 14.11.: dann öffnet sich der Winkel wie im ersten Quadranten des
 Einheitskreises). Leiter wird angelehnt, „5 m“ daneben, Winkel 70° erst, wenn die Leiter steht. Dreieck: Höhe rot an
 der Wand, Abstand blau am Boden, rechter Winkel als Viertelbogen mit Punkt. Rechts die Rechnung Zeile für Zeile mit
-echten Brüchen: sin α = Gegenkathete/Hypotenuse → sin 70° = Höhe/5 m → Höhe = 5 m · sin 70° ≈ 4,70 m; dann
-cos 70° = Abstand/5 m → Abstand = 5 m · cos 70° ≈ 1,71 m. Zum Schluss rechts der Einheitskreis mit P bei 70°
-(sin 70° ≈ 0,940, cos 70° ≈ 0,342) und „· 5“.
+echten Brüchen: sin α = Gegenkathete/Hypotenuse → sin 70° = Höhe/5 m → Höhe = 5 m · sin 70° → Taschenrechner:
+sin 70° ≈ 0,940 → Höhe ≈ 5 m · 0,940 = 4,70 m; dann cos 70° = Abstand/5 m → Abstand = 5 m · cos 70° →
+cos 70° ≈ 0,342 → Abstand ≈ 5 m · 0,342 = 1,71 m. **Zwischenschritt mit dem Zahlenwert (Nutzer 14.11.)**: Zahlenstrahl
+von 0 bis 1 mit sin 70° (rot) und cos 70° (blau), „im rechtwinkligen Dreieck: immer zwischen 0 und 1“. Drei
+Nachkommastellen, weil 5 · 0,34 = 1,70 nicht zum Ergebnis 1,71 passt (nicht mit zu grob gerundeten Zwischenwerten
+rechnen). Zum Schluss rechts der Einheitskreis mit P bei 70° im ersten Viertel und „mal 5“.
 
 ## 3 kurs (≈ 42 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
 > Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich
 > und wie weit nördlich vom Hafen? Auf See misst man den Kurs von Norden aus, im Uhrzeigersinn. Geh auf der Karte vom
 > Hafen erst nach Norden, dann nach Osten: wieder ein rechtwinkliges Dreieck. Die Strecke nach Osten liegt dem Winkel
-> gegenüber. Sie ist also zehn Kilometer mal Sinus sechzig Grad, ungefähr acht Komma sieben Kilometer. Die Strecke
-> nach Norden liegt am Winkel an: zehn Kilometer mal Kosinus sechzig Grad, genau fünf Kilometer. Achtung: Hier gehört
-> der Sinus zur waagrechten Strecke, weil der Winkel an der Nordlinie liegt.
+> gegenüber. Sie ist also zehn Kilometer mal Sinus sechzig Grad. Sinus sechzig Grad ist ungefähr null Komma acht
+> sechs sechs, wieder ein Wert zwischen null und eins. Das ergibt ungefähr acht Komma sechs sechs Kilometer. Die
+> Strecke nach Norden liegt am Winkel an: zehn Kilometer mal Kosinus sechzig Grad. Kosinus sechzig Grad ist genau null
+> Komma fünf, also fünf Kilometer. Achtung: Hier gehört der Sinus zur waagrechten Strecke, weil der Winkel an der
+> Nordlinie liegt.
 
 Bild: Seekarte: oben Norden, Kilometergitter (1 Kästchen = 1 km), Kompassrose, Maßstab, Festland mit Hafen unten
 links, Insel mit Leuchtturm. Das Schiff fährt die Strecke ab (10 km). Kurswinkel 60° orange ab der Nordlinie, erst
-wenn er erklärt wird. Nordstrecke blau (Ankathete, 5 km), Oststrecke rot (Gegenkathete, ≈ 8,7 km): Die Farbe folgt
+wenn er erklärt wird. Nordstrecke blau (Ankathete, 5 km), Oststrecke rot (Gegenkathete, ≈ 8,66 km): Die Farbe folgt
 der Funktion (Sinus rot, Kosinus blau), nicht der Richtung – das ist die Pointe. Rechts die Rechnung mit echten
-Brüchen. Gesprochen und gezeigt „≈ 8,7 km“ (genauer 8,66).
+Brüchen und dem Zwischenschritt sin 60° ≈ 0,866 bzw. cos 60° = 0,5 (Zahlenstrahl 0 bis 1 wie bei der Leiter).
 
 ## 4 riesenrad (≈ 65 s)
 > Bis hier hat ein Dreieck gereicht. Jetzt dreht sich etwas, und dann brauchst du den ganzen Kreis. Ein Riesenrad hat
@@ -58,7 +66,8 @@ Brüchen. Gesprochen und gezeigt „≈ 8,7 km“ (genauer 8,66).
 Bild: Riesenrad links (Maßstab 8 px je Meter, Boden unten), dreht sich ab „Jetzt dreht sich etwas“. Maße 60 m und
 32 m als Maßlinien neben dem Rad, nicht auf Linien. Gondel = P mit Radius 30 m, Winkel α ab der Waagrechten durch
 die Achse, rote Strecke von der Achshöhe zu P. Rechts: „über der Achse: 30 m · sin α“, „Höhe = 32 m + 30 m · sin α“,
-dann je Winkel eine Zeile (30°, 90°, 210°) mit echtem Bruch; am Rad bleiben die drei Stellen mit Höhe stehen. Danach
+dann je Winkel eine Zeile (30°, 90°, 210°) mit echtem Bruch, bei 210° der Hinweis „negativ: die Gondel hängt unter
+der Achse“ (Gegenstück zu „zwischen 0 und 1“ im Dreieck); am Rad bleiben die drei Stellen mit Höhe stehen. Danach
 läuft P zwei Runden, rechts entsteht die Höhe über der Zeit (Achse 0/2/32/62 m, „1 Runde“, „2 Runden“). Zum Schluss
 Karte mit QR-Code der Einheitskreis-App und Play-Zeichen.
 

@@ -42,7 +42,7 @@ def pruefe(t):
     return (round(t, 1), sc['id'], funde)
 if __name__ == '__main__':
     ende = G.SZENEN[-1]['start'] + G.SZENEN[-1]['dauer']
-    ts = list(np.arange(0.2, ende, 0.5))
+    ts = list(np.arange(0.2, ende, 0.25))
     with Pool(4) as p:
         res = p.map(pruefe, ts, chunksize=8)
     agg = {}

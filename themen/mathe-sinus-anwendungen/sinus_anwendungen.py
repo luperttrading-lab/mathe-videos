@@ -114,6 +114,22 @@ def B(z, n, a=1.0):
     return ('b', z, n, a)
 
 
+def zahlenstrahl(b, x0, x1, y, a, punkte):
+    """Zahlenstrahl mit hervorgehobenem Bereich 0 … 1; punkte = [(wert, farbe, name, alpha), …] mit Namen über dem Punkt."""
+    if a <= 0:
+        return
+    b.linie([(x0 - 46, y), (x1 + 46, y)], GRAU, 2.5, alpha=a)
+    b.linie([(x0, y), (x1, y)], TEAL, 7, alpha=0.45 * a)
+    for v, s_ in ((0, '0'), (1, '1')):
+        x = x0 + (x1 - x0) * v
+        b.linie([(x, y - 10), (x, y + 10)], INK, 3, alpha=a)
+        b.text(s_, x, y + 28, 24, INK, INTER_X, alpha=a)
+    for wert, c, name, al in punkte:
+        x = x0 + (x1 - x0) * wert
+        b.kreis(x, y, 9, c, alpha=a * al)
+        b.text(name, x, y - 28, 22, c, INTER_X, alpha=a * al)
+
+
 def leiste(b, a=1.0):
     band(b, 0, 640, 1280, 720, TEAL, a, r=0)
     b.text('MATHE VERSTEHEN', 60, 680, 30, '#ffffff', INTER_X, anker='l', alpha=a)
@@ -178,8 +194,11 @@ def s_leiter(b, sc, t):
     w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
     tL, tW_, tH = w('fünf Meter lang'), w('siebzig Grad'), w('Wie hoch')
     tD, tHy, tG = w('rechtwinkliges Dreieck'), w('Die Leiter ist die Hypotenuse'), w('Gegenkathete durch')
-    tA, tM, tE1 = w('also Sinus siebzig'), w('Mal fünf Meter'), w('ungefähr vier')
-    tK, tB, tE2 = w('Genauso ist der Kosinus'), w('Der Abstand zur Wand'), w('ungefähr ein Meter')
+    tA, tM, tT1 = w('also Sinus siebzig'), w('Mal fünf Meter'), w('Der Taschenrechner')
+    tW1, tZ01, tKa = w('ungefähr null Komma neun'), w('zwischen null und eins'), w('eine Kathete ist')
+    tR1, tE1 = w('Fünf Meter mal null Komma'), w('sind vier Meter siebzig')
+    tK, tB, tT2 = w('Genauso ist der Kosinus'), w('Der Abstand zur Wand'), w('Kosinus siebzig Grad ist')
+    tW2, tE2 = w('ungefähr null Komma drei'), w('das ergibt ein Meter')
     tEK = w('Es ist das Dreieck')
     # Wand und Boden
     a0 = ein(t, 0.0, 0.4)
@@ -222,14 +241,29 @@ def s_leiter(b, sc, t):
     zz(b, t, tL, [('Leiter: ', GRAU), ('5 m', INK)], LX, 250, 34, ende=vor)
     zz(b, t, tW_, [('Winkel: ', GRAU), ('70°', WINKEL)], LX, 312, 34, ende=vor)
     zz(b, t, tH, [('Höhe: ', GRAU), ('?', SIN)], LX, 374, 34, ende=vor)
-    weg = tEK
-    zf(b, t, tG, [T('sin α', SIN), T(' = '), B([('Gegenkathete', SIN)], [('Hypotenuse', INK)])], LX, 160, 32, weg)
-    zf(b, t, tA, [T('sin 70°', SIN), T(' = '), B([('Höhe', SIN)], [('5 m', INK)])], LX, 258, 32, weg)
+    # Teil 1 (Sinus): Herleitung, Zahlenwert vom Taschenrechner, Ergebnis. Teil 2 (Kosinus) ab tK: Die Herleitung
+    # weicht, das Ergebnis rückt nach oben, darunter derselbe Weg für den Abstand. Der Zahlenstrahl bleibt stehen.
+    weg, g = tEK, 30
+    zf(b, t, tG, [T('sin α', SIN), T(' = '), B([('Gegenkathete', SIN)], [('Hypotenuse', INK)])], LX, 150, g, tK - 0.2)
+    zf(b, t, tA, [T('sin 70°', SIN), T(' = '), B([('Höhe', SIN)], [('5 m', INK)])], LX, 236, g, tK - 0.2)
+    zf(b, t, tM, [T('Höhe', SIN), T(' = 5 m · '), T('sin 70°', SIN)], LX, 316, g, tK - 0.2)
+    zf(b, t, tT1, [T('Taschenrechner:  ', GRAU), T('sin 70°', SIN), T(' ≈ ', INK, ein(t, tW1)), T('0,940', SIN, ein(t, tW1))],
+       LX, 372, 26, tK - 0.2)
+    hoch = glatt(p(t, tK, 0.7))
     e1 = ein(t, tE1)
-    zf(b, t, tM, [T('Höhe', SIN), T(' = 5 m · '), T('sin 70°', SIN), T(' ≈ ', INK, e1), T('4,70 m', SIN, e1)], LX, 348, 32, weg)
-    zf(b, t, tK, [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 440, 32, weg)
+    zf(b, t, tR1, [T('Höhe', SIN), T(' ≈ 5 m · '), T('0,940', SIN), T(' = ', INK, e1), T('4,70 m', SIN, e1)],
+       LX, 430 - 280 * hoch, g, weg)
+    zf(b, t, tK + 0.7, [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 236, g, weg)   # erst, wenn die Zeile oben ist
+    zf(b, t, tB, [T('Abstand', COS), T(' = 5 m · '), T('cos 70°', COS)], LX, 316, g, weg)
+    zf(b, t, tT2, [T('Taschenrechner:  ', GRAU), T('cos 70°', COS), T(' ≈ ', INK, ein(t, tW2)), T('0,342', COS, ein(t, tW2))],
+       LX, 372, 26, weg)
     e2 = ein(t, tE2)
-    zf(b, t, tB, [T('Abstand', COS), T(' = 5 m · '), T('cos 70°', COS), T(' ≈ ', INK, e2), T('1,71 m', COS, e2)], LX, 532, 32, weg)
+    zf(b, t, tW2 + 1.2, [T('Abstand', COS), T(' ≈ 5 m · '), T('0,342', COS), T(' = ', INK, e2), T('1,71 m', COS, e2)], LX, 430, g, weg)
+    aZ = ein(t, tZ01 - 0.3) * (1 - ein(t, weg, 0.4))
+    zahlenstrahl(b, 700, 1140, 510, aZ, [(0.940, SIN, 'sin 70°', 1.0), (0.342, COS, 'cos 70°', ein(t, tW2))])
+    zz(b, t, tZ01, [('im rechtwinkligen Dreieck: ', GRAU), ('immer zwischen 0 und 1', TEAL)], LX, 576, 24, ende=weg)
+    zz(b, t, w('Strecken sind nie'), [('Strecken sind nie negativ,', GRAU)], LX, 614, 21, INTER, ende=weg)
+    zz(b, t, tKa, [('eine Kathete ist immer kürzer als die Hypotenuse.', GRAU)], LX, 644, 21, INTER, ende=weg)
     # Vergleich: dasselbe Dreieck im Einheitskreis (Hypotenuse 1), mal 5
     aE = ein(t, tEK + 0.3, 0.6)
     if aE > 0:
@@ -239,6 +273,8 @@ def s_leiter(b, sc, t):
         E.achsen(b, aE, cx=cx, cy=cy, r=r)
         E.kreislinie(b, 1.0, aE, cx=cx, cy=cy, r=r)
         px, py = E.punkt(70, cx, cy, r)
+        viertel = [(cx, cy)] + [E.punkt(90 * k / 30, cx, cy, r) for k in range(31)]
+        b.poly(viertel, fill=TEAL, alpha=0.10 * aE)          # erstes Viertel: beide Werte zwischen 0 und 1
         b.poly([(cx, cy), (px, cy), (px, py)], fill=WINKEL, alpha=0.10 * aE)
         E.winkel(b, 70, aE, text='', cx=cx, cy=cy)           # 70° ist zu schmal für eine Zahl im Winkel: steht rechts
         b.linie([(cx, cy), (px, cy)], COS, 8, alpha=aE)
@@ -251,6 +287,8 @@ def s_leiter(b, sc, t):
         zz(b, t, w('nur fünfmal') + 0.3, [('mal 5: ', INK), ('≈ 4,70 m', SIN)], x, 386, 26)
         zz(b, t, tEK + 1.1, [('cos 70° ≈ 0,342', COS)], x, 468, 26)
         zz(b, t, w('nur fünfmal') + 0.6, [('mal 5: ', INK), ('≈ 1,71 m', COS)], x, 508, 26)
+        zz(b, t, w('nur fünfmal') + 1.0, [('erstes Viertel:', TEAL)], x, 574, 20)
+        zz(b, t, w('nur fünfmal') + 1.0, [('beide Werte zwischen 0 und 1', TEAL)], x, 600, 20)
 
 
 # ---------------------------------------------------------------- 3 Schiffskurs auf der Seekarte
@@ -325,8 +363,10 @@ def s_kurs(b, sc, t):
     tS, tK0, tI, tQ = w('fährt vom Hafen'), w('zehn Kilometer'), w('zu einer Insel'), w('Wie weit liegt')
     tN, tU = w('von Norden aus'), w('im Uhrzeigersinn')
     tGN, tGO, tR = w('erst nach Norden'), w('dann nach Osten'), w('wieder ein rechtwinkliges')
-    tGg, tO1, tO2 = w('gegenüber'), w('zehn Kilometer mal Sinus'), w('ungefähr acht')
-    tAn, tN1, tN2 = w('liegt am Winkel an'), w('zehn Kilometer mal Kosinus'), w('genau fünf')
+    tGg, tO1, tT1 = w('gegenüber'), w('zehn Kilometer mal Sinus'), w('Sinus sechzig Grad ist')
+    tW1, tZ01, tO2 = w('ungefähr null Komma acht'), w('wieder ein Wert'), w('Das ergibt ungefähr')
+    tAn, tN1, tT2 = w('liegt am Winkel an'), w('zehn Kilometer mal Kosinus'), w('Kosinus sechzig Grad ist')
+    tW2, tN2 = w('genau null Komma fünf'), w('also fünf Kilometer')
     tAch = w('Achtung')
     seekarte(b, ein(t, 0.0, 0.4))
     ex, ey = HX, ZY                                        # Ecke mit dem rechten Winkel
@@ -361,17 +401,25 @@ def s_kurs(b, sc, t):
     if t < tO2:
         etikett(b, 'Osten', (ex + ZX) / 2, ey - 26, 22, SIN, aO, grund=False)
     else:
-        zeile(b, [('Osten ', SIN), ('≈ 8,7 km', SIN)], (ex + ZX) / 2, ey - 26, 24, INTER_X, alphas=[1, ein(t, tO2 + 0.2)])
+        zeile(b, [('Osten ', SIN), ('≈ 8,66 km', SIN)], (ex + ZX) / 2, ey - 26, 24, INTER_X, alphas=[1, ein(t, tO2 + 0.6)])
     # Rechnung rechts
     zz(b, t, tK0, [('Kurs ', INK), ('60°', WINKEL), (' · Strecke 10 km', INK)], KX, 128, 28)
-    zz(b, t, tQ, [('Wie weit nach Osten? Wie weit nach Norden?', GRAU)], KX, 174, 21, INTER)
-    g = 28
-    zf(b, t, tGg, [T('sin 60°', SIN), T(' = '), B([('Osten', SIN)], [('10 km', INK)])], KX, 252, g)
-    o2 = ein(t, tO2)
-    zf(b, t, tO1, [T('Osten', SIN), T(' = 10 km · '), T('sin 60°', SIN), T(' ≈ ', INK, o2), T('8,7 km', SIN, o2)], KX, 338, g)
-    zf(b, t, tAn, [T('cos 60°', COS), T(' = '), B([('Norden', COS)], [('10 km', INK)])], KX, 424, g)
+    zz(b, t, tQ, [('Wie weit nach Osten? Wie weit nach Norden?', GRAU)], KX, 174, 21, INTER, ende=tAn - 0.2)
+    # Teil 1 (Osten, Sinus), Teil 2 (Norden, Kosinus) ab tAn: wie bei der Leiter rückt das Ergebnis nach oben
+    g, weg1 = 28, tAn - 0.2
+    zf(b, t, tGg, [T('sin 60°', SIN), T(' = '), B([('Osten', SIN)], [('10 km', INK)])], KX, 250, g, weg1)
+    zf(b, t, tO1, [T('Osten', SIN), T(' = 10 km · '), T('sin 60°', SIN)], KX, 326, g, weg1)
+    zf(b, t, tT1, [T('Taschenrechner:  ', GRAU), T('sin 60°', SIN), T(' ≈ ', INK, ein(t, tW1)), T('0,866', SIN, ein(t, tW1))],
+       KX, 378, 24, weg1)
+    hoch = glatt(p(t, tAn, 0.7))
+    o2 = ein(t, tO2 + 0.6)
+    zf(b, t, tO2, [T('Osten', SIN), T(' ≈ 10 km · '), T('0,866', SIN), T(' = ', INK, o2), T('8,66 km', SIN, o2)], KX, 432 - 248 * hoch, g)
+    zf(b, t, tAn + 0.7, [T('cos 60°', COS), T(' = '), B([('Norden', COS)], [('10 km', INK)])], KX, 258, g)   # erst, wenn die Zeile oben ist
+    zf(b, t, tN1, [T('Norden', COS), T(' = 10 km · '), T('cos 60°', COS)], KX, 332, g)
+    zf(b, t, tT2, [T('cos 60°', COS), T(' = ', INK, ein(t, tW2)), T('0,5', COS, ein(t, tW2)), T('  (genau)', GRAU, ein(t, tW2))], KX, 382, 24)
     n2 = ein(t, tN2)
-    zf(b, t, tN1, [T('Norden', COS), T(' = 10 km · '), T('cos 60°', COS), T(' = ', INK, n2), T('5 km', COS, n2)], KX, 510, g)
+    zf(b, t, tW2 + 0.9, [T('Norden', COS), T(' = 10 km · '), T('0,5', COS), T(' = ', INK, n2), T('5 km', COS, n2)], KX, 432, g)
+    zahlenstrahl(b, 740, 1180, 512, ein(t, tZ01 - 0.3), [(0.866, SIN, 'sin 60°', 1.0), (0.5, COS, 'cos 60°', ein(t, tW2))])
     aA = ein(t, tAch)
     if aA > 0:
         band(b, 676, 566 + 10 * (1 - aA), 1240, 652 + 10 * (1 - aA), TEAL, 0.94 * aA, r=18)
@@ -501,6 +549,7 @@ def s_riesenrad(b, sc, t):
     r4, r5 = ein(t, w('zweiunddreißig minus fünfzehn')), ein(t, w('siebzehn'))
     zf(b, t, w('minus ein halb'), [T('210°:  ', WINKEL), T('32 + 30 · ('), T('−', SIN), halb(), T(')'), T(' = 32 − 15', INK, r4),
                                    T(' = 17', INK, r5)], 660, 498, 27, weg, 'l')
+    zz(b, t, w('minus ein halb') + 0.9, [('negativ: Die Gondel hängt unter der Achse.', GRAU)], 660, 558, 20, INTER, ende=weg, anker='l')
     # Höhe über der Zeit
     if kurve > 0:
         b.linie([(640, BODEN), (ZX1 + 26, BODEN)], GRAU, 3.5, alpha=kurve)
