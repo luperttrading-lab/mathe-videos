@@ -29,7 +29,8 @@ nachziehen.
   kein Kanal, kein Abspann): `einheitskreis.py` (Baukasten regel.py), Sprechtext nur in `drehbuch.md`, `gliederung.md`.
   Eigene Vorschau-Seite [Einheitskreis-Video · Vorschau](https://claude.ai/artifact/2zRnaGCW6fr3xH48QPsMXc)
   (Slug `101dceed-779d-4835-8c36-388133b01b8f`, `vorschau.json` dort). Im Chat immer „Video“ im Linknamen
-  (Nutzer 13.11.: Verwechslung mit der App-Vorschau vermeiden).
+  (Nutzer 13.11.: Verwechslung mit der App-Vorschau vermeiden). Stand 14.11.: 5:47, gerendert (1080p/480p), Startbild
+  `startbild.py` (A „Kreis und Welle“). Lehren daraus in `werkzeug/gestaltungsregeln.md`.
 - `einheitskreis/` – eigene App „Einheitskreis“ (13.11., Details `einheitskreis/LIESMICH.md`), abgenommen 13.11. (v0.8),
   live: [Einheitskreis](https://luperttrading-lab.github.io/mathe-videos/einheitskreis/). Änderungen erst als Vorschau
   [Einheitskreis · Vorschau](https://claude.ai/artifact/43jaMqCCrmXtqx6TYuqET3) (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`),
@@ -65,6 +66,16 @@ nachziehen.
   - **App:** [Kopfrechnen üben](https://luperttrading-lab.github.io/mathe-videos/uebung/)
 - `vorschau.json` und `fertig.json` zeigen auf Videos im Scratchpad der Sitzung, die sie gerendert hat. In einer neuen
   Sitzung sind die Dateien weg: neu rendern (Ton aus dem Cache kostet nichts) und Pfade anpassen.
+
+## Gestaltungsregeln für jedes Erklärvideo und jede App (Pflicht, Nutzer 14.11.)
+Vor dem ersten Clip `werkzeug/gestaltungsregeln.md` lesen und vor jedem Clip dagegen prüfen („egal in welchen Videos,
+immer die gleichen Ansprüche, das gleiche Vorgehen“). Kurzfassung: nichts Falsches und nichts unbegründet; jeder
+Rechenschritt eine Zeile, Brüche übereinander; jeder gesprochene Schritt im Bild, Herkunft zeigen, nichts vor seiner
+Existenz zeichnen; Strecken dick, Achsen mit 0, gleiche Größe = gleiche Farbe auch in Formeln; keine Beschriftung auf
+Linien oder übereinander, gleiche Größen, Klammern und Abstände wie im Mathe-Satz (nach sichtbarer Tinte); starker
+animierter Start, Orientierung, Merkzettel mit den Zusammenhängen als Gleichungen; vor dem Zeigen automatisch prüfen
+(`werkzeug/beschriftung_pruefen.py`) und vergrößerte Ausschnitte ansehen – Stichproben reichen nicht. Wenn der Nutzer
+eine Stelle bemängelt, dieselbe Art Fehler im ganzen Video suchen.
 
 ## Zugänge (Cloud-Umgebung „Standard“)
 - `ELEVENLABS_API_KEY`: vorhanden. Creator-Plan, 125.526 Zeichen pro Monat; ein neuer Satz kostet ≈ 40–60 Zeichen.

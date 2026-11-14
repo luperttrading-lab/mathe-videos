@@ -1,7 +1,7 @@
 # Lehren aus dem Einheitskreis-Video (Entwurf 13.11.)
 
-Wird nach „Video fertig“ (Nutzer) als Abschnitt „Gestaltungsregeln für Erklärvideos und Apps“ in die CLAUDE.md
-übernommen und gilt dann für alle Videos und Apps in diesem Repo.
+Übernommen 14.11. in `werkzeug/gestaltungsregeln.md` (gilt für alle Videos und Apps, Verweis in der CLAUDE.md). Diese
+Datei bleibt als Sammlung der Einzelstellen.
 
 ## Beschriftungen
 - Keine Zahl und kein Wort auf einer Linie, einer Kreislinie oder einem Bogen, wo es vermeidbar ist: lieber daneben in
