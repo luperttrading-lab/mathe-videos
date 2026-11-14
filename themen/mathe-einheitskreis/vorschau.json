@@ -1,12 +1,20 @@
 {
  "titel": "Einheitskreis-Video",
- "aufgabe": "Ganz oben das fertige Video (5:45). Ansehen, dann „✓ passt“ oder „ändern“ mit Minute. Darunter zur Info die beiden Clips und das Startbild.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: neuer Merkzettel (24 s). Darunter zur Info das fertige Video von gestern.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_merke.mp4",
+   "titel": "Neu: Merkzettel mit allen Zusammenhängen (0:24)",
+   "stand": "14.11., 08:50",
+   "pruefen": true,
+   "poster_bei": 16,
+   "notiz": "Nur die Schluss-Szene. Merkzettel jetzt: „Für jeden Punkt P auf dem Einheitskreis:“ P(x | y) = P(cos α | sin α), darunter sin²α + cos²α = 1, dann „Die Werte im ersten Viertel reichen,“ mit Tabelle 0°/30°/45°/60°/90° (Werte erscheinen nacheinander), dann „die Vorzeichen zeigt das Viertel, in dem P liegt.“ Im Bild links am Punkt P(x | y), x blau, y rot. Gesprochen jetzt „Für jeden Punkt P auf dem Einheitskreis ist x der Kosinus und y der Sinus.“ (neu vertont). „passt“ = ich setze das ganze Video neu zusammen."
+  },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/final/einheitskreis_720p.mp4",
    "titel": "Fertig gerendert: Der Einheitskreis (5:45)",
    "stand": "13.11., 23:00",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 11,
    "notiz": "Das ganze Video am Stück, mit allen Änderungen. 480p (zum Verschicken an deinen Sohn) und 1080p liegen im Chat. „✓ passt“ = abgenommen; dann übernehme ich die Gestaltungsregeln in die CLAUDE.md."
   },

@@ -899,25 +899,46 @@ def s_kurve(b, sc, t):
             b.text(wort, x + 115, 545, 26, INK, INTER_X, alpha=a)
 
 
-MERK = [  # Nutzer 13.11.: x/Kosinus blau, y/Sinus rot wie im Bild
-    ([('Auf dem Einheitskreis ist ', INK), ('x der Kosinus', COS)], [('und ', INK), ('y der Sinus', SIN), ('.', INK)]),
-    ([('Sinus Quadrat', SIN), (' plus ', INK), ('Kosinus Quadrat', COS)], [('ist eins.', INK)]),
-    ([('Die Werte im ersten Viertel reichen,', INK)], [('die Vorzeichen zeigt das Viertel,', INK)],
-     [('in dem P liegt.', INK)])]
+TAB = [(0, ('0',), ('1',)), (30, ('1', '2'), ('√3', '2')), (45, ('√2', '2'), ('√2', '2')), (60, ('√3', '2'), ('1', '2')),
+       (90, ('1',), ('0',))]
+
+
+def wert(b, w_, x, y, g, c, a):
+    """Tabellenwert: ganze Zahl oder echter Bruch."""
+    if len(w_) == 1:
+        b.text(w_[0], x, y, g, c, INTER_X, alpha=a)
+    else:
+        el = [('b', [(w_[0], c)], [(w_[1], c)], 1)]
+        formel(b, el, x - formel(b, el, 0, 0, g, messen=True) / 2, y, g, a)
 
 
 def merkzettel(b, sc, t, alle=False):
-    karte(b, 640, 120, 590, 460, alpha=1.0, r=22)
-    b.text('Merke', 935, 160, 30, TEAL, INTER_X)
-    y = 215
-    for i, zeilen in enumerate(MERK):
-        start = 0 if alle else C(sc, ('Auf dem Einheitskreis', 'Sinus Quadrat', 'Die Werte')[i])
-        a = ein(t, start)
-        for teile in zeilen:
-            if a > 0:
-                zeile(b, teile, 935, y + 10 * (1 - a), 25, INTER_X, alpha=a)
-            y += 36
-        y += 26
+    """Nutzer 14.11.: die Zusammenhänge des ganzen Videos als Gleichungen auf einem Zettel."""
+    karte(b, 620, 96, 630, 500, alpha=1.0, r=22)
+    mx = 935
+    b.text('Merke', mx, 128, 28, TEAL, INTER_X)
+    st = (lambda w: 0) if alle else (lambda w: C(sc, w))  # noqa: E731
+    a1, a2, a3, a4 = (ein(t, st(w)) for w in ('Für jeden Punkt', 'Sinus Quadrat', 'Die Werte', 'die Vorzeichen'))
+    b.text('Für jeden Punkt P auf dem Einheitskreis:', mx, 172 + 10 * (1 - a1), 22, INK, INTER_X, alpha=a1)
+    zeile(b, [('P(', INK), ('x', COS), (' | ', INK), ('y', SIN), (')', INK), ('  =  ', INK),
+              ('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], mx, 214 + 10 * (1 - a1), 32,
+          INTER_X, alpha=a1)
+    zeile(b, [('sin²α', SIN), (' + ', INK), ('cos²α', COS), (' = 1', INK)], mx, 272 + 10 * (1 - a2), 32, INTER_X, alpha=a2)
+    b.text('Die Werte im ersten Viertel reichen,', mx, 320 + 10 * (1 - a3), 22, INK, INTER_X, alpha=a3)
+    # Tabelle 0° … 90°
+    xl, x0, dx = 690, 790, 100
+    for k, (gr, s_w, c_w) in enumerate(TAB):
+        ak = ein(t, st('Die Werte') + 0.25 * k, 0.4) if not alle else 1.0
+        x = x0 + dx * k
+        b.text(f'{gr}°', x, 360, 22, WINKEL, INTER_X, alpha=ak)
+        wert(b, s_w, x, 410, 22, SIN, ak)
+        wert(b, c_w, x, 468, 22, COS, ak)
+    if a3 > 0:
+        b.text('α', xl, 360, 22, WINKEL, INTER_X, alpha=a3)
+        b.text('sin α', xl, 410, 22, SIN, INTER_X, alpha=a3)
+        b.text('cos α', xl, 468, 22, COS, INTER_X, alpha=a3)
+        b.linie([(650, 380), (1220, 380)], HELL, 2, alpha=a3)
+    b.text('die Vorzeichen zeigt das Viertel, in dem P liegt.', mx, 532 + 10 * (1 - a4), 22, INK, INTER_X, alpha=a4)
 
 
 def kleiner_kreis(b):
@@ -930,6 +951,7 @@ def kleiner_kreis(b):
     b.linie([(px, CY), (px, py)], SIN, 7)
     b.linie([(330, CY), (px, py)], INK, 4)
     b.kreis(px, py, 8, INK)
+    zeile(b, [('P(', INK), ('x', COS), (' | ', INK), ('y', SIN), (')', INK)], px + 14, py - 26, 26, INTER_X, anker='l')
     etikett(b, 'x = cos α', 342, CY + 30, 24, COS, anker='l', grund=False)
     etikett(b, 'y = sin α', 330 + math.sqrt(170 ** 2 - ((py - CY) / 2) ** 2) + 12, (CY + py) / 2, 24, SIN, anker='l', grund=False)
 
