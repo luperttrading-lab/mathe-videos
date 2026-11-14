@@ -25,23 +25,28 @@ Ziel ≈ 2:45–3:05, ≈ 380–440 Wörter (Tempo 1,05 ≈ 2,28 Wörter/s).
   wörtlich „senkrechte Projektion einer Kreisbewegung“. Weil a sin(bx + c) nur fakultativ ist: im Riesenrad Höhen über
   Einheitskreis-Winkel ausrechnen (Höhe = Achse + 30 · sin), die Formel h(t) höchstens zeigen, nicht ins Zentrum.
 
-## Auswahl (Stand 14.11. vormittags)
+## Stand 14.11. mittags: Video gebaut
 Nutzer 14.11.: erst „das, was in Mathe und Physik dran kommt in Klasse 10“, dann **„keine Physik-Aufgabe“** und
-**„die Schiffsaufgabe mit Karte, nicht nur mit Dreieck“**; Leiter mit **Wand rechts** (Winkel im ersten Quadranten).
-Physik Hessen Klasse 10 (Lehrplan Physik, g9-physik.pdf) wäre: Arbeit und Energie (Goldene Regel, Generator),
-Radioaktivität, Energieversorgung – Rampe, Generator und Ballwurf sind damit gestrichen.
+**„die Schiffsaufgabe mit Karte, nicht nur mit Dreieck“**; Leiter mit **Wand rechts** (Winkel im ersten Quadranten);
+schließlich **„bau das Video so, wie du es jetzt am besten findest“** → Auswahl Leiter, Schiffskurs, Riesenrad und
+ganzes Video gerendert (3:10, 430 Wörter). Physik Hessen Klasse 10 (Lehrplan Physik, g9-physik.pdf) wäre: Arbeit und
+Energie (Goldene Regel, Generator), Radioaktivität, Energieversorgung – Rampe, Generator und Ballwurf gestrichen.
 
-| # | Szene | Zeit | Wörter | Inhalt | Bezug Mathe Klasse 10 Hessen |
+| # | Szene | Start | Dauer | Inhalt | Bezug Mathe Klasse 10 Hessen |
 |---|---|---|---|---|---|
-| 1 | einstieg | 0:00–0:15 | 35 | Rückbezug Einheitskreis; zwei Sorten Aufgaben: Dreieck und Kreisbewegung | – |
-| 2 | leiter | 0:15–0:50 | 80 | 5-m-Leiter, 70°, Wand rechts: Höhe 5 · sin 70° ≈ 4,70 m, Abstand 5 · cos 70° ≈ 1,71 m | „Anwendungen aus Technik“ |
-| 3 | kurs | 0:50–1:30 | 90 | Seekarte mit km-Gitter: 10 km auf Kurs 60° → Osten 10 · sin 60° ≈ 8,66 km, Norden 10 · cos 60° = 5 km; Kurs zählt ab Nord im Uhrzeigersinn | „Berechnungen in Dreiecken“, cos α = sin(90° − α) |
-| 4 | bruecke | 1:30–1:37 | 17 | „Bis hier hat ein Dreieck gereicht. Jetzt dreht sich etwas …“ | – |
-| 5 | riesenrad | 1:37–2:25 | 105 | Höhe = 32 m + 30 m · sin α: 30° → 47 m, 90° → 62 m, 210° → 17 m; Höhe über die Zeit = Sinuskurve; Play-Knopf der App | „senkrechte Projektion einer Kreisbewegung“ |
-| 6 | merke + schluss | 2:25–2:45 | 45 | Merkzettel, Motivationssatz + Spruch | – |
+| – | einstieg | 0:00 | 15 s | Startbild entsteht: Einheitskreis aus Video 1, Dreieck löst sich heraus, P kreist | – |
+| 1 | leiter | 0:16 | 44 s | 5-m-Leiter, 70°, Wand rechts: Höhe 5 m · sin 70° ≈ 4,70 m, Abstand 5 m · cos 70° ≈ 1,71 m; Einheitskreis mal 5 | „Anwendungen aus Technik“ |
+| 2 | kurs | 1:01 | 45 s | Seekarte mit km-Gitter: 10 km auf Kurs 60° → Osten 10 km · sin 60° ≈ 8,7 km, Norden 10 km · cos 60° = 5 km | „Berechnungen in Dreiecken“ |
+| 3 | riesenrad | 1:46 | 56 s | Höhe = 32 m + 30 m · sin α: 30° → 47 m, 90° → 62 m, 210° → 17 m; Höhe über der Zeit = Sinuskurve; QR der App | „senkrechte Projektion einer Kreisbewegung“ |
+| 4 | merke + schluss | 2:45 | 22 s | Merkzettel (gesprochen wie geschrieben), Motivationssatz + Spruch „Das kann jeder lernen.“ | – |
 
-≈ 2:45. Auswahlblatt für den Nutzer: `beispiele.pdf` (aus `beispiele_pdf.py`), Nr. 1–3 Vorschlag, Nr. 4 Skipiste und
-Nr. 5 Tageslänge als Alternativen. Entscheidung, welche Aufgaben ins Video kommen: offen.
+Dateien: `sinus_anwendungen.py` (Video; Baukasten regel.py und Zeichenhilfen aus einheitskreis.py nur importiert),
+`drehbuch.md` (Sprechtext), `startbild.py` → `bilder/startbild.png`, `pruefen.py` (Beschriftungs-Check, muss außer
+den Texten auf den grünen Bändern leer bleiben), `tts_cache/` (Ton, 1.139 Zeichen berechnet), `beispiele_pdf.py` →
+`beispiele.pdf` (Auswahlblatt mit den Alternativen Skipiste und Tageslänge), `vorschau.json` (eigene Vorschau-Seite).
+Vorschau-Seite: [Sinus-Anwendungen-Video · Vorschau](https://claude.ai/artifact/Rr7NxyPfPvNJSXyf89sZ7W), Slug
+`c936b41e-56df-414b-a0c6-0a264d78df29` (Artifact mit {"db": {}, "comments": {}}). Kein Abspann, kein Kanal, keine Geräusche. Offen: Abnahme durch den Nutzer; Verweis in Video 1 auf Video 2 (Vorschlag,
+nicht eingebaut).
 
 ## Zahlen (nachgerechnet 14.11.)
 5 · sin 70° = 4,698 → 4,70 m; 5 · cos 70° = 1,710 → 1,71 m; 20 · cos 30° = 17,32; 20 · sin 30° = 10;

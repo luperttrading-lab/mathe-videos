@@ -34,6 +34,13 @@ nachziehen.
   live: [Einheitskreis](https://luperttrading-lab.github.io/mathe-videos/einheitskreis/). Änderungen erst als Vorschau
   [Einheitskreis · Vorschau](https://claude.ai/artifact/43jaMqCCrmXtqx6TYuqET3) (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`),
   nach „passt“ auf `main`. Test: `node einheitskreis/tests/einheitskreis.mjs` muss „Alles grün“ melden.
+- `themen/mathe-sinus-anwendungen/` – Video 2 der Reihe „Mathe verstehen“: „Wofür braucht man Sinus und Kosinus?“
+  (14.11., 3:10; für den Sohn, Hessen Gymnasium Klasse 10; kein Kanal, kein Abspann, keine Physik-Aufgaben): Leiter,
+  Schiffskurs auf der Seekarte, Riesenrad. `sinus_anwendungen.py` (importiert regel.py und die Zeichenhilfen aus
+  einheitskreis.py), Sprechtext nur in `drehbuch.md`, Stand und Entscheidungen in `gliederung.md`, `pruefen.py`
+  (Beschriftungs-Check), Auswahlblatt `beispiele.pdf`. Eigene Vorschau-Seite
+  [Sinus-Anwendungen-Video · Vorschau](https://claude.ai/artifact/Rr7NxyPfPvNJSXyf89sZ7W)
+  (Slug `c936b41e-56df-414b-a0c6-0a264d78df29`, `vorschau.json` dort).
 
 ## Antworten an den Nutzer
 - Kurz halten und Bilder zeigen statt viel Text (Kontaktbogen, Stichbilder, Vorher/nachher).

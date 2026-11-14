@@ -1,0 +1,630 @@
+#!/usr/bin/env python3
+"""Reihe „Mathe verstehen“, Trigonometrie, Video 2: Wofür braucht man Sinus und Kosinus? (14.11., Drehbuch drehbuch.md)
+
+Drei Anwendungen: Leiter an der Wand, Schiffskurs auf der Seekarte (beide: rechtwinkliges Dreieck), Riesenrad
+(Kreisbewegung, Höhe über der Zeit). Sprechtext steht nur in drehbuch.md (Zeilen mit „>“ unter „## <n> <id>“).
+Baukasten: `../mathe-einmaleins/regel.py` (Ton, Zeitmarken, Kapitelkopf, Rendern) und die Zeichenhilfen aus
+`../mathe-einheitskreis/einheitskreis.py` (Formeln mit echten Brüchen, Winkel, Achsen) – beide nur importiert.
+
+Aufruf wie regel.py: python3 sinus_anwendungen.py <ausgabe.mp4> [--nur-ton] [--bild <s>[,<s>…]]
+"""
+import math, os, re, sys
+
+HIER = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HIER, '..', 'mathe-einmaleins'))
+sys.path.insert(0, os.path.join(HIER, '..', 'mathe-einheitskreis'))
+import einheitskreis as E                                  # noqa: E402  (setzt G.* für Video 1; wird unten ersetzt)
+import regel as G                                          # noqa: E402
+from regel import INK, GRAU, HELL, BG, TEAL, INTER, INTER_X, C, band, ein, karte   # noqa: E402
+from animationen import breite, einfuegen, glatt, klemm, p  # noqa: E402
+from einheitskreis import SIN, COS, WINKEL, zeile, formel, etikett, gestrichelt, bahn   # noqa: E402
+from motivation import spruch                              # noqa: E402
+from PIL import Image                                      # noqa: E402
+
+SPRUCH = spruch('sinus-anwendungen', 'schluss')
+QR_BILD = os.path.join(HIER, 'bilder', 'qr_einheitskreis.png')   # …/mathe-videos/einheitskreis/ (Kopie aus Video 1)
+STARTBILD = False                                          # startbild.py: letztes Bild des Einstiegs, P bei 50°
+
+
+def szenen_aus_drehbuch():
+    szenen, sc = [], None
+    for z in open(os.path.join(HIER, 'drehbuch.md'), encoding='utf-8'):
+        m = re.match(r'## \d+ (\w+)', z)
+        if m:
+            sc = dict(id=m.group(1), text='')
+            szenen.append(sc)
+        elif z.startswith('>') and sc is not None:
+            sc['text'] = (sc['text'] + ' ' + z[1:].strip()).strip()
+    return szenen
+
+
+SZENEN = szenen_aus_drehbuch()
+KICKER = {'einstieg': 'Wofür?', 'leiter': 'Leiter an der Wand', 'kurs': 'Schiffskurs', 'riesenrad': 'Riesenrad',
+          'merke': 'Merke', 'schluss': 'Merke'}
+for s in SZENEN:
+    s['kicker'] = KICKER[s['id']]
+    if s['id'] == 'schluss':
+        s['anhang'] = True
+    if s['id'] == 'riesenrad':
+        s['pause'] = 2.5                                   # Karte mit QR-Code länger stehen lassen
+    if s['id'] == 'leiter':
+        s['pause'] = 1.6                                   # Vergleich mit dem Einheitskreis kurz stehen lassen
+
+
+# ---------------------------------------------------------------- Zeichenhilfen
+def bogen(b, cx, cy, r, a0, a1, c, lw, a=1.0):
+    """Kreisbogen von a0 nach a1 (Grad, mathematisch: 0° rechts, gegen den Uhrzeigersinn)."""
+    if a <= 0 or abs(a1 - a0) < 0.3:
+        return
+    n = max(2, int(abs(a1 - a0) / 3))
+    b.linie([(cx + r * math.cos(math.radians(a0 + (a1 - a0) * k / n)), cy - r * math.sin(math.radians(a0 + (a1 - a0) * k / n)))
+             for k in range(n + 1)], c, lw, alpha=a)
+
+
+def rechter_winkel(b, x, y, a0, a=1.0, r=28):
+    """Viertelbogen mit Punkt (deutsche Schulnotation); a0 = Richtung des ersten Schenkels, der zweite liegt 90° weiter."""
+    if a <= 0:
+        return
+    bogen(b, x, y, r, a0, a0 + 90, INK, 2.5, a)
+    m = math.radians(a0 + 45)
+    b.kreis(x + 0.45 * r * math.cos(m), y - 0.45 * r * math.sin(m), 3.5, INK, alpha=a)
+
+
+def strecke(b, x0, y0, x1, y1, c, lw, f=1.0, a=1.0):
+    """Strecke, die von (x0, y0) aus wächst (f = 0 … 1)."""
+    if f > 0 and a > 0:
+        b.linie([(x0, y0), (x0 + (x1 - x0) * f, y0 + (y1 - y0) * f)], c, lw, alpha=a)
+
+
+def masslinie(b, x0, y0, x1, y1, c, a=1.0, lw=2.5, t=8):
+    """Maßlinie mit Querstrichen an beiden Enden."""
+    if a <= 0:
+        return
+    b.linie([(x0, y0), (x1, y1)], c, lw, alpha=a)
+    d = math.hypot(x1 - x0, y1 - y0) or 1
+    nx, ny = -(y1 - y0) / d * t, (x1 - x0) / d * t
+    for x, y in ((x0, y0), (x1, y1)):
+        b.linie([(x - nx, y - ny), (x + nx, y + ny)], c, lw, alpha=a)
+
+
+def puls(t, start, dauer=0.7):
+    return math.sin(math.pi * klemm((t - start) / dauer)) if t > start else 0.0
+
+
+def zz(b, t, start, teile, x, y, g=30, pfad=INTER_X, ende=None, anker='m'):
+    """Zeile blendet beim gesprochenen Wort ein (und bei `ende` wieder aus)."""
+    a = ein(t, start) * (1 - (ein(t, ende, 0.4) if ende is not None else 0))
+    if a > 0:
+        zeile(b, teile, x, y + 12 * (1 - ein(t, start)), g, pfad, alpha=a, anker=anker)
+
+
+def zf(b, t, start, el, x, y, g=30, ende=None, anker='m'):
+    """Formelzeile mit echten Brüchen; el wie bei `formel`, Alpha je Teil schon eingerechnet."""
+    a = ein(t, start) * (1 - (ein(t, ende, 0.4) if ende is not None else 0))
+    if a > 0:
+        w = formel(b, el, 0, 0, g, messen=True)
+        formel(b, el, x - w / 2 if anker == 'm' else x, y + 12 * (1 - ein(t, start)), g, a)
+
+
+def T(s, c=INK, a=1.0):
+    return ('t', s, c, a)
+
+
+def B(z, n, a=1.0):
+    return ('b', z, n, a)
+
+
+def leiste(b, a=1.0):
+    band(b, 0, 640, 1280, 720, TEAL, a, r=0)
+    b.text('MATHE VERSTEHEN', 60, 680, 30, '#ffffff', INTER_X, anker='l', alpha=a)
+    b.text('TRIGONOMETRIE', 1220, 680, 30, '#ffffff', INTER_X, anker='r', alpha=a)
+
+
+# ---------------------------------------------------------------- 1 Einstieg (Startbild entsteht)
+def s_einstieg(b, sc, t):
+    tW, tZ = C(sc, 'wofür'), C(sc, 'zwei Sorten')
+    tD, tK = C(sc, 'rechtwinkligen Dreieck'), C(sc, 'im Kreis dreht')
+    if STARTBILD:
+        t = 1e6
+    f = glatt(p(t, tZ, 1.1))                               # Kreis wandert nach rechts, das Dreieck nach links
+    r = 140
+    cx, cy = 640 + 260 * f, 400 + 25 * f
+    g = 50.0 if STARTBILD else 50 + 80 * max(0.0, t - tK)
+    a0 = ein(t, 0.1, 0.5)
+    b.text('Der Einheitskreis', 640, 150, 30, GRAU, INTER_X, alpha=a0 * (1 - ein(t, tW - 0.3, 0.3)))
+    E.achsen(b, a0, cx=cx, cy=cy, r=r)
+    E.kreislinie(b, glatt(p(t, 0.2, 0.9)), a0, cx=cx, cy=cy, r=r)
+    px, py = E.punkt(g, cx, cy, r)
+    ap = ein(t, 0.9, 0.4)
+    if ap > 0:
+        E.winkel(b, g % 360, ap, text='', cx=cx, cy=cy)
+        b.linie([(cx, cy), (px, cy)], COS, 10, alpha=ap)
+        b.linie([(px, cy), (px, py)], SIN, 10, alpha=ap)
+        b.linie([(cx, cy), (px, py)], INK, 5, alpha=ap)
+        b.kreis(px, py, 12, INK, alpha=ap)
+        al = ein(t, 1.3, 0.4) * (1 - ein(t, tZ - 0.3, 0.3))  # Rückblick auf Video 1: was die Strecken sind
+        ym = (py + cy) / 2
+        etikett(b, 'sin α', cx + math.sqrt(r * r - (ym - cy) ** 2) + 14, ym, 26, SIN, al, anker='l', grund=False)
+        etikett(b, 'cos α', (cx + px) / 2, cy + 30, 26, COS, al, grund=False)
+    # Dreieck: startet deckungsgleich im Kreis (P bei 50°) und wächst nach links heraus
+    if f > 0:
+        q0 = [(640, 400), (640 + r * math.cos(math.radians(50)), 400), E.punkt(50, 640, 400, r)]
+        q1 = [(170, 590), (430, 590), (430, 590 - 260 * math.tan(math.radians(50)))]
+        A_, B_, C_ = [(u[0] + (v[0] - u[0]) * f, u[1] + (v[1] - u[1]) * f) for u, v in zip(q0, q1)]
+        b.poly([A_, B_, C_], fill=WINKEL, alpha=0.10 * f)
+        bogen(b, A_[0], A_[1], 48 + 22 * f, 0, 50, WINKEL, 5 + 2 * f, f)
+        b.linie([A_, B_], COS, 10, alpha=f)
+        b.linie([B_, C_], SIN, 10, alpha=f)
+        b.linie([A_, C_], INK, 5 + f, alpha=f)
+        rechter_winkel(b, B_[0], B_[1], 90, ein(t, tD, 0.4), r=34)
+    b.text('Wofür braucht man', 640, 56 + 12 * (1 - ein(t, tW)), 44, INK, INTER_X, alpha=ein(t, tW))
+    a2 = ein(t, tW + 0.35)
+    zeile(b, [('Sinus', SIN), (' und ', INK), ('Kosinus', COS), ('?', INK)], 640, 112 + 12 * (1 - a2), 58, INTER_X, alpha=a2)
+    aD, aK = ein(t, tD), ein(t, tK)
+    zeile(b, [('Dreieck: ', INK), ('Längen ausrechnen', GRAU)], 300, 192 + 8 * (1 - aD), 26, INTER_X, alpha=aD)
+    zeile(b, [('Kreis: ', INK), ('was sich dreht', GRAU)], 900, 192 + 8 * (1 - aK), 26, INTER_X, alpha=aK)
+    leiste(b, ein(t, 0.2, 0.5))
+
+
+# ---------------------------------------------------------------- 2 Leiter an der Wand
+LM = 96                                                    # Bildpunkte je Meter
+FX, FY = 170, 610                                          # Leiterfuß (wie der Ursprung im Einheitskreis)
+WX = FX + 5 * math.cos(math.radians(70)) * LM              # Wand
+TY = FY - 5 * math.sin(math.radians(70)) * LM              # oberes Ende der Leiter
+LX = 920                                                   # Mitte der Rechenspalte
+
+
+def s_leiter(b, sc, t):
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    tL, tW_, tH = w('fünf Meter lang'), w('siebzig Grad'), w('Wie hoch')
+    tD, tHy, tG = w('rechtwinkliges Dreieck'), w('Die Leiter ist die Hypotenuse'), w('Gegenkathete durch')
+    tA, tM, tE1 = w('also Sinus siebzig'), w('Mal fünf Meter'), w('ungefähr vier')
+    tK, tB, tE2 = w('Genauso ist der Kosinus'), w('Der Abstand zur Wand'), w('ungefähr ein Meter')
+    tEK = w('Es ist das Dreieck')
+    # Wand und Boden
+    a0 = ein(t, 0.0, 0.4)
+    band(b, WX, 120, WX + 28, FY, '#d9d2c3', a0, r=0)
+    b.linie([(50, FY), (560, FY)], INK, 3.5, alpha=a0)
+    # Dreiecksfläche, rechter Winkel
+    aD = ein(t, tD, 0.5)
+    b.poly([(FX, FY), (WX, FY), (WX, TY)], fill=WINKEL, alpha=0.10 * aD)
+    rechter_winkel(b, WX, FY, 90, aD)
+    # Höhe (rot, an der Wand) und Abstand (blau, am Boden)
+    strecke(b, WX, FY, WX, TY, SIN, 8 + 4 * puls(t, tG), glatt(p(t, tG, 0.7)))
+    strecke(b, FX, FY, WX, FY, COS, 8 + 4 * puls(t, tK), glatt(p(t, tK, 0.7)))
+    # Leiter: wird angelehnt (wächst vom Fuß aus), mit Sprossen
+    fl = glatt(p(t, 0.25, 1.0))
+    strecke(b, FX, FY, WX, TY, INK, 6, fl)
+    dx, dy = math.cos(math.radians(70)), -math.sin(math.radians(70))
+    for k in range(1, 10):
+        if fl * 10 >= k:
+            x, y = FX + (WX - FX) * k / 10, FY + (TY - FY) * k / 10
+            b.linie([(x + 9 * dy, y - 9 * dx), (x - 9 * dy, y + 9 * dx)], INK, 3)
+    E.winkel(b, 70 * glatt(p(t, tW_, 0.8)), ein(t, tW_, 0.3), text='70°' if t > tW_ + 0.6 else '', cx=FX, cy=FY)
+    # Beschriftungen neben den Strecken, nie darauf
+    aHy = ein(t, tHy)
+    etikett(b, 'Hypotenuse', 232, 352 - 30 * aHy, 22, INK, aHy, anker='r', grund=False)
+    etikett(b, '5 m', 232, 352 + 6 * aHy, 28, INK, ein(t, tL), anker='r', grund=False)
+    aF = ein(t, tH) * (1 - ein(t, tG, 0.3))                # Frage: wie hoch?
+    nah = ein(t, tG + 0.7, 0.4)                            # Maßlinie weicht der roten Strecke, die Schrift rückt heran
+    masslinie(b, WX + 54, FY, WX + 54, TY, SIN, ein(t, tH) * (1 - nah), lw=2.5)
+    etikett(b, '?', WX + 84, (FY + TY) / 2, 44, SIN, aF, grund=False)
+    lx = WX + 70 - 26 * nah
+    aG = ein(t, tG) * (1 - ein(t, tE1, 0.3))
+    etikett(b, 'Höhe', lx, (FY + TY) / 2 - 14, 28, SIN, aG, anker='l', grund=False)
+    etikett(b, 'Gegenkathete', lx, (FY + TY) / 2 + 20, 20, SIN, aG, anker='l', grund=False)
+    etikett(b, '≈ 4,70 m', lx, (FY + TY) / 2, 30, SIN, ein(t, tE1 + 0.3), anker='l', grund=False)
+    aAn = ein(t, tK) * (1 - ein(t, tE2, 0.3))
+    etikett(b, 'Abstand (Ankathete)', (FX + WX) / 2, FY + 34, 20, COS, aAn, grund=False)
+    etikett(b, '≈ 1,71 m', (FX + WX) / 2, FY + 36, 28, COS, ein(t, tE2 + 0.3), grund=False)
+    # rechts zuerst, was gegeben und gesucht ist; dann die Rechnung Zeile für Zeile; am Ende der Einheitskreis
+    vor = tG - 0.4
+    zz(b, t, tL, [('Leiter: ', GRAU), ('5 m', INK)], LX, 250, 34, ende=vor)
+    zz(b, t, tW_, [('Winkel: ', GRAU), ('70°', WINKEL)], LX, 312, 34, ende=vor)
+    zz(b, t, tH, [('Höhe: ', GRAU), ('?', SIN)], LX, 374, 34, ende=vor)
+    weg = tEK
+    zf(b, t, tG, [T('sin α', SIN), T(' = '), B([('Gegenkathete', SIN)], [('Hypotenuse', INK)])], LX, 160, 32, weg)
+    zf(b, t, tA, [T('sin 70°', SIN), T(' = '), B([('Höhe', SIN)], [('5 m', INK)])], LX, 258, 32, weg)
+    e1 = ein(t, tE1)
+    zf(b, t, tM, [T('Höhe', SIN), T(' = 5 m · '), T('sin 70°', SIN), T(' ≈ ', INK, e1), T('4,70 m', SIN, e1)], LX, 348, 32, weg)
+    zf(b, t, tK, [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 440, 32, weg)
+    e2 = ein(t, tE2)
+    zf(b, t, tB, [T('Abstand', COS), T(' = 5 m · '), T('cos 70°', COS), T(' ≈ ', INK, e2), T('1,71 m', COS, e2)], LX, 532, 32, weg)
+    # Vergleich: dasselbe Dreieck im Einheitskreis (Hypotenuse 1), mal 5
+    aE = ein(t, tEK + 0.3, 0.6)
+    if aE > 0:
+        cx, cy, r = 800, 430, 150
+        zz(b, t, tEK + 0.3, [('Das Dreieck aus dem Einheitskreis,', INK)], LX, 122, 28)
+        zz(b, t, w('nur fünfmal'), [('nur fünfmal so groß', TEAL)], LX, 162, 28)
+        E.achsen(b, aE, cx=cx, cy=cy, r=r)
+        E.kreislinie(b, 1.0, aE, cx=cx, cy=cy, r=r)
+        px, py = E.punkt(70, cx, cy, r)
+        b.poly([(cx, cy), (px, cy), (px, py)], fill=WINKEL, alpha=0.10 * aE)
+        E.winkel(b, 70, aE, text='', cx=cx, cy=cy)           # 70° ist zu schmal für eine Zahl im Winkel: steht rechts
+        b.linie([(cx, cy), (px, cy)], COS, 8, alpha=aE)
+        b.linie([(px, cy), (px, py)], SIN, 8, alpha=aE)
+        b.linie([(cx, cy), (px, py)], INK, 4, alpha=aE)
+        b.kreis(px, py, 9, INK, alpha=aE)
+        x = 1128
+        zz(b, t, tEK + 0.5, [('Winkel ', INK), ('70°', WINKEL), (', Radius 1', INK)], x, 268, 24)
+        zz(b, t, tEK + 0.8, [('sin 70° ≈ 0,940', SIN)], x, 346, 26)
+        zz(b, t, w('nur fünfmal') + 0.3, [('mal 5: ', INK), ('≈ 4,70 m', SIN)], x, 386, 26)
+        zz(b, t, tEK + 1.1, [('cos 70° ≈ 0,342', COS)], x, 468, 26)
+        zz(b, t, w('nur fünfmal') + 0.6, [('mal 5: ', INK), ('≈ 1,71 m', COS)], x, 508, 26)
+
+
+# ---------------------------------------------------------------- 3 Schiffskurs auf der Seekarte
+SEE, GITTER, LAND, UFER = '#e3eef5', '#c3d5e2', '#eadfbf', '#b4a57c'
+MX0, MY0, MX1, MY1 = 50, 92, 640, 650                      # Kartenrand
+KM = 46                                                    # Bildpunkte je Kilometer (1 Kästchen = 1 km)
+HX, HY = 160, 530                                          # Hafen
+ZX, ZY = HX + 10 * math.sin(math.radians(60)) * KM, HY - 10 * math.cos(math.radians(60)) * KM   # Insel (Ziel)
+KX = 958                                                   # Mitte der Rechenspalte
+
+
+def bezier(p0, p1, p2, p3, n=24):
+    return [tuple((1 - u) ** 3 * a + 3 * (1 - u) ** 2 * u * b_ + 3 * (1 - u) * u * u * c + u ** 3 * d
+                  for a, b_, c, d in zip(p0, p1, p2, p3)) for u in (k / n for k in range(n + 1))]
+
+
+KUESTE = bezier((MX0, 474), (95, 474), (128, 494), (HX, HY)) + bezier((HX, HY), (194, 564), (236, 604), (300, MY1))[1:]
+
+
+def seekarte(b, a=1.0):
+    """Oben Norden, 1 Kästchen = 1 km: Festland mit Hafen unten links, Insel mit Leuchtturm am Ziel."""
+    if a <= 0:
+        return
+    band(b, MX0, MY0, MX1, MY1, SEE, a, r=0)
+    k = -2
+    while HX + KM * k < MX1:
+        b.linie([(HX + KM * k, MY0), (HX + KM * k, MY1)], GITTER, 1.2, alpha=a)
+        k += 1
+    k = -2
+    while HY - KM * k > MY0:
+        b.linie([(MX0, HY - KM * k), (MX1, HY - KM * k)], GITTER, 1.2, alpha=a)
+        k += 1
+    b.poly(KUESTE + [(MX0, MY1)], fill=LAND, alpha=a)
+    b.linie(KUESTE, UFER, 2.5, alpha=a)
+    b.text('Hafen', 104, 604, 22, INK, INTER_X, alpha=a)
+    # Insel mit Leuchtturm
+    ix, iy = 598, 266
+    b.d.ellipse([(ix - 37) * 2, (iy - 27) * 2, (ix + 37) * 2, (iy + 27) * 2], fill=G.farbe(UFER, 255 * a))
+    b.d.ellipse([(ix - 35) * 2, (iy - 25) * 2, (ix + 35) * 2, (iy + 25) * 2], fill=G.farbe(LAND, 255 * a))
+    b.poly([(ix + 2, iy + 8), (ix + 14, iy + 8), (ix + 11, iy - 16), (ix + 5, iy - 16)], fill='#ffffff', outline=INK, lw=1.5, alpha=a)
+    band(b, ix + 4, iy - 23, ix + 12, iy - 16, INK, a, r=1)
+    b.text('Insel', ix, iy - 44, 22, INK, INTER_X, alpha=a)
+    # Kompassrose
+    cx, cy = 96, 146
+    b.kreis(cx, cy, 25.5, INK, alpha=a)
+    b.kreis(cx, cy, 23.5, '#ffffff', alpha=a)
+    b.poly([(cx, cy - 20), (cx - 7, cy), (cx + 7, cy)], fill=INK, alpha=a)
+    b.poly([(cx, cy + 20), (cx - 7, cy), (cx + 7, cy)], fill='#ffffff', outline=INK, lw=1.2, alpha=a)
+    b.text('N', cx, cy - 39, 20, INK, INTER_X, alpha=a)
+    # Maßstab: 5 km
+    sx, sy = 372, 628
+    b.linie([(sx, sy), (sx + 5 * KM, sy)], INK, 3, alpha=a)
+    for k in range(6):
+        b.linie([(sx + KM * k, sy - 6), (sx + KM * k, sy + 6)], INK, 2.5, alpha=a)
+    b.text('0', sx, sy - 20, 18, INK, INTER, alpha=a)
+    b.text('5 km', sx + 5 * KM, sy - 20, 18, INK, INTER, alpha=a)
+    b.linie([(MX0, MY0), (MX1, MY0), (MX1, MY1), (MX0, MY1), (MX0, MY0)], INK, 2.5, alpha=a)
+
+
+def schiff(b, x, y, a=1.0):
+    """Schiff von oben, Bug in Fahrtrichtung (Kurs 60°)."""
+    if a <= 0:
+        return
+    dx, dy = math.sin(math.radians(60)), -math.cos(math.radians(60))
+    q = lambda u, v: (x + u * dx - v * dy, y + u * dy + v * dx)   # noqa: E731
+    b.poly([q(-22, -9), q(8, -9), q(24, 0), q(8, 9), q(-22, 9)], fill='#ffffff', outline=INK, lw=2.5, alpha=a)
+    b.poly([q(-12, -5), q(0, -5), q(0, 5), q(-12, 5)], fill=INK, alpha=a)
+
+
+def s_kurs(b, sc, t):
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    tS, tK0, tI, tQ = w('fährt vom Hafen'), w('zehn Kilometer'), w('zu einer Insel'), w('Wie weit liegt')
+    tN, tU = w('von Norden aus'), w('im Uhrzeigersinn')
+    tGN, tGO, tR = w('erst nach Norden'), w('dann nach Osten'), w('wieder ein rechtwinkliges')
+    tGg, tO1, tO2 = w('gegenüber'), w('zehn Kilometer mal Sinus'), w('ungefähr acht')
+    tAn, tN1, tN2 = w('liegt am Winkel an'), w('zehn Kilometer mal Kosinus'), w('genau fünf')
+    tAch = w('Achtung')
+    seekarte(b, ein(t, 0.0, 0.4))
+    ex, ey = HX, ZY                                        # Ecke mit dem rechten Winkel
+    aR = ein(t, tR, 0.5)
+    b.poly([(HX, HY), (ex, ey), (ZX, ZY)], fill=WINKEL, alpha=0.14 * aR)
+    # Nordlinie (gestrichelt), erst wenn vom Kurs die Rede ist
+    aN = ein(t, tN, 0.4)
+    if aN > 0:
+        gestrichelt(b, HX, HY, HX, ZY - 46, GRAU, aN, n=22, lw=2.5)
+    # Fahrstrecke und Schiff
+    fs = glatt(p(t, tS, max(1.5, tI + 0.4 - tS)))
+    strecke(b, HX, HY, ZX, ZY, INK, 5, fs)
+    # Nord- und Oststrecke
+    strecke(b, HX, HY, ex, ey, COS, 8 + 4 * puls(t, tAn), glatt(p(t, tGN, 0.8)))
+    strecke(b, ex, ey, ZX, ZY, SIN, 8 + 4 * puls(t, tGg) + 4 * puls(t, tAch + 0.6), glatt(p(t, tGO, 0.9)))
+    rechter_winkel(b, ex, ey, 270, aR)
+    # Kurswinkel: von der Nordlinie im Uhrzeigersinn bis zur Fahrstrecke
+    fu = glatt(p(t, tU, 1.0))
+    bogen(b, HX, HY, 62, 90, 90 - 60 * fu, WINKEL, 5 + 3 * puls(t, tAch + 0.2), ein(t, tU, 0.2))
+    etikett(b, '60°', HX + 100 * math.cos(math.radians(62)), HY - 100 * math.sin(math.radians(62)), 24, WINKEL,
+            ein(t, tU + 0.8), grund=False)
+    b.kreis(HX, HY, 7, INK, alpha=ein(t, tS - 0.2, 0.3))
+    b.kreis(ZX, ZY, 7, INK, alpha=ein(t, tI + 0.3, 0.3))
+    schiff(b, HX + (ZX - HX) * fs, HY + (ZY - HY) * fs, ein(t, tS - 0.3, 0.3) * (1 - ein(t, tGN - 0.5, 0.4)))
+    # Beschriftungen neben den Strecken
+    etikett(b, '10 km', HX + (ZX - HX) * 0.56 + 22, HY + (ZY - HY) * 0.56 + 34, 24, INK, ein(t, tI + 0.4), anker='l', grund=False)
+    aNo = ein(t, tGN + 0.5)
+    hoch = 14 * ein(t, tN2)
+    etikett(b, 'Norden', HX - 14, (HY + ey) / 2 - hoch, 22, COS, aNo, anker='r', grund=False)
+    etikett(b, '5 km', HX - 14, (HY + ey) / 2 + 16, 24, COS, ein(t, tN2 + 0.2), anker='r', grund=False)
+    aO = ein(t, tGO + 0.6)
+    if t < tO2:
+        etikett(b, 'Osten', (ex + ZX) / 2, ey - 26, 22, SIN, aO, grund=False)
+    else:
+        zeile(b, [('Osten ', SIN), ('≈ 8,7 km', SIN)], (ex + ZX) / 2, ey - 26, 24, INTER_X, alphas=[1, ein(t, tO2 + 0.2)])
+    # Rechnung rechts
+    zz(b, t, tK0, [('Kurs ', INK), ('60°', WINKEL), (' · Strecke 10 km', INK)], KX, 128, 28)
+    zz(b, t, tQ, [('Wie weit nach Osten? Wie weit nach Norden?', GRAU)], KX, 174, 21, INTER)
+    g = 28
+    zf(b, t, tGg, [T('sin 60°', SIN), T(' = '), B([('Osten', SIN)], [('10 km', INK)])], KX, 252, g)
+    o2 = ein(t, tO2)
+    zf(b, t, tO1, [T('Osten', SIN), T(' = 10 km · '), T('sin 60°', SIN), T(' ≈ ', INK, o2), T('8,7 km', SIN, o2)], KX, 338, g)
+    zf(b, t, tAn, [T('cos 60°', COS), T(' = '), B([('Norden', COS)], [('10 km', INK)])], KX, 424, g)
+    n2 = ein(t, tN2)
+    zf(b, t, tN1, [T('Norden', COS), T(' = 10 km · '), T('cos 60°', COS), T(' = ', INK, n2), T('5 km', COS, n2)], KX, 510, g)
+    aA = ein(t, tAch)
+    if aA > 0:
+        band(b, 676, 566 + 10 * (1 - aA), 1240, 652 + 10 * (1 - aA), TEAL, 0.94 * aA, r=18)
+        b.text('Achtung: Der Winkel liegt an der Nordlinie.', KX, 592 + 10 * (1 - aA), 21, '#ffffff', INTER_X, alpha=aA)
+        a2 = ein(t, w('Hier gehört'))
+        b.text('Der Sinus gehört hier zur waagrechten Strecke.', KX, 626 + 10 * (1 - aA), 21, '#ffffff', INTER_X, alpha=aA * a2)
+
+
+# ---------------------------------------------------------------- 4 Riesenrad
+PM = 8                                                     # Bildpunkte je Meter
+BODEN = 630
+NX, NY, RR = 350, BODEN - 32 * PM, 30 * PM                 # Nabe (Achse 32 m hoch), Radius 30 m
+QX = 950                                                   # Mitte der Rechenspalte
+ZX0, ZX1 = 720, 1230                                       # Höhe über der Zeit: zwei Runden
+GONDEL = '#b7b0a2'
+_qr = {}
+
+
+def rad(b, g, a=1.0, unsere=0.0):
+    """Riesenrad, um g Grad gedreht; `unsere` hebt die Gondel bei g hervor (Punkt P)."""
+    if a <= 0:
+        return
+    for s_ in (-1, 1):
+        b.linie([(NX, NY), (NX + 112 * s_, BODEN)], GRAU, 6, alpha=a)
+    ecken = [(NX + RR * math.cos(math.radians(g + 30 * k)), NY - RR * math.sin(math.radians(g + 30 * k))) for k in range(12)]
+    for x, y in ecken:
+        b.linie([(NX, NY), (x, y)], HELL, 2.5, alpha=a)
+    E.kreislinie(b, 1.0, a, cx=NX, cy=NY, r=RR)
+    for k, (x, y) in enumerate(ecken):
+        if k or unsere < 1:
+            b.kreis(x, y, 9, GONDEL, alpha=a)
+    b.kreis(NX, NY, 10, INK, alpha=a)
+    if unsere > 0:
+        b.kreis(ecken[0][0], ecken[0][1], 9 + 3 * unsere, INK, alpha=a * unsere)
+
+
+def rad_winkel(sc, t):
+    """Stellung unserer Gondel in Grad (darf über 360 hinauslaufen)."""
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    tJ, tP = w('Jetzt dreht'), w('Die Gondel ist')
+    t30, t90, t210 = w('Bei dreißig Grad'), w('Bei neunzig Grad'), w('Bei zweihundertzehn')
+    tD, tC0, tC1 = w('Dreht sich das Rad'), w('dann ergibt die Höhe'), w('Probier es') + 0.4
+    v = 40.0
+    if t <= tJ:
+        return 10 - v * (tP - tJ)
+    if t <= tP:
+        return 10 - v * (tP - t)
+    if t < t30 - 0.3:
+        u = klemm((t - tP) / 2.0)
+        return 10 + 40 * (1 - (1 - u) ** 2)                # läuft weich bei 50° aus
+    if t < tD:
+        return bahn(t, [(0, 50), (t30 - 0.3, 30), (t90 - 0.3, 90), (t210 - 0.3, 210)], 1.2)
+    if t < tC0:
+        return 210 + 150 * glatt(p(t, tD, max(0.8, tC0 - tD - 0.1)))
+    return 360 + 720 * klemm((t - tC0) / (tC1 - tC0))      # zwei Runden, gleichmäßig
+
+
+def s_riesenrad(b, sc, t):
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    tJ, t60, t32, tP, tR30 = w('Jetzt dreht'), w('sechzig Meter Durchmesser'), w('zweiunddreißig Meter über'), w('Die Gondel ist'), w('Radius dreißig')
+    tUe, tHo = w('Über der Achse'), w('Ihre Höhe')
+    t30, t90, t210 = w('Bei dreißig Grad'), w('Bei neunzig Grad'), w('Bei zweihundertzehn')
+    tD, tC0, tC1, tApp = w('Dreht sich das Rad'), w('dann ergibt die Höhe'), w('Probier es') + 0.4, w('Probier es')
+    g = rad_winkel(sc, t)
+    gm = g % 360
+    kurve = ein(t, tD, 0.5)                                # Rechnung weg, Kurve her
+    # Boden, Achshöhe
+    b.linie([(24, BODEN), (640, BODEN)], INK, 3.5)
+    a32 = ein(t, t32)
+    masslinie(b, 62, BODEN, 62, NY, GRAU, a32)
+    b.text('32 m', 38, (BODEN + NY) / 2, 22, GRAU, INTER_X, alpha=a32, dreh=90)
+    if a32 > 0:
+        gestrichelt(b, 62, NY, NX + RR + 34, NY, GRAU, a32, n=44, lw=2)
+    a60 = ein(t, t60) * (1 - ein(t, tP - 0.3, 0.4))
+    masslinie(b, NX - RR, NY - RR - 22, NX + RR, NY - RR - 22, GRAU, a60)
+    etikett(b, '60 m', NX, NY - RR - 44, 22, GRAU, a60, grund=False)
+    aP = ein(t, tP, 0.4)
+    rad(b, g, 1.0, aP)
+    px, py = E.punkt(g, NX, NY, RR)
+    # feste Stellen mit ihrer Höhe (bleiben stehen)
+    for grad, tt, s_, ox, oy in ((30, t30, '47 m', 46, -16), (90, t90, '62 m', 52, -28), (210, t210, '17 m', -34, 32)):
+        am = ein(t, w({30: 'siebenundvierzig', 90: 'zweiundsechzig', 210: 'siebzehn'}[grad]), 0.4) * (1 - 0.0 * kurve)
+        if am > 0:
+            x, y = E.punkt(grad, NX, NY, RR)
+            b.kreis(x, y, 7, TEAL, alpha=am)
+            etikett(b, s_, x + ox, y + oy, 24, TEAL, am, grund=False)
+    # Zeiger, Winkel, Höhe über der Achse (rot)
+    aU = ein(t, tUe - 0.2, 0.4)
+    if aP > 0:
+        b.linie([(NX, NY), (px, py)], INK, 4, alpha=aP)
+    if aU > 0:
+        name = 'α' if t < t30 else ('' if t > tD else f'{int(round(gm))}°' if abs(gm - round(gm / 30) * 30) < 0.5 else '')
+        E.winkel(b, gm, aU, text=name, cx=NX, cy=NY)
+        unten = min(NY, py) if py < NY else NY
+        if abs(py - NY) > 2:
+            gestrichelt(b, px, BODEN, px, max(NY, py) if py > NY else NY, GRAU, 0.8 * aU, n=int(max(4, abs(BODEN - max(NY, py)) / 9)), lw=2)
+        b.linie([(px, NY), (px, py)], SIN, 8, alpha=aU)
+    if aP > 0:
+        b.kreis(px, py, 12, INK, alpha=aP)
+        if t < tD:
+            dx = 26 if px >= NX - 2 else -26
+            b.text('P', px + dx, py + (-24 if py <= NY + 1 else 26), 28, INK, INTER_X, alpha=aP * (1 - ein(t, t30 - 0.4, 0.3)))
+    a30 = ein(t, tR30) * (1 - ein(t, t30 - 0.4, 0.3))
+    if a30 > 0:
+        m = math.radians(gm)
+        etikett(b, '30 m', (NX + px) / 2 - 30 * math.sin(m), (NY + py) / 2 - 30 * math.cos(m), 22, INK, a30, grund=False)
+    # rechts zuerst, was gegeben ist; dann die Rechnung
+    vor = tUe - 0.4
+    zz(b, t, 0.2, [('Bis hier: ein Dreieck', GRAU)], QX, 150, 28, ende=vor)
+    zz(b, t, w('ganzen Kreis'), [('Jetzt: der ganze Kreis', TEAL)], QX, 198, 32, ende=vor)
+    zz(b, t, t60, [('Durchmesser: ', GRAU), ('60 m', INK)], QX, 300, 30, ende=vor)
+    zz(b, t, t32, [('Achse: ', GRAU), ('32 m über dem Boden', INK)], QX, 352, 30, ende=vor)
+    zz(b, t, tP, [('Gondel = Punkt ', GRAU), ('P', INK)], QX, 404, 30, ende=vor)
+    zz(b, t, tR30, [('Radius: ', GRAU), ('30 m', INK), (' statt 1', GRAU)], QX, 456, 30, ende=vor)
+    weg = tD
+    zz(b, t, tUe, [('über der Achse: ', INK), ('30 m · sin α', SIN)], QX, 138, 28, ende=weg)
+    yH = 196 - 104 * kurve                                 # die Formel wandert nach oben und bleibt stehen
+    aH = ein(t, tHo)
+    if aH > 0:
+        zeile(b, [('Höhe', INK), (' = 32 m + ', INK), ('30 m · sin α', SIN)], QX + 35 * kurve, yH + 12 * (1 - aH), 32 - 6 * kurve, INTER_X, alpha=aH)
+    zz(b, t, t30, [('Höhe in Metern:', GRAU)], 660, 262, 21, INTER, ende=weg, anker='l')
+    halb = lambda c=SIN: B([('1', c)], [('2', c)])          # noqa: E731
+    r1, r2 = ein(t, w('zweiunddreißig plus fünfzehn')), ein(t, w('siebenundvierzig'))
+    zf(b, t, t30, [T('30°:  ', WINKEL), T('32 + 30 · '), halb(), T(' = 32 + 15', INK, r1), T(' = 47', INK, r2)], 660, 322, 27, weg, 'l')
+    r3 = ein(t, w('zweiundsechzig'))
+    zf(b, t, t90, [T('90°:  ', WINKEL), T('32 + 30 · '), T('1', SIN), T(' = 62', INK, r3)], 660, 410, 27, weg, 'l')
+    r4, r5 = ein(t, w('zweiunddreißig minus fünfzehn')), ein(t, w('siebzehn'))
+    zf(b, t, w('minus ein halb'), [T('210°:  ', WINKEL), T('32 + 30 · ('), T('−', SIN), halb(), T(')'), T(' = 32 − 15', INK, r4),
+                                   T(' = 17', INK, r5)], 660, 498, 27, weg, 'l')
+    # Höhe über der Zeit
+    if kurve > 0:
+        b.linie([(640, BODEN), (ZX1 + 26, BODEN)], GRAU, 3.5, alpha=kurve)
+        b.poly([(ZX1 + 38, BODEN), (ZX1 + 22, BODEN - 7), (ZX1 + 22, BODEN + 7)], fill=GRAU, alpha=kurve)
+        b.linie([(ZX0, BODEN + 8), (ZX0, NY - RR - 26)], GRAU, 3.5, alpha=kurve)
+        b.poly([(ZX0, NY - RR - 38), (ZX0 - 7, NY - RR - 22), (ZX0 + 7, NY - RR - 22)], fill=GRAU, alpha=kurve)
+        for h in (32, 62):
+            y = BODEN - h * PM
+            b.linie([(ZX0 - 7, y), (ZX0 + 7, y)], GRAU, 3, alpha=kurve)
+            b.text(f'{h} m', ZX0 - 14, y - (14 if h == 32 else 0), 18, INK, INTER_X, anker='r', alpha=kurve)
+        b.text('0', ZX0 - 14, BODEN + 20, 18, INK, INTER_X, anker='r', alpha=kurve)
+        b.text('Höhe', ZX0 - 14, NY - RR - 34, 20, INK, INTER_X, anker='r', alpha=kurve)
+        b.text('Zeit', ZX1 + 14, BODEN - 22, 20, INK, INTER_X, alpha=kurve)
+        gestrichelt(b, ZX0, NY, ZX1 + 20, NY, GRAU, 0.7 * kurve, n=56, lw=2)
+        for k, s_ in ((1, '1 Runde'), (2, '2 Runden')):
+            x = ZX0 + (ZX1 - ZX0) * k / 2
+            b.linie([(x, BODEN - 7), (x, BODEN + 7)], GRAU, 3, alpha=kurve)
+            b.text(s_, x, BODEN + 24, 18, INK, INTER_X, anker='m' if k == 1 else 'r', alpha=kurve)
+        f = klemm((t - tC0) / (tC1 - tC0))
+        n = int(240 * f)
+        if n > 1:
+            b.linie([(ZX0 + (ZX1 - ZX0) * k / 240, BODEN - PM * (32 + 30 * math.sin(4 * math.pi * k / 240))) for k in range(n + 1)], SIN, 6)
+        if 0 < f < 1:
+            kx = ZX0 + (ZX1 - ZX0) * f
+            gestrichelt(b, px, py, kx, py, SIN, 0.6, n=40)
+            b.kreis(kx, py, 7, SIN)
+    # App: Karte mit QR-Code und Play-Zeichen
+    aA = ein(t, tApp + 0.2, 0.6)
+    if aA > 0:
+        band(b, 652, 66, 1280, 690, BG, 0.72 * aA, r=0)
+        karte(b, 880, 150, 340, 420, alpha=aA, r=22)
+        b.text('Einheitskreis-App', 1050, 190, 28, INK, INTER_X, alpha=aA)
+        if 'qr' not in _qr:
+            _qr['qr'] = Image.open(QR_BILD).convert('RGBA').resize((int(210 * 2),) * 2, Image.NEAREST)
+        sp = _qr['qr'].copy()
+        sp.putalpha(sp.getchannel('A').point(lambda v: int(v * aA)))
+        einfuegen(b.img, sp, 945 * 2, 222 * 2)
+        aPl = ein(t, w('Drück auf Play'))
+        b.kreis(948, 500, 30, TEAL, alpha=aA * aPl)
+        b.poly([(938, 484), (938, 516), (964, 500)], fill='#ffffff', alpha=aA * aPl)
+        b.text('Play: P kreist', 1092, 500, 28, INK, INTER_X, alpha=aA * aPl)
+
+
+# ---------------------------------------------------------------- 5 Merke, 6 Schluss
+def merkbilder(b):
+    """Links klein: das Dreieck (Leiter) und der Kreis (Riesenrad)."""
+    ax, ay, bx, cy_ = 110, 316, 270, 316 - 160 * math.tan(math.radians(50))
+    b.poly([(ax, ay), (bx, ay), (bx, cy_)], fill=WINKEL, alpha=0.10)
+    bogen(b, ax, ay, 44, 0, 50, WINKEL, 5)
+    b.linie([(ax, ay), (bx, ay)], COS, 8)
+    b.linie([(bx, ay), (bx, cy_)], SIN, 8)
+    b.linie([(ax, ay), (bx, cy_)], INK, 4)
+    rechter_winkel(b, bx, ay, 90, r=24)
+    b.text('α', ax + 66, ay - 22, 22, WINKEL, INTER_X)
+    etikett(b, 'Gegenkathete', bx + 16, (ay + cy_) / 2, 20, SIN, anker='l', grund=False)
+    etikett(b, 'Ankathete', (ax + bx) / 2, ay + 26, 20, COS, grund=False)
+    etikett(b, 'Hypotenuse', (ax + bx) / 2 - 22, (ay + cy_) / 2 - 26, 20, INK, anker='r', grund=False)
+    cx, cy, r = 250, 508, 108
+    b.linie([(cx - r - 26, cy), (cx + r + 26, cy)], GRAU, 2.5)
+    E.kreislinie(b, cx=cx, cy=cy, r=r)
+    px, py = E.punkt(50, cx, cy, r)
+    bogen(b, cx, cy, 34, 0, 50, WINKEL, 5)
+    b.linie([(px, cy), (px, py)], SIN, 8)
+    b.linie([(cx, cy), (px, py)], INK, 4)
+    b.kreis(px, py, 9, INK)
+    b.kreis(cx, cy, 6, INK)
+    b.text('α', cx + 47, cy - 19, 22, WINKEL, INTER_X)
+    etikett(b, 'Radius', (cx + px) / 2 - 24, (cy + py) / 2 - 24, 20, INK, anker='r', grund=False)
+    etikett(b, 'Radius · sin α', cx + r + 16, (cy + py) / 2, 20, SIN, anker='l', grund=False)
+
+
+def merkzettel(b, sc, t, alle=False):
+    karte(b, 600, 96, 640, 512, alpha=1.0, r=22)
+    mx = 920
+    b.text('Merke', mx, 130, 28, TEAL, INTER_X)
+    st = (lambda s_: 0) if alle else (lambda s_: C(sc, s_))  # noqa: E731
+    a1, a2 = ein(t, st('Im rechtwinkligen')), ein(t, st('Und wo sich'))
+    a3 = [ein(t, st(s_)) for s_ in ('beim Riesenrad', 'beim Windrad', 'beim Pedal')]
+    b.text('Im rechtwinkligen Dreieck rechnest du mit', mx, 178 + 10 * (1 - a1), 23, INK, INTER_X, alpha=a1)
+    zeile(b, [('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' fehlende Seiten aus.', INK)], mx, 210 + 10 * (1 - a1), 23, INTER_X, alpha=a1)
+    aF = ein(t, st('Im rechtwinkligen') + (0 if alle else 1.6))
+    zeile(b, [('Gegenkathete', SIN), (' = Hypotenuse · ', INK), ('sin α', SIN)], mx, 264 + 10 * (1 - aF), 27, INTER_X, alpha=aF)
+    zeile(b, [('Ankathete', COS), (' = Hypotenuse · ', INK), ('cos α', COS)], mx, 306 + 10 * (1 - aF), 27, INTER_X, alpha=aF)
+    b.linie([(640, 348), (1200, 348)], HELL, 2, alpha=a2)
+    b.text('Und wo sich etwas gleichmäßig dreht,', mx, 384 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
+    b.text('beschreiben sie die Bewegung:', mx, 416 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
+    aG = ein(t, st('Und wo sich') + (0 if alle else 1.8))
+    zeile(b, [('Höhe = Höhe der Achse + ', INK), ('Radius · sin α', SIN)], mx, 470 + 10 * (1 - aG), 25, INTER_X, alpha=aG)
+    zeile(b, [('beim Riesenrad, ', INK), ('beim Windrad, ', INK), ('beim Pedal am Fahrrad.', INK)], mx, 540, 20, INTER_X, alphas=a3)
+
+
+def s_merke(b, sc, t):
+    merkbilder(b)
+    merkzettel(b, sc, t)
+
+
+def s_schluss(b, sc, t):
+    merkbilder(b)
+    merkzettel(b, sc, t, alle=True)
+    a = ein(t, 0.1)
+    if a > 0:
+        band(b, 190, 622 + 10 * (1 - a), 1090, 688 + 10 * (1 - a), TEAL, 0.96 * a, r=20)
+        w1, w2 = ein(t, C(sc, 'Rechne die Leiter'), 0.5), ein(t, C(sc, 'Das kann jeder'), 0.5)
+        b.text('Klingt nach viel? Am Anfang ganz normal.', 640, 655, 28, '#ffffff', INTER_X, alpha=a * (1 - klemm(w1 * 2)))
+        b.text('Rechne die Leiter einfach selbst einmal nach.', 640, 655, 28, '#ffffff', INTER_X,
+               alpha=a * klemm(w1 * 2 - 1) * (1 - klemm(w2 * 2)))
+        b.text(SPRUCH, 640, 655, 30, '#ffffff', INTER_X, alpha=a * klemm(w2 * 2 - 1))
+
+
+ZEICHNER = dict(einstieg=s_einstieg, leiter=s_leiter, kurs=s_kurs, riesenrad=s_riesenrad, merke=s_merke, schluss=s_schluss)
+KLAENGE = {}                                               # Geräusche sparsam: keine
+MERKSAETZE = []
+
+G.SZENEN, G.ZEICHNER, G.KLAENGE, G.MERKSAETZE = SZENEN, ZEICHNER, KLAENGE, MERKSAETZE
+_rahmen = E._rahmen                                        # der ursprüngliche Kapitelkopf aus regel.py
+
+
+def rahmen(b, i, tl, t):
+    if SZENEN[i]['id'] != 'einstieg':                      # Startbild ohne Kapitelkopf
+        _rahmen(b, i, tl, t)
+
+
+G.rahmen = rahmen
+G.CACHE = os.path.join(HIER, 'tts_cache')
+
+if __name__ == '__main__':
+    G.main()
