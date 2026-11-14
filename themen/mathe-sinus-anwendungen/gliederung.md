@@ -51,6 +51,15 @@ Vorschau-Seite, beide vom Nutzer mit „passt“ abgenommen (14.11., 15:44/15:45
 **ganzes Video neu gerendert (3:41)**, liegt als oberster Eintrag auf der Vorschau-Seite zur Abnahme; 1080p und 480p
 im Scratchpad der Sitzung.
 
+**Nutzer 14.11. nachmittags (Notiz auf der Vorschau-Seite zum ganzen Video): „Bei 3:21 ist fehlende Seiten falsch
+betont. Die Betonung muss auf Seiten liegen, nicht auf fehlende.“** Gemessen (`betonung.py`, Praat): stimmt, „feh“
+131 Hz/78 dB gegen „Sei“ 84 Hz/73 dB. Ohne Artikel hebt die Stimme das Adjektiv immer heraus, Großschreibung hilft
+nicht; mit „die fehlenden Seiten“ verschwindet es. Zwei Fassungen als Hörprobe auf der Vorschau-Seite (je 15 s):
+Fassung 1 „Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus.“ (im Drehbuch,
+Vorschlag), Fassung 2 „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
+(`MERKE_FASSUNG=2`). Nach der Wahl: Schalter entfernen bzw. Drehbuch anpassen, ganzes Video neu rendern.
+`.claude/settings.json` (Nutzer, main afb5c6d: publish_files und declare_capabilities erlaubt) per Cherry-Pick im Zweig.
+
 Dateien: `sinus_anwendungen.py` (Video; Baukasten regel.py und Zeichenhilfen aus einheitskreis.py nur importiert),
 `drehbuch.md` (Sprechtext), `startbild.py` → `bilder/startbild.png`, `pruefen.py` (Beschriftungs-Check, muss außer
 den Texten auf den grünen Bändern leer bleiben), `tts_cache/` (Ton, 1.139 Zeichen berechnet), `beispiele_pdf.py` →
