@@ -1,12 +1,20 @@
 {
  "titel": "Einheitskreis-Video",
- "aufgabe": "Ganz oben das fertige Video (5:47). Ansehen, dann „✓ passt“ oder „ändern“ mit Minute. Darunter zur Info die Clips und das Startbild.",
+ "aufgabe": "1 Eintrag zu prüfen, ganz oben: „Wichtig für die Anwendung“ (ab ≈ 0:30 im Clip). Darunter zur Info das fertige Video von heute früh.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_warum.mp4",
+   "titel": "Neu: „Wichtig für die Anwendung“ in Szene Warum? (1:18)",
+   "stand": "14.11., 11:00",
+   "pruefen": true,
+   "poster_bei": 50,
+   "notiz": "Nur die Szene „Warum?“. Neu ab ≈ 0:30: „Wichtig für die Anwendung: Der Sinus gehört zur Seite gegenüber vom Winkel. Der Kosinus gehört zur Seite, die am Winkel anliegt, aber nicht die Hypotenuse ist. Hier ist die Hypotenuse eins, darum sind Sinus und Kosinus genau die Längen dieser Seiten. In jedem anderen rechtwinkligen Dreieck teilst du noch durch die Hypotenuse, egal wie es gedreht ist.“ Im Kreis: Pfeil vom Winkel hinüber zur roten Seite, dann leuchten die blaue Seite und der Winkelbogen auf. Rechts: die Regel, ein gedrehtes Dreieck (Gegenkathete links, nicht senkrecht neben P) und sin α, cos α als Brüche. „passt“ = ich rendere das ganze Video neu."
+  },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/final/einheitskreis_720p_v2.mp4",
    "titel": "Fertig gerendert: Der Einheitskreis (5:47)",
    "stand": "14.11., 09:10",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 11,
    "notiz": "Ganzes Video mit dem neuen Merkzettel (P(x | y) = P(cos α | sin α), sin²α + cos²α = 1, Wertetabelle). 480p und 1080p liegen im Chat. „✓ passt“ = abgenommen; dann übernehme ich die Gestaltungsregeln in die CLAUDE.md."
   },

@@ -386,11 +386,73 @@ def s_orientierung(b, sc, t):
     zeit_zeile(b, t, w('unten rechts'), [('rechts unten: 300°', INK)], 510, 30, INTER)
 
 
+def wichtig(b, t, T):
+    """Rechte Spalte: Regel für die Anwendung und ein gedrehtes rechtwinkliges Dreieck (Nutzer 14.11.)."""
+    a = ein(t, T['W']) * (1 - ein(t, T['Ko'] - 0.4, 0.4))
+    if a <= 0:
+        return
+    b.text('Wichtig für die Anwendung', RX, 165 + 10 * (1 - ein(t, T['W'])), 28, TEAL, INTER_X, alpha=a)
+    zeit_zeile(b, t, T['Ge'] - 0.6, [('sin', SIN), (': Seite gegenüber vom Winkel', INK)], 210, 26, INTER_X,
+               ende=T['Ko'] - 0.4)
+    zeit_zeile(b, t, T['An'] - 0.6, [('cos', COS), (': Seite am Winkel (nicht die Hypotenuse)', INK)], 248, 26, INTER_X,
+               ende=T['Ko'] - 0.4)
+    # gedrehtes Dreieck: α rechts, rechter Winkel unten links, Gegenkathete links (anders als im Einheitskreis)
+    ad = ein(t, T['Td'] - 0.6, 0.5) * a
+    if ad > 0:
+        A_ = (RX + 150, 350)
+        phi = math.radians(200)                            # Richtung A → C
+        la, lb = 220, 150
+        C_ = (A_[0] + la * math.cos(phi), A_[1] - la * math.sin(phi))
+        n_ = (math.cos(phi + math.pi / 2), -math.sin(phi + math.pi / 2))
+        B_ = (C_[0] - lb * n_[0], C_[1] - lb * n_[1])
+        b.poly([A_, C_, B_], fill=WINKEL, alpha=0.10 * ad)
+        b.linie([A_, C_], COS, 8, alpha=ad)
+        b.linie([C_, B_], SIN, 8, alpha=ad)
+        b.linie([A_, B_], INK, 4, alpha=ad)
+        sp_ = ((A_[0] + B_[0] + C_[0]) / 3, (A_[1] + B_[1] + C_[1]) / 3)     # Schwerpunkt
+
+        def aussen(P1, P2, d):
+            mx_, my_ = (P1[0] + P2[0]) / 2, (P1[1] + P2[1]) / 2
+            vx, vy = mx_ - sp_[0], my_ - sp_[1]
+            l_ = math.hypot(vx, vy)
+            return mx_ + d * vx / l_, my_ + d * vy / l_
+        # α an A (Bogen zwischen AC und AB)
+        wa = math.atan2(-(C_[1] - A_[1]), C_[0] - A_[0])
+        wb = math.atan2(-(B_[1] - A_[1]), B_[0] - A_[0])
+        while wb - wa > math.pi:
+            wb -= 2 * math.pi
+        while wa - wb > math.pi:
+            wb += 2 * math.pi
+        b.linie([(A_[0] + 44 * math.cos(wa + (wb - wa) * k / 16), A_[1] - 44 * math.sin(wa + (wb - wa) * k / 16))
+                 for k in range(17)], WINKEL, 5, alpha=ad)
+        wm = (wa + wb) / 2
+        b.text('α', A_[0] + 70 * math.cos(wm), A_[1] - 70 * math.sin(wm), 24, WINKEL, INTER_X, alpha=ad)
+        # rechter Winkel an C: Viertelbogen mit Punkt
+        ua = ((A_[0] - C_[0]) / la, (A_[1] - C_[1]) / la)
+        ub = ((B_[0] - C_[0]) / lb, (B_[1] - C_[1]) / lb)
+        b.linie([(C_[0] + 24 * (ua[0] * math.cos(q) + ub[0] * math.sin(q)),
+                  C_[1] + 24 * (ua[1] * math.cos(q) + ub[1] * math.sin(q))) for q in [math.pi / 2 * k / 10 for k in range(11)]],
+                INK, 2.5, alpha=ad)
+        b.kreis(C_[0] + 9 * (ua[0] + ub[0]), C_[1] + 9 * (ua[1] + ub[1]), 3, INK, alpha=ad)
+        x_, y_ = aussen(A_, C_, 30)
+        etikett(b, 'Ankathete', x_ + 10, y_, 20, COS, ad, grund=False)
+        x_, y_ = aussen(C_, B_, 18)
+        etikett(b, 'Gegenkathete', x_, y_, 20, SIN, ad, anker='r', grund=False)
+        x_, y_ = aussen(A_, B_, 22)
+        etikett(b, 'Hypotenuse', x_ + 10, y_, 20, INK, ad, grund=False)
+    zeit_formel(b, t, T['Td'] + 0.4, [('t', 'sin α', SIN, 1), ('t', ' = ', INK, 1),
+                                     ('b', [('Gegenkathete', SIN)], [('Hypotenuse', INK)], 1)], 485, 26, ende=T['Ko'] - 0.4)
+    zeit_formel(b, t, T['Td'] + 0.9, [('t', 'cos α', COS, 1), ('t', ' = ', INK, 1),
+                                     ('b', [('Ankathete', COS)], [('Hypotenuse', INK)], 1)], 560, 26, ende=T['Ko'] - 0.4)
+
+
 def s_warum(b, sc, t):
     T = {k: C(sc, w) for k, w in dict(L='senkrecht nach unten', D='rechtwinkliges', H='Hypotenuse', G='Gegenkathete durch Hyp',
                                        G1='Gegenkathete durch eins', Ho='Höhe von P', K='Kosinus Ankathete',
                                        Xk='x-Koordinate', Ko='Koordinaten Kosinus', Al='Alphabet', N='Aber Vorsicht',
-                                       G2='Wird Alpha größer', F='legt man fest', J='jeder Winkel').items()}
+                                       G2='Wird Alpha größer', F='legt man fest', J='jeder Winkel',
+                                       W='Wichtig für die Anwendung', Ge='gegenüber vom Winkel', An='am Winkel anliegt',
+                                       Hl='Hier ist die Hypotenuse', Td='teilst du noch').items()}
     g = 50 + 90 * glatt(p(t, T['G2'], 1.8))               # Nutzer 13.11.: Dreieck gibt es auch dort, aber …
     if t > T['J']:
         g = 145 + 70 * (t - T['J'])
@@ -420,6 +482,27 @@ def s_warum(b, sc, t):
     lab_c = 'Ankathete' if t < T['Xk'] else 'cos α'
     strecken(b, g, f_sin=glatt(p(t, T['L'], 0.9)), f_cos=glatt(p(t, T['K'], 0.9)), lab_sin=lab_s, lab_cos=lab_c,
              la_s=ein(t, T['G'] if t < T['Ho'] else T['Ho'], 0.4), la_c=ein(t, T['K'] if t < T['Xk'] else T['Xk'], 0.4))
+    # Nutzer 14.11.: „Sinus gegenüber vom Winkel, Kosinus liegt am Winkel an“ im Bild zeigen
+    ag_ = ein(t, T['Ge'] - 0.3, 0.3) * (1 - ein(t, T['An'] - 0.3, 0.3))
+    if ag_ > 0:
+        b.linie([(px, py), (px, CY)], SIN, 18, alpha=0.25 * ag_)
+        m_ = math.radians(g / 2)
+        x0_, y0_ = CX + 104 * math.cos(m_), CY - 104 * math.sin(m_)       # hinter dem „α“ beginnen
+        f_ = glatt(p(t, T['Ge'] - 0.3, 0.6))
+        x1_ = x0_ + (px - 14 - x0_) * f_
+        y1_ = y0_ + ((py + CY) / 2 - y0_) * f_
+        b.linie([(x0_, y0_), (x1_, y1_)], WINKEL, 4, alpha=ag_)
+        dx_, dy_ = x1_ - x0_, y1_ - y0_
+        l_ = max(math.hypot(dx_, dy_), 1)
+        ux_, uy_ = dx_ / l_, dy_ / l_
+        b.poly([(x1_ + ux_ * 10, y1_ + uy_ * 10), (x1_ - uy_ * 7, y1_ + ux_ * 7), (x1_ + uy_ * 7, y1_ - ux_ * 7)],
+               fill=WINKEL, alpha=ag_)
+    aa_ = ein(t, T['An'] - 0.3, 0.3) * (1 - ein(t, T['Hl'], 0.4))
+    if aa_ > 0:
+        b.linie([(CX, CY), (px, CY)], COS, 18, alpha=0.25 * aa_)
+        winkel(b, g % 360, aa_, text='')
+        b.linie([(CX + 48 * math.cos(math.radians(g * k / 20)), CY - 48 * math.sin(math.radians(g * k / 20)))
+                 for k in range(21)], WINKEL, 9, alpha=0.35 * aa_)
     # y-Wert an der y-Achse ablesen (Nutzer 13.11.): gestrichelt von P waagrecht zur y-Achse, dort der Sinus als rote
     # Strecke. Der x-Wert braucht keine Hilfslinie: Die rote Senkrechte trifft die x-Achse genau dort (Fußpunkt).
     ay = ein(t, C(sc, 'y-Koordinate'), 0.5) * (1 - ein(t, T['J'], 0.4))   # beim Kreisen ausblenden
@@ -460,7 +543,7 @@ def s_warum(b, sc, t):
     a1 = ein(t, C(sc, 'y-Koordinate'), 0.4) * weg_h          # danach nur noch „1“ neben der Hypotenuse
     if a1 > 0:
         etikett(b, '1', CX + ux * R / 2 + nx * 24, CY + uy * R / 2 + ny * 24, 26, INK, a1, grund=False)
-    weg = T['N']
+    weg = T['W']                                          # Platz für „Wichtig für die Anwendung“
     zeit_formel(b, t, T['G'], [('t', 'sin α', SIN, 1), ('t', ' = ', INK, 1),
                                ('b', [('Gegenkathete', SIN)], [('Hypotenuse', INK)], 1)], 185, 30, ende=weg)
     zeit_formel(b, t, T['G1'], [('t', 'sin α', SIN, 1), ('t', ' = ', INK, 1),
@@ -471,6 +554,7 @@ def s_warum(b, sc, t):
     zeit_zeile(b, t, T['N'], [('im rechtwinkligen Dreieck: 0° < ', INK), ('α', WINKEL), (' < 90°', INK)], 200, 28, INTER)
     zeit_zeile(b, t, T['G2'] + 1.6, [('bei ', INK), ('α', WINKEL), (' = 140°: Winkel im Dreieck 40°', INK)], 250, 28, INTER)
     zeit_zeile(b, t, T['F'], [('deshalb festgelegt, für jedes ', GRAU), ('α', WINKEL), (':', GRAU)], 310, 28, INTER)
+    wichtig(b, t, T)
     zeit_zeile(b, t, T['Ko'], [('P(', INK), ('cos α', COS), (' | ', INK), ('sin α', SIN), (')', INK)], 470, 46)
     a = ein(t, T['Al'])
     if a > 0:

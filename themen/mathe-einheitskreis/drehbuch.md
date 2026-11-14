@@ -30,7 +30,10 @@ Bild: P läuft zu jedem genannten Winkel, dort bleibt ein oranger Strich mit Gra
 > Von P aus ziehen wir eine Linie senkrecht nach unten auf die x-Achse. So entsteht ein rechtwinkliges Dreieck. Seine
 > Hypotenuse ist der Radius, also genau eins. Sinus ist Gegenkathete durch Hypotenuse, hier also Gegenkathete durch
 > eins. Der Sinus ist einfach die Höhe von P: die y-Koordinate. Genauso ist der Kosinus Ankathete durch eins, also die
-> x-Koordinate. P hat die Koordinaten Kosinus Alpha und Sinus Alpha. Im Alphabet kommt K vor S, so wie x vor y.
+> x-Koordinate. Wichtig für die Anwendung: Der Sinus gehört zur Seite gegenüber vom Winkel. Der Kosinus gehört zur
+> Seite, die am Winkel anliegt, aber nicht die Hypotenuse ist. Hier ist die Hypotenuse eins, darum sind Sinus und
+> Kosinus genau die Längen dieser Seiten. In jedem anderen rechtwinkligen Dreieck teilst du noch durch die Hypotenuse,
+> egal wie es gedreht ist. P hat die Koordinaten Kosinus Alpha und Sinus Alpha. Im Alphabet kommt K vor S, so wie x vor y.
 > Aber Vorsicht: In einem rechtwinkligen Dreieck liegt Alpha immer zwischen null und neunzig Grad. Wird Alpha größer,
 > ist der Winkel im Dreieck nicht mehr Alpha. Deshalb legt man fest: Kosinus und Sinus sind die Koordinaten von P,
 > für jeden Winkel. So hat jeder Winkel einen Sinus und einen Kosinus.
