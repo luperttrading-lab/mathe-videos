@@ -13,8 +13,17 @@ Ziel ≈ 2:45–3:05, ≈ 380–440 Wörter (Tempo 1,05 ≈ 2,28 Wörter/s).
   Kosinusfunktion“** (ca. 17 Std.): Bogenmaß, Graphen, a · sin(b · (x + c)) + d mit Amplitude und Periode,
   „realitätsbezogene Problemstellungen zu periodischen Vorgängen graphisch und rechnerisch“. Konkrete Beispiele nennt
   der Lehrplan nicht.
-- Folgerung (falls Bayern): Für Klasse 10 ist der periodische Teil (Riesenrad) der eigentliche Stoff, das Dreieck
-  Wiederholung aus Klasse 9. Andere Länder noch nicht geprüft → Bundesland beim Nutzer erfragt.
+- **Sohn: Hessen, Gymnasium (Nutzer 14.11.)** – maßgeblich. Hessischer Lehrplan Mathematik, gymnasialer
+  Bildungsgang 5–13 (kultus.hessen.de, g9-mathematik.pdf), **Jahrgangsstufe 10, „10.4 Trigonometrie und
+  trigonometrische Funktionen“, 24 Std.**: alles in Klasse 10 – sin/cos/tan als Längenverhältnisse im rechtwinkligen
+  Dreieck, Einheitskreis 0–360°, sin² + cos² = 1, „Anwendungen aus Technik, Physik und ebener und räumlicher
+  Geometrie“, Sinus-/Kosinussatz, Steigungswinkel einer Geraden; „Sinus- und Kosinusfunktion: Definition über den
+  Einheitskreis bzw. über die senkrechte Projektion einer Kreisbewegung“, Periodizität, „Beispiele periodischer
+  Zusammenhänge (z. B. Modelle einfacher zyklischer Prozesse aus den Natur-, Wirtschafts- oder Sozialwissenschaften)“.
+  **Fakultativ**: allgemeine a sin(bx + c), Tangensfunktion, Vermessung/Triangulation.
+- Folgerung: Beide Teile (Dreieck und Kreis) sind in Hessen Klasse-10-Stoff, die Aufteilung passt. Riesenrad =
+  wörtlich „senkrechte Projektion einer Kreisbewegung“. Weil a sin(bx + c) nur fakultativ ist: im Riesenrad Höhen über
+  Einheitskreis-Winkel ausrechnen (Höhe = Achse + 30 · sin), die Formel h(t) höchstens zeigen, nicht ins Zentrum.
 
 ## Szenen
 | # | Szene | Zeit | Wörter | Inhalt | Bereich |
@@ -24,7 +33,7 @@ Ziel ≈ 2:45–3:05, ≈ 380–440 Wörter (Tempo 1,05 ≈ 2,28 Wörter/s).
 | 3 | wurf | 0:50–1:20 | 70 | Ball mit 20 m/s unter 30°: vorwärts 20 · cos 30° ≈ 17,3 m/s, nach oben 20 · sin 30° = 10 m/s (sin 30° = ½ aus Video 1). Zerlegen in waagrecht/senkrecht | Sport/Physik |
 | 4 | kurs (optional) | 1:20–1:45 | 55 | Schiff 10 km auf Kurs 60° (von Nord im Uhrzeigersinn): 10 · sin 60° ≈ 8,66 km nach Osten, 10 · cos 60° = 5 km nach Norden. Achtung: Kurs zählt anders als der Einheitskreis | Navigation |
 | 5 | bruecke | 1:45–1:55 | 25 | „Bis hier reicht das Dreieck. Jetzt dreht sich etwas – und da brauchst du den ganzen Kreis.“ | – |
-| 6 | riesenrad | 1:55–2:40 | 100 | Riesenrad Ø 60 m, Achse 32 m hoch, Einstieg 2 m, eine Runde 10 min. Gondel = Punkt P, nur Radius 30 statt 1. Höhe h(t) = 32 − 30 · cos(36° · t): nach 1 min 40 s (60°) 17 m, nach 5 min oben 62 m. Kurve entsteht aus dem Kreis wie in Video 1; Hinweis: Play-Knopf in der App | Technik/Freizeit |
+| 6 | riesenrad | 1:55–2:40 | 100 | Riesenrad Ø 60 m, Achse 32 m hoch, Einstieg 2 m, eine Runde 10 min. Gondel = Punkt P, nur Radius 30 statt 1, Winkel ab der Waagrechten wie im Einheitskreis. Höhe = 32 m + 30 m · sin α: bei 30° 47 m, bei 90° 62 m, bei 210° 17 m, bei 270° unten 2 m. Eine Runde 10 min → 36° pro Minute. Kurve entsteht aus dem Kreis wie in Video 1; Hinweis: Play-Knopf in der App | Technik/Freizeit |
 | 7 | ausblick | 2:40–2:55 | 35 | Wiederholt sich etwas: Wechselstrom (50-mal pro Sekunde), Schall, Tageslänge übers Jahr – die nur **ungefähr** wie eine Sinuskurve | Natur/Technik |
 | 8 | merke + schluss | 2:55–3:10 | 40 | Merkzettel: „Dreieck: Seiten ausrechnen. Kreis: Wiederholung beschreiben.“ Motivationssatz + Spruch | – |
 
