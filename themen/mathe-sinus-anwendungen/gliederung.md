@@ -25,27 +25,25 @@ Ziel ≈ 2:45–3:05, ≈ 380–440 Wörter (Tempo 1,05 ≈ 2,28 Wörter/s).
   wörtlich „senkrechte Projektion einer Kreisbewegung“. Weil a sin(bx + c) nur fakultativ ist: im Riesenrad Höhen über
   Einheitskreis-Winkel ausrechnen (Höhe = Achse + 30 · sin), die Formel h(t) höchstens zeigen, nicht ins Zentrum.
 
-## Szenen
-| # | Szene | Zeit | Wörter | Inhalt | Bereich |
+## Auswahl nach Klasse-10-Stoff Hessen (Nutzer 14.11.: „das, was in Mathe und Physik dran kommt in Klasse 10“)
+Physik Hessen G9 Klasse 10 (Lehrplan Physik, gymnasialer Bildungsgang, kultus.hessen.de g9-physik.pdf): 10.1 Arbeit und
+Energie (ca. 32 Std.: Hebel, Rollen, „Goldene Regel der Mechanik“, „Elektrizität als Energieform: Generator, Motor“),
+10.2 Radioaktivität, 10.3 Energieversorgung (Generatoren, Kraftwerke, Fernleitung, Transformator).
+Würfe und Kräftezerlegung stehen dort nicht (Oberstufe) → Ballwurf und Schiffskurs gestrichen.
+
+| # | Szene | Zeit | Wörter | Inhalt | Bezug Klasse 10 Hessen |
 |---|---|---|---|---|---|
-| 1 | einstieg | 0:00–0:15 | 35 | Rückbezug: „Im Einheitskreis hast du gesehen, was Sinus und Kosinus sind. Aber wofür braucht man das?“ Zwei Sorten Aufgaben: Dreieck (Längen ausrechnen) und Kreis (Dinge, die sich wiederholen) | – |
-| 2 | leiter | 0:15–0:50 | 80 | 5-m-Leiter, 70° zum Boden: Höhe = 5 · sin 70° ≈ 4,70 m (rot), Abstand = 5 · cos 70° ≈ 1,71 m (blau). Herleitung sin = Gegenkathete/Hypotenuse → mal 5. Dreieck = Einheitskreis-Dreieck, nur fünfmal so groß | Bau/Handwerk |
-| 3 | wurf | 0:50–1:20 | 70 | Ball mit 20 m/s unter 30°: vorwärts 20 · cos 30° ≈ 17,3 m/s, nach oben 20 · sin 30° = 10 m/s (sin 30° = ½ aus Video 1). Zerlegen in waagrecht/senkrecht | Sport/Physik |
-| 4 | kurs (optional) | 1:20–1:45 | 55 | Schiff 10 km auf Kurs 60° (von Nord im Uhrzeigersinn): 10 · sin 60° ≈ 8,66 km nach Osten, 10 · cos 60° = 5 km nach Norden. Achtung: Kurs zählt anders als der Einheitskreis | Navigation |
-| 5 | bruecke | 1:45–1:55 | 25 | „Bis hier reicht das Dreieck. Jetzt dreht sich etwas – und da brauchst du den ganzen Kreis.“ | – |
-| 6 | riesenrad | 1:55–2:40 | 100 | Riesenrad Ø 60 m, Achse 32 m hoch, Einstieg 2 m, eine Runde 10 min. Gondel = Punkt P, nur Radius 30 statt 1, Winkel ab der Waagrechten wie im Einheitskreis. Höhe = 32 m + 30 m · sin α: bei 30° 47 m, bei 90° 62 m, bei 210° 17 m, bei 270° unten 2 m. Eine Runde 10 min → 36° pro Minute. Kurve entsteht aus dem Kreis wie in Video 1; Hinweis: Play-Knopf in der App | Technik/Freizeit |
-| 7 | ausblick | 2:40–2:55 | 35 | Wiederholt sich etwas: Wechselstrom (50-mal pro Sekunde), Schall, Tageslänge übers Jahr – die nur **ungefähr** wie eine Sinuskurve | Natur/Technik |
-| 8 | merke + schluss | 2:55–3:10 | 40 | Merkzettel: „Dreieck: Seiten ausrechnen. Kreis: Wiederholung beschreiben.“ Motivationssatz + Spruch | – |
+| 1 | einstieg | 0:00–0:15 | 35 | Rückbezug Einheitskreis; zwei Sorten Aufgaben: Dreieck und Kreisbewegung | – |
+| 2 | leiter | 0:15–0:50 | 80 | 5-m-Leiter, 70°: Höhe 5 · sin 70° ≈ 4,70 m, Abstand 5 · cos 70° ≈ 1,71 m | M 10.4 „Anwendungen aus Technik“ |
+| 3 | rampe | 0:50–1:30 | 85 | Kiste 500 N, Rampe 5 m lang, 1 m hoch: sin α = 1/5; ohne Reibung brauchst du 500 N · 1/5 = 100 N; Weg 5-mal so lang, Kraft 5-mal so klein; Druck auf die Rampe 500 N · cos α ≈ 490 N (cos α = √(1 − 0,04) ≈ 0,98, sin² + cos² = 1 aus Video 1) | Ph 10.1 Goldene Regel der Mechanik |
+| 4 | bruecke | 1:30–1:38 | 18 | „Bisher stand alles still. Jetzt dreht sich etwas – und dann brauchst du den ganzen Kreis.“ | – |
+| 5 | riesenrad | 1:38–2:25 | 105 | Ø 60 m, Achse 32 m: Gondel = P mit Radius 30; Höhe = 32 + 30 · sin α: 0° → 32 m, 30° → 47 m, 90° → 62 m, 210° → 17 m, 270° → 2 m. Dreht es gleichmäßig, wird die Höhe über die Zeit eine Sinuskurve; Play-Knopf der App | M 10.4 „senkrechte Projektion einer Kreisbewegung“, Periodizität |
+| 6 | generator | 2:25–2:50 | 55 | Spule dreht sich gleichmäßig im Magnetfeld → Spannung schwankt wie eine Sinuskurve; Steckdose: 50 volle Schwingungen pro Sekunde | Ph 10.1 Generator, 10.3 Energieversorgung |
+| 7 | merke + schluss | 2:50–3:10 | 45 | Merkzettel, Motivationssatz + Spruch | – |
 
-Ohne Szene 4: ≈ 2:45 / 385 Wörter.
-
-## Bewusst nicht drin
-- Rampe/Steigung: Prozent-Steigung ist ein Tangens (6 % → 3,4°), Tangens bleibt draußen (wie Video 1).
-- Kraft am Hang (60 kg, 20° → 201 N hangabwärts, 553 N auf den Hang): gleiche Mathematik wie Wurf, mit Newton
-  abstrakter. Alternative zu Szene 3, falls das Physikbuch des Sohns das gerade hat.
-- Gezeiten: nur grob periodisch (zwei Perioden ≈ 12 h 25 min, Spring/Nipp überlagert) – zu viel für einen Satz.
+≈ 3:10, ≈ 425 Wörter. Ausblick Tageslänge/Schall gestrichen (Zeit), Generator ersetzt ihn.
 
 ## Zahlen (nachgerechnet 14.11.)
 5 · sin 70° = 4,698 → 4,70 m; 5 · cos 70° = 1,710 → 1,71 m; 20 · cos 30° = 17,32; 20 · sin 30° = 10;
-10 · sin 60° = 8,660; 10 · cos 60° = 5; Riesenrad: h(0) = 2, h(1⅔) = 32 − 30 · ½ = 17, h(2,5) = 32, h(5) = 62.
-Tageslänge: Werte vor dem Drehbuch per Quelle prüfen.
+Rampe: sin α = 1/5 → α ≈ 11,5°, F = 100 N, cos α = √0,96 = 0,9798 → 489,9 N ≈ 490 N, Arbeit 100 N · 5 m = 500 N · 1 m = 500 J.
+Riesenrad 32 + 30 · sin α: 0° 32, 30° 47, 90° 62, 210° 17, 270° 2.
