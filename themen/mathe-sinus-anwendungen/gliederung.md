@@ -59,6 +59,10 @@ Fassung 1 „Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die feh
 Vorschlag), Fassung 2 „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
 (`MERKE_FASSUNG=2`). Nach der Wahl: Schalter entfernen bzw. Drehbuch anpassen, ganzes Video neu rendern.
 `.claude/settings.json` (Nutzer, main afb5c6d: publish_files und declare_capabilities erlaubt) per Cherry-Pick im Zweig.
+Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
+Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
+(alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)
+und vorher im Chat ankündigen, dass gleich eine Rückfrage kommt.
 
 Dateien: `sinus_anwendungen.py` (Video; Baukasten regel.py und Zeichenhilfen aus einheitskreis.py nur importiert),
 `drehbuch.md` (Sprechtext), `startbild.py` → `bilder/startbild.png`, `pruefen.py` (Beschriftungs-Check, muss außer
