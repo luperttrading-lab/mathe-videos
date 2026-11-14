@@ -1,30 +1,30 @@
 {
  "titel": "Sinus-Anwendungen-Video",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: das ganze Video mit dem Zwischenschritt (3:41). Darunter zur Info die beiden abgenommenen Clips.",
+ "aufgabe": "2 Einträge zu prüfen, ganz oben: der Merksatz in zwei Fassungen (je 15 s). Bitte bei der Fassung, die richtig betont ist, „passt“ tippen. Darunter zur Info das ganze Video.",
  "videos": [
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/dfd50b62-1260-5208-93ae-2bd9e5fd742d/scratchpad/v/clip_merke1.mp4",
+   "titel": "Merksatz, Fassung 1: „Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus.“ (0:15)",
+   "stand": "14.11., 16:20",
+   "pruefen": true,
+   "poster_bei": 6,
+   "notiz": "Mein Vorschlag. Satz umgestellt, damit „die fehlenden Seiten“ am Ende im Fokus steht; gemessen ist „Sei“ jetzt die längste Silbe (220 ms) und die Stimme fällt auf dem Wort ab. Der Merkzettel zeigt genau diesen Satz. „passt“ = diese Fassung kommt ins Video."
+  },
+  {
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/dfd50b62-1260-5208-93ae-2bd9e5fd742d/scratchpad/v/clip_merke2.mp4",
+   "titel": "Merksatz, Fassung 2: „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“ (0:15)",
+   "stand": "14.11., 16:20",
+   "pruefen": true,
+   "poster_bei": 6,
+   "notiz": "Alte Reihenfolge, nur „die fehlenden Seiten“ statt „fehlende Seiten“. Gemessen sind „fehlenden“ und „Seiten“ hier gleich hoch und fast gleich laut – die Hervorhebung von „fehlende“ ist weg, „Seiten“ sticht aber weniger heraus als in Fassung 1. „passt“ = diese Fassung kommt ins Video."
+  },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/dfd50b62-1260-5208-93ae-2bd9e5fd742d/scratchpad/v/sinus_v2_720p.mp4",
    "titel": "Ganzes Video mit Zwischenschritt: Wofür braucht man Sinus und Kosinus? (3:41)",
    "stand": "14.11., 15:50",
-   "pruefen": true,
+   "pruefen": false,
    "poster_bei": 14,
-   "notiz": "Das ganze Video am Stück, mit dem abgenommenen Zwischenschritt in Leiter (ab 0:16) und Schiffskurs (ab 1:21). Riesenrad ab 2:17: neu nur der Schriftzug bei 210° „negativ: Die Gondel hängt unter der Achse.“ (≈ 3:00). Merkzettel ab 3:16. „passt“ = abgenommen; dann bekommst du auf Wunsch die 480p-Datei zum Verschicken."
-  },
-  {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/dfd50b62-1260-5208-93ae-2bd9e5fd742d/scratchpad/v/clip_leiter.mp4",
-   "titel": "Neu: Leiter mit Zahlenwert sin 70° ≈ 0,940 (1:05)",
-   "stand": "14.11., 12:20",
-   "pruefen": false,
-   "poster_bei": 44,
-   "notiz": "Abgenommen („passt“, 14.11., 15:45). Ist jetzt im ganzen Video oben enthalten."
-  },
-  {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/dfd50b62-1260-5208-93ae-2bd9e5fd742d/scratchpad/v/clip_kurs.mp4",
-   "titel": "Neu: Schiffskurs mit Zahlenwert sin 60° ≈ 0,866 (0:57)",
-   "stand": "14.11., 12:20",
-   "pruefen": false,
-   "poster_bei": 46,
-   "notiz": "Abgenommen („passt“, 14.11., 15:45). Ist jetzt im ganzen Video oben enthalten."
+   "notiz": "Stand vor der Korrektur des Merksatzes: Bei 3:21 ist „fehlende Seiten“ falsch betont (deine Notiz). Alles andere bleibt so; nach deiner Wahl oben rendere ich das ganze Video neu."
   }
  ]
 }

@@ -72,11 +72,18 @@ läuft P zwei Runden, rechts entsteht die Höhe über der Zeit (Achse 0/2/32/62 
 Karte mit QR-Code der Einheitskreis-App und Play-Zeichen.
 
 ## 5 merke (≈ 14 s)
-> Merke: Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus fehlende Seiten aus. Und wo sich etwas
+> Merke: Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus. Und wo sich etwas
 > gleichmäßig dreht, beschreiben sie die Bewegung: beim Riesenrad, beim Windrad, beim Pedal am Fahrrad.
 
 Merkzettel zeigt genau die gesprochenen Sätze, dazu die Gleichungen aus dem Video: Gegenkathete = Hypotenuse · sin α,
 Ankathete = Hypotenuse · cos α, Höhe = Höhe der Achse + Radius · sin α.
+
+Betonung (Nutzer 14.11.: „fehlende Seiten“ war auf „fehlende“ betont, muss auf „Seiten“ liegen). Gemessen mit
+`betonung.py`: Ohne Artikel hebt die Stimme „fehlende“ heraus (131 Hz, 200 ms; „Seiten“ 82–93 Hz), egal in welcher
+Satzstellung; Großschreibung „SEITEN“ hilft nicht. Mit Artikel („die fehlenden Seiten“) fällt die Hervorhebung weg.
+Fassung 1 (hier im Drehbuch): Satz umgestellt, „die fehlenden Seiten“ steht am Ende im Fokus – „Sei“ ist die längste
+Silbe (220 ms), die Tonhöhe fällt auf dem Wort (104 → 79 Hz). Fassung 2 (zur Wahl, `MERKE_FASSUNG=2`): alte
+Reihenfolge „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
 
 ## 6 schluss (≈ 8 s)
 > Klingt nach viel? Am Anfang ganz normal. Rechne die Leiter einfach selbst einmal nach. Das kann jeder lernen.
