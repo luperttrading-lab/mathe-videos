@@ -90,10 +90,12 @@ gleichzeitig unter dem Kreis die Kosinuskurve (x-Wert von P, Winkel nach unten).
 Kurve um 90° auf die Sinus-Achsen; bei „verschoben“ gleitet eine Kopie der roten Kurve um 90° nach links auf die blaue.
 
 ## 8 merke (≈ 15 s)
-> Merke: Auf dem Einheitskreis ist x der Kosinus und y der Sinus. Sinus Quadrat plus Kosinus Quadrat ist eins. Die
-> Werte im ersten Viertel reichen, die Vorzeichen zeigt das Viertel, in dem P liegt.
+> Merke: Für jeden Punkt P auf dem Einheitskreis ist x der Kosinus und y der Sinus. Sinus Quadrat plus Kosinus
+> Quadrat ist eins. Die Werte im ersten Viertel reichen, die Vorzeichen zeigt das Viertel, in dem P liegt.
 
-Merkzettel zeigt genau diese drei Sätze.
+Merkzettel (Nutzer 14.11.: Zusammenhänge als Gleichungen zusammenführen): „Für jeden Punkt P auf dem Einheitskreis:“,
+P(x | y) = P(cos α | sin α), sin²α + cos²α = 1, „Die Werte im ersten Viertel reichen,“ mit Tabelle 0°/30°/45°/60°/90°,
+„die Vorzeichen zeigt das Viertel, in dem P liegt.“ Im Bild daneben P(x | y) am Punkt.
 
 ## 9 schluss (≈ 8 s)
 > Nicht sofort alles klar? Ganz normal. Schau dir den Kreis ruhig noch einmal an. Übung macht den Meister.
