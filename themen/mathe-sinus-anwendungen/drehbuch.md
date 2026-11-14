@@ -22,19 +22,23 @@ Einheitskreises, nicht im zweiten), Boden, Leiter (Hypotenuse INK), Winkel 70° 
 blau; Rechnung als echter Bruch sin 70° = Höhe/5 m → Höhe = 5 m · sin 70° ≈ 4,70 m; dann cos. Zum Schluss schrumpft das
 Dreieck auf den Einheitskreis (Hypotenuse 1).
 
-## 3 rampe (≈ 40 s)
-> Eine Kiste wiegt fünfhundert Newton. Statt sie einen Meter hochzuheben, schiebst du sie eine fünf Meter lange Rampe
-> hinauf. Dann ist der Sinus des Steigungswinkels Höhe durch Länge, also ein Fünftel. Ohne Reibung brauchst du nur
-> fünfhundert Newton mal ein Fünftel, also hundert Newton. Der Weg ist fünfmal so lang, die Kraft fünfmal so klein:
-> die Goldene Regel der Mechanik. Den Rest der Gewichtskraft trägt die Rampe: fünfhundert Newton mal Kosinus,
-> ungefähr vierhundertneunzig Newton.
+## 3 kurs (≈ 40 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
+> Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich
+> und wie weit nördlich vom Hafen? Auf See misst man den Kurs von Norden aus, im Uhrzeigersinn. Geh auf der Karte vom
+> Hafen erst nach Norden, dann nach Osten: wieder ein rechtwinkliges Dreieck. Die Strecke nach Osten liegt dem Winkel
+> gegenüber, also zehn Kilometer mal Sinus sechzig Grad, ungefähr acht Komma sieben Kilometer. Die Strecke nach Norden
+> liegt am Winkel an: zehn Kilometer mal Kosinus sechzig Grad, genau fünf Kilometer. Achtung: Hier gehört der Sinus
+> zur waagrechten Strecke, weil der Winkel an der Nordlinie liegt.
 
-Bild: Rampe (Länge 5 m INK mit Klammer, Höhe 1 m rot), Kiste, Pfeil Gewichtskraft nach
-unten, zerlegt in rot (hangabwärts, 100 N) und blau (in die Rampe, ≈ 490 N), rechter Winkel als Viertelbogen mit Punkt.
-sin α = 1 m / 5 m = 1/5 als echte Brüche. Offen: cos α = √(1 − 1/25) ≈ 0,98 kurz zeigen (Pythagoras aus Video 1)?
+Bild: Seekarte wie im Auswahlblatt (`beispiele_pdf.py`, `bild_karte`): oben Norden, Kilometergitter (1 Kästchen =
+1 km), Kompassrose, Maßstab, Festland mit Hafen unten links, Insel mit Leuchtturm. Schiff fährt die Strecke ab
+(10 km INK), Kurswinkel 60° orange ab der Nordlinie; dann Nordstrecke blau (Ankathete, 5 km), Oststrecke rot
+(Gegenkathete, ≈ 8,66 km), rechter Winkel als Viertelbogen mit Punkt. Farbe folgt der Funktion (Sinus rot, Kosinus
+blau), nicht der Richtung – das ist die Pointe. Zum Schluss Kästchen abzählen: 5 hoch, knapp 9 nach rechts.
+Gesprochen „acht Komma sieben“, eingeblendet ≈ 8,66 km.
 
-## 4 bruecke (≈ 8 s)
-> Bis hier stand alles still. Jetzt dreht sich etwas, und dann brauchst du den ganzen Kreis.
+## 4 bruecke (≈ 7 s)
+> Bis hier hat ein Dreieck gereicht. Jetzt dreht sich etwas, und dann brauchst du den ganzen Kreis.
 
 ## 5 riesenrad (≈ 47 s)
 > Ein Riesenrad hat sechzig Meter Durchmesser, die Achse ist zweiunddreißig Meter hoch. Die Gondel ist unser Punkt P,
@@ -48,22 +52,15 @@ Bild: Riesenrad als Kreis mit Achsenkreuz in der Nabe (Boden 32 m tiefer), Gonde
 über dem Boden als Klammer; Werte 0°/30°/90°/210°/270° (Gondel unten 2 m) nacheinander; rechts entsteht die Höhenkurve
 über der Zeit (Achse t in Minuten, eine Runde = 10 min), wie in Video 1 Szene `kurve`. Kurz App-Bildschirm mit Play.
 
-## 6 generator (≈ 25 s)
-> Genauso im Kraftwerk: Im Generator dreht sich ein Magnet gleichmäßig, rundherum sitzen Spulen. Die Spannung in den
-> Spulen schwankt dabei fast genau wie eine Sinuskurve. Aus der Steckdose kommen fünfzig solche Schwingungen pro
-> Sekunde.
-
-Bild: drehender Stabmagnet (Pole grau/INK, Rot und Blau bleiben sin/cos vorbehalten) in einem Ring aus Spulen, daneben
-die Spannungskurve; Einblendung „50 Hz = 50 Schwingungen pro Sekunde“.
-
-## 7 merke (≈ 12 s)
+## 6 merke (≈ 12 s)
 > Merke: Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus Seiten aus. Und wo sich etwas gleichmäßig dreht,
 > beschreiben sie, wie es sich wiederholt.
 
-## 8 schluss (≈ 8 s)
+## 7 schluss (≈ 8 s)
 > Klingt nach viel? Am Anfang ganz normal. Rechne die Leiter einfach selbst einmal nach. Das kann jeder lernen.
 
 (Spruch aus `werkzeug/motivation.py`, Thema `sinus-anwendungen`: „Das kann jeder lernen.“)
 
-Hinweis Generator: Im Kraftwerk dreht sich der Magnet (Polrad), die Spulen stehen; das Schulmodell „Spule dreht im
-Magnetfeld“ ist physikalisch gleichwertig. Netzspannung ist nicht exakt sinusförmig (Oberschwingungen) → „fast genau“.
+Gestrichen (Nutzer 14.11.: „keine Physik-Aufgabe“): Rampe (Goldene Regel), Generator, Ballwurf.
+Alternativen ohne Physik im Auswahlblatt `beispiele.pdf`: Skipiste (statt Leiter), Tageslänge in Frankfurt (zweites
+Kreis-Beispiel, nur ungefähr sinusförmig: Sinuskurve bis zu 24 min daneben).
