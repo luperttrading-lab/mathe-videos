@@ -35,6 +35,13 @@ für Mathe. Vor dem ersten Clip lesen, vor jedem Clip gegen diese Liste prüfen 
 
 ## 4 Bild: Herkunft zeigen, Schritt für Schritt
 - Jeder gesprochene Schritt erscheint im Bild, genau beim Wort, nicht vorher.
+- Begriffe am Objekt zeigen, nicht nur sagen (Nutzer 14.11.): Das Objekt steht schon, wenn der Satz beginnt; beim
+  Wort zeigt eine Bewegung, was gemeint ist (Pfeil vom Winkel quer durchs Dreieck zur Gegenseite), und das Gemeinte
+  blinkt kurz in seiner Farbe. Regeln an einem zweiten, gedrehten Beispiel zeigen, damit nicht „senkrecht“ und
+  „waagrecht“ gelernt wird, sondern „gegenüber“ und „anliegend“.
+- Regeln so formulieren, dass sie auch außerhalb des Beispiels gelten (Sinus „gehört zur Seite gegenüber“; nur bei
+  Hypotenuse 1 ist er ihre Länge) und Mehrdeutiges ausschließen (am Winkel liegen zwei Seiten an: „nicht die
+  Hypotenuse“).
 - Herkunft zeigen statt benennen: Werte mit Strecken und gestrichelten Linien auf die Achsen tragen, Wert für Wert beim
   Sprechen; Kurven aus der Bewegung entstehen lassen; Zusammenhänge animieren (Kurve kippen, Kopie verschieben).
 - Nichts einzeichnen, bevor es existiert (Winkel an einer Seite erst, wenn die Seite da ist; Dreieck erst, wenn der

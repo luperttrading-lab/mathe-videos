@@ -1,22 +1,14 @@
 {
  "titel": "Einheitskreis-Video",
- "aufgabe": "1 Eintrag zu prüfen, ganz oben: „Wichtig für die Anwendung“ ab ≈ 0:30.",
+ "aufgabe": "Ganz oben das fertige Video (6:10). Ansehen, dann „✓ passt“ oder „ändern“ mit Minute.",
  "videos": [
   {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_warum.mp4",
-   "titel": "Neu: „Wichtig für die Anwendung“ in Szene Warum? (1:18)",
-   "stand": "14.11., 11:30",
+   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/final/einheitskreis_720p_v3.mp4",
+   "titel": "Fertig gerendert: Der Einheitskreis (6:10)",
+   "stand": "14.11., 15:50",
    "pruefen": true,
-   "poster_bei": 36,
-   "notiz": "Neu ab ≈ 0:30: Rechts zeichnet sich ein gedrehtes Dreieck, sobald „Wichtig für die Anwendung“ beginnt. Bei „gegenüber vom Winkel“ läuft ein oranger Pfeil vom α quer durchs Dreieck zur Gegenseite, die wird rot und blinkt („Gegenkathete“). Bei „am Winkel anliegt“ pulsiert der Winkel und die anliegende Seite wird blau und blinkt („Ankathete“). Bei „nicht die Hypotenuse“ leuchtet die Hypotenuse grau und wird benannt. Danach sin α und cos α als Brüche. Im Kreis links dasselbe in klein."
-  },
-  {
-   "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/final/einheitskreis_720p_v2.mp4",
-   "titel": "Fertig gerendert: Der Einheitskreis (5:47)",
-   "stand": "14.11., 09:10",
-   "pruefen": false,
-   "poster_bei": 11,
-   "notiz": "Ganzes Video mit dem neuen Merkzettel (P(x | y) = P(cos α | sin α), sin²α + cos²α = 1, Wertetabelle). 480p und 1080p liegen im Chat. „✓ passt“ = abgenommen; dann übernehme ich die Gestaltungsregeln in die CLAUDE.md."
+   "poster_bei": 95,
+   "notiz": "Ganzes Video mit „Wichtig für die Anwendung“ (Sinus gegenüber, Kosinus anliegend, gedrehtes Dreieck) und dem neuen Merkzettel. 480p und 1080p liegen im Chat. „✓ passt“ = abgenommen."
   },
   {
    "datei": "/tmp/claude-0/-home-user-mathe-videos/b5ab4615-6b84-5e75-ade0-439f3910010d/scratchpad/ek/clip_anfang.mp4",

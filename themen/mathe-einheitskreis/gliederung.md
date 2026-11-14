@@ -43,4 +43,5 @@ Optik: `einheitskreis/kreis.js` (zeichneKreis, zeichneKurven). Das Video bleibt 
 - Startbild: A „Kreis und Welle“ (Nutzer 13.11., Vorschau-Seite „passt“), `startbild.py` → `startbild_welle.png`.
 - 13.11. abends: „rendern“ (Nutzer) – ganzes Video 5:45, 1080p/720p/480p.
 - 14.11.: Merkzettel mit allen Zusammenhängen („passt“), ganzes Video neu gerendert (5:47).
+- 14.11.: „Wichtig für die Anwendung“ („passt“), ganzes Video neu gerendert (6:10).
 - Damit offen: Abspann mit Abo-Aufruf (ohne Kanal sinnlos), Titel und Vorschaubild erst bei Veröffentlichung.

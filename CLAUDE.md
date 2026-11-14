@@ -29,7 +29,7 @@ nachziehen.
   kein Kanal, kein Abspann): `einheitskreis.py` (Baukasten regel.py), Sprechtext nur in `drehbuch.md`, `gliederung.md`.
   Eigene Vorschau-Seite [Einheitskreis-Video · Vorschau](https://claude.ai/artifact/2zRnaGCW6fr3xH48QPsMXc)
   (Slug `101dceed-779d-4835-8c36-388133b01b8f`, `vorschau.json` dort). Im Chat immer „Video“ im Linknamen
-  (Nutzer 13.11.: Verwechslung mit der App-Vorschau vermeiden). Stand 14.11.: 5:47, gerendert (1080p/480p), Startbild
+  (Nutzer 13.11.: Verwechslung mit der App-Vorschau vermeiden). Stand 14.11.: 6:10, gerendert (1080p/480p), Startbild
   `startbild.py` (A „Kreis und Welle“). Lehren daraus in `werkzeug/gestaltungsregeln.md`.
 - `einheitskreis/` – eigene App „Einheitskreis“ (13.11., Details `einheitskreis/LIESMICH.md`), abgenommen 13.11. (v0.8),
   live: [Einheitskreis](https://luperttrading-lab.github.io/mathe-videos/einheitskreis/). Änderungen erst als Vorschau
