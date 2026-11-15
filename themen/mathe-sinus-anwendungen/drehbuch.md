@@ -16,16 +16,34 @@ Bild: Einheitskreis aus Video 1 in der Mitte (P bei 50°, rote und blaue Strecke
 man Sinus und Kosinus?“. Bei „Dreieck“ löst sich das Dreieck aus dem Kreis und wandert nach links, bei „im Kreis
 dreht“ beginnt P rechts zu kreisen. Grüne Leiste „MATHE VERSTEHEN · TRIGONOMETRIE“ – endet im Startbild.
 
-## 2 leiter (≈ 40 s)
+## 2 regel (≈ 32 s) – Nutzer 15.11.: „das Allerwichtigste: Sinus gegenüber vom Winkel, Kosinus am Winkel“
+> Das Wichtigste zuerst: Welche Seite gehört zum Sinus, welche zum Kosinus? Das hängt nur davon ab, wo der Winkel
+> Alpha liegt. Gegenüber vom rechten Winkel liegt die längste Seite, die Hypotenuse. Gegenüber von Alpha liegt die
+> Gegenkathete. Für sie brauchst du den Sinus. An Alpha liegen zwei Seiten: die Hypotenuse und die Ankathete. Für die
+> Ankathete brauchst du den Kosinus. Kurz: Kathete gegenüber, also Sinus. Kathete am Winkel, also Kosinus. Sitzt Alpha
+> in der anderen Ecke, tauschen Gegenkathete und Ankathete die Plätze.
+
+Bild: großes 3-4-5-Dreieck links (rechter Winkel unten rechts, α unten links), zuerst alle Seiten schwarz. Bei
+„Gegenüber vom rechten Winkel“ Pfeil vom rechten Winkel zur Hypotenuse, „Hypotenuse“ gedreht entlang der Seite. Bei
+„Gegenüber von Alpha“ oranger Pfeil von α quer durchs Dreieck, die Seite wird rot: „Gegenkathete / gegenüber von α“.
+Bei „An Alpha liegen zwei Seiten“ leuchten beide Seiten an α nacheinander (Hypotenuse, dann die untere), die untere
+wird blau: „Ankathete / an α“. Rechts: „Kathete gegenüber → Sinus“ mit „Gegenkathete = Hypotenuse · sin α“, „Kathete
+am Winkel → Kosinus“ mit „Ankathete = Hypotenuse · cos α“; bei „Kurz“ leuchten beide Regeln auf. Bei „Sitzt Alpha in
+der anderen Ecke“ wandert α in die obere Ecke, Rot und Blau tauschen mit ihren Namen, der Pfeil zeigt von der neuen
+Ecke auf die neue Gegenkathete (unten). Die Regel hängt an der Lage zum Winkel, nicht an waagrecht/senkrecht.
+
+## 3 leiter (≈ 45 s)
 > Eine Leiter ist fünf Meter lang und steht im Winkel von siebzig Grad zum Boden. Wie hoch reicht sie? Leiter, Wand
-> und Boden bilden ein rechtwinkliges Dreieck. Die Leiter ist die Hypotenuse. Sinus ist Gegenkathete durch
-> Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Mal fünf Meter: Die Höhe ist fünf Meter mal Sinus
-> siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier null. Im rechtwinkligen
-> Dreieck liegt dieser Wert immer zwischen null und eins: Strecken sind nie negativ, und eine Kathete ist immer kürzer
-> als die Hypotenuse. Fünf Meter mal null Komma neun vier null sind vier Meter siebzig. Genauso ist der Kosinus
-> Ankathete durch Hypotenuse. Der Abstand zur Wand ist also fünf Meter mal Kosinus siebzig Grad. Kosinus siebzig Grad
-> ist ungefähr null Komma drei vier zwei, das ergibt ein Meter einundsiebzig. Es ist das Dreieck aus dem
-> Einheitskreis, nur fünfmal so groß.
+> und Boden bilden ein rechtwinkliges Dreieck. Die Leiter liegt gegenüber vom rechten Winkel, sie ist die Hypotenuse.
+> Die Höhe an der Wand liegt gegenüber vom Siebzig-Grad-Winkel: Kathete gegenüber, also Sinus. Sinus ist
+> Gegenkathete durch Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Mal fünf Meter: Die Höhe ist
+> fünf Meter mal Sinus siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier
+> null. Im rechtwinkligen Dreieck liegt dieser Wert immer zwischen null und eins: Strecken sind nie negativ, und eine
+> Kathete ist immer kürzer als die Hypotenuse. Fünf Meter mal null Komma neun vier null sind vier Meter siebzig. Und
+> der Abstand zur Wand? Er liegt am Siebzig-Grad-Winkel an: Kathete am Winkel, also Kosinus. Kosinus ist Ankathete
+> durch Hypotenuse. Der Abstand ist also fünf Meter mal Kosinus siebzig Grad. Kosinus siebzig Grad ist ungefähr null
+> Komma drei vier zwei, das ergibt ein Meter einundsiebzig. Es ist das Dreieck aus dem Einheitskreis, nur fünfmal so
+> groß.
 
 Bild: **Wand rechts, Leiterfuß links** (Nutzer 14.11.: dann öffnet sich der Winkel wie im ersten Quadranten des
 Einheitskreises). Leiter wird angelehnt, „5 m“ daneben, Winkel 70° erst, wenn die Leiter steht. Dreieck: Höhe rot an
@@ -42,15 +60,16 @@ gestrichelter oranger Pfeil läuft vom Winkel quer durchs Dreieck zur Wand, die 
 vom Winkel“; bei „Ankathete“ leuchtet der Bogen, ein blaues Leuchten läuft vom Scheitel am Boden entlang, „am Winkel“.
 Im Einheitskreis-Vergleich am Ende der rechte Winkel.
 
-## 3 kurs (≈ 42 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
+## 4 kurs (≈ 50 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
 > Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich
 > und wie weit nördlich vom Hafen? Auf See misst man den Kurs von Norden aus, im Uhrzeigersinn. Geh auf der Karte vom
-> Hafen erst nach Norden, dann nach Osten: wieder ein rechtwinkliges Dreieck. Die Strecke nach Osten liegt dem Winkel
-> gegenüber. Sie ist also zehn Kilometer mal Sinus sechzig Grad. Sinus sechzig Grad ist ungefähr null Komma acht
-> sechs sechs, wieder ein Wert zwischen null und eins. Das ergibt ungefähr acht Komma sechs sechs Kilometer. Die
-> Strecke nach Norden liegt am Winkel an: zehn Kilometer mal Kosinus sechzig Grad. Kosinus sechzig Grad ist genau null
-> Komma fünf, also fünf Kilometer. Achtung: Hier gehört der Sinus zur waagrechten Strecke, weil der Winkel an der
-> Nordlinie liegt.
+> Hafen erst nach Norden, dann nach Osten: wieder ein rechtwinkliges Dreieck. Die Fahrstrecke ist die Hypotenuse. Die
+> Strecke nach Osten liegt gegenüber vom Kurswinkel: Kathete gegenüber, also Sinus. Sie ist zehn Kilometer mal Sinus
+> sechzig Grad. Sinus sechzig Grad ist ungefähr null Komma acht sechs sechs, wieder ein Wert zwischen null und eins.
+> Das ergibt ungefähr acht Komma sechs sechs Kilometer. Die Strecke nach Norden liegt am Kurswinkel an: Kathete am
+> Winkel, also Kosinus. Sie ist zehn Kilometer mal Kosinus sechzig Grad. Kosinus sechzig Grad ist genau null Komma
+> fünf, also fünf Kilometer. Achtung: Hier gehört der Sinus zur waagrechten Strecke. Es zählt nicht, ob eine Seite
+> waagrecht oder senkrecht liegt, sondern wo sie zum Winkel liegt.
 
 Bild: Seekarte: oben Norden, Kilometergitter (1 Kästchen = 1 km), Kompassrose, Maßstab, Festland mit Hafen unten
 links, Insel mit Leuchtturm. Das Schiff fährt die Strecke ab (10 km). Kurswinkel 60° orange ab der Nordlinie, erst
@@ -61,10 +80,12 @@ Brüchen und dem Zwischenschritt sin 60° ≈ 0,866 bzw. cos 60° = 0,5 (Zahlens
 bei „gegenüber“ Pfeil vom Kurswinkel zur Oststrecke, „gegenüber vom Winkel“; bei „am Winkel an“ läuft das Leuchten
 vom Hafen die Nordstrecke hinauf, „am Winkel“.
 
-## 4 riesenrad (≈ 65 s)
+## 5 riesenrad (≈ 70 s)
 > Bis hier hat ein Dreieck gereicht. Jetzt dreht sich etwas, und dann brauchst du den ganzen Kreis. Ein Riesenrad hat
 > sechzig Meter Durchmesser, die Achse liegt zweiunddreißig Meter über dem Boden. Die Gondel ist unser Punkt P, nur
-> mit Radius dreißig Meter statt eins. Über der Achse liegt sie also dreißig Meter mal Sinus Alpha. Ihre Höhe über
+> mit Radius dreißig Meter statt eins. Auch hier steckt ein rechtwinkliges Dreieck. Die Höhe über der Achse liegt
+> gegenüber von Alpha: Kathete gegenüber, also Sinus. Über der Achse liegt die Gondel also dreißig Meter mal Sinus
+> Alpha. Ihre Höhe über
 > dem Boden ist zweiunddreißig Meter plus dreißig Meter mal Sinus Alpha. Bei dreißig Grad ist der Sinus ein halb:
 > zweiunddreißig plus fünfzehn, also siebenundvierzig Meter. Bei neunzig Grad ist sie ganz oben, zweiundsechzig
 > Meter. Bei zweihundertzehn Grad ist der Sinus minus ein halb: zweiunddreißig minus fünfzehn, nur noch siebzehn
@@ -83,9 +104,10 @@ Karte mit QR-Code der Einheitskreis-App und Play-Zeichen.
 gedreht entlang des Radius, Pfeil vom Winkel zur roten Strecke, oben rechts „Gegenkathete = Hypotenuse · sin α“; bei
 „Bei dreißig Grad“ verschwindet es wieder.
 
-## 5 merke (≈ 14 s)
-> Merke: Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus. Und wo sich etwas
-> gleichmäßig dreht, beschreiben sie die Bewegung: beim Riesenrad, beim Windrad, beim Pedal am Fahrrad.
+## 6 merke (≈ 20 s)
+> Merke: Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus. Für die Kathete
+> gegenüber vom Winkel brauchst du den Sinus, für die Kathete am Winkel den Kosinus. Und wo sich etwas gleichmäßig
+> dreht, beschreiben sie die Bewegung: beim Riesenrad, beim Windrad, beim Pedal am Fahrrad.
 
 Merkzettel zeigt genau die gesprochenen Sätze, dazu die Gleichungen aus dem Video: Gegenkathete = Hypotenuse · sin α,
 Ankathete = Hypotenuse · cos α. Im kleinen Kreis links der rechte Winkel leicht angedeutet (Nutzer 15.11.). Nicht
@@ -99,7 +121,7 @@ Fassung 1 (hier im Drehbuch): Satz umgestellt, „die fehlenden Seiten“ steht 
 Silbe (220 ms), die Tonhöhe fällt auf dem Wort (104 → 79 Hz). Vom Nutzer 15.11. abgenommen („Ja“). Verworfen:
 Fassung 2 mit alter Reihenfolge „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
 
-## 6 schluss (≈ 8 s)
+## 7 schluss (≈ 8 s)
 > Klingt nach viel? Am Anfang ganz normal. Rechne die Leiter einfach selbst einmal nach. Das kann jeder lernen.
 
 (Spruch aus `werkzeug/motivation.py`, Thema `sinus-anwendungen`: „Das kann jeder lernen.“)

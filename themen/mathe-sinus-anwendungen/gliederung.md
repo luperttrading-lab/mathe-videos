@@ -78,6 +78,21 @@ Nutzer 15.11. nachmittags: Das Zeichen für den rechten Winkel wurde vom roten B
 sitzt es in der inneren Ecke an der Kante der dicken Striche (`rechter_winkel(…, b1, b2)` mit den Strichbreiten).
 Dabei Winkelbögen in den kleinen Kreisen (Leiter-Vergleich, Merkzettel) verkleinert, damit sie das Zeichen nicht
 berühren. Neu gerendert, 480p verschickt.
+**Nutzer 15.11. abends: „Für die Anwendung ist das Allerwichtigste: Sinus gegenüber vom Winkel, Kosinus am Winkel.
+Optisch besser ausarbeiten und besser besprechen, auch wenn die Aufnahmen geändert werden müssen.“** Umgesetzt:
+- neue Szene `regel` (≈ 36 s) vor den Beispielen: 3-4-5-Dreieck, Hypotenuse gegenüber vom rechten Winkel,
+  Gegenkathete gegenüber von α → Sinus, Ankathete am Winkel → Kosinus, Merkform „Kathete gegenüber, also Sinus.
+  Kathete am Winkel, also Kosinus.“, dann wandert α in die andere Ecke und Rot/Blau tauschen.
+- Leiter, Schiffskurs und Riesenrad sagen die Regel jetzt jedes Mal ausdrücklich („liegt gegenüber vom …: Kathete
+  gegenüber, also Sinus“ bzw. „liegt am … an: Kathete am Winkel, also Kosinus“), im Bild „gegenüber vom Winkel →
+  Sinus“ und „am Winkel → Kosinus“ an den Seiten. Schiff: „Es zählt nicht, ob eine Seite waagrecht oder senkrecht
+  liegt, sondern wo sie zum Winkel liegt.“
+- Merkzettel: neuer Satz „Für die Kathete gegenüber vom Winkel brauchst du den Sinus, für die Kathete am Winkel den
+  Kosinus.“ Neue Aufnahme legte die Betonung wieder auf „fehlenden“; mit `stimme_varianten.py` vier Takes (seed 1–4)
+  erzeugt und gemessen, seed 4 gewählt („fehlenden“ 107 Hz/76,4 dB, „Seiten“ 103 Hz/75,7 dB – wie die abgenommene
+  Fassung). Takes in `tts_cache/varianten/`.
+- Länge damit 5:06 (688 Wörter) statt 3:40 – über der ursprünglichen Obergrenze von 4 min. Kürzungsvorschläge an den
+  Nutzer, noch nicht entschieden.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)

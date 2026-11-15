@@ -12,3 +12,12 @@
 {"zeit": "2026-11-14 15:17:40", "zeichen": 213, "character_cost": "92", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "133fd9ea423970a7.json"}
 {"zeit": "2026-11-14 15:18:20", "zeichen": 212, "character_cost": "91", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "053eeffcddfe8c52.json"}
 {"zeit": "2026-11-14 15:18:24", "zeichen": 207, "character_cost": "89", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "776fc98a58da8597.json"}
+{"zeit": "2026-11-15 16:59:34", "zeichen": 526, "character_cost": "226", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "c7cb156a45117fe3.json"}
+{"zeit": "2026-11-15 16:59:54", "zeichen": 1139, "character_cost": "489", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "0dabe013254126be.json"}
+{"zeit": "2026-11-15 17:00:13", "zeichen": 978, "character_cost": "420", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "93c855e48138250c.json"}
+{"zeit": "2026-11-15 17:00:31", "zeichen": 1009, "character_cost": "434", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "701b80b0a59b53d0.json"}
+{"zeit": "2026-11-15 17:00:37", "zeichen": 311, "character_cost": "134", "model": "eleven_v4", "voice": "NBqeXKdZHweef6y0B67V", "datei": "55d28ce9ac201523.json"}
+{"zeichen": 311, "character_cost": "134", "seed": 1, "datei": "varianten/55d28ce9ac201523_seed1.json"}
+{"zeichen": 311, "character_cost": "134", "seed": 2, "datei": "varianten/55d28ce9ac201523_seed2.json"}
+{"zeichen": 311, "character_cost": "134", "seed": 3, "datei": "varianten/55d28ce9ac201523_seed3.json"}
+{"zeichen": 311, "character_cost": "134", "seed": 4, "datei": "varianten/55d28ce9ac201523_seed4.json"}

@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(HIER, '..', 'mathe-einheitskreis'))
 import einheitskreis as E                                  # noqa: E402  (setzt G.* für Video 1; wird unten ersetzt)
 import regel as G                                          # noqa: E402
 from regel import INK, GRAU, HELL, BG, TEAL, INTER, INTER_X, C, band, ein, karte   # noqa: E402
-from animationen import breite, einfuegen, glatt, klemm, p  # noqa: E402
+from animationen import breite, einfuegen, glatt, klemm, mischfarbe, p  # noqa: E402
 from einheitskreis import SIN, COS, WINKEL, zeile, formel, etikett, gestrichelt, bahn   # noqa: E402
 from motivation import spruch                              # noqa: E402
 from PIL import Image                                      # noqa: E402
@@ -39,7 +39,7 @@ def szenen_aus_drehbuch():
 
 
 SZENEN = szenen_aus_drehbuch()
-KICKER = {'einstieg': 'Wofür?', 'leiter': 'Leiter an der Wand', 'kurs': 'Schiffskurs', 'riesenrad': 'Riesenrad',
+KICKER = {'einstieg': 'Wofür?', 'regel': 'Sinus oder Kosinus?', 'leiter': 'Leiter an der Wand', 'kurs': 'Schiffskurs', 'riesenrad': 'Riesenrad',
           'merke': 'Merke', 'schluss': 'Merke'}
 for s in SZENEN:
     s['kicker'] = KICKER[s['id']]
@@ -49,6 +49,8 @@ for s in SZENEN:
         s['pause'] = 2.5                                   # Karte mit QR-Code länger stehen lassen
     if s['id'] == 'leiter':
         s['pause'] = 1.6                                   # Vergleich mit dem Einheitskreis kurz stehen lassen
+    if s['id'] == 'regel':
+        s['pause'] = 2.2                                   # getauschte Seiten kurz stehen lassen
 
 
 # ---------------------------------------------------------------- Zeichenhilfen
@@ -128,7 +130,7 @@ def _schnitt(A, d, S1, S2):
     return A[0] + s_ * d[0], A[1] + s_ * d[1]
 
 
-def hinweis_gegenueber(b, t, t0, A, w0, w1, seite, rb=48, c=SIN, dauer=2.8, ab=None):
+def hinweis_gegenueber(b, t, t0, A, w0, w1, seite, rb=48, c=SIN, dauer=2.8, ab=None, pfeil=WINKEL):
     """Nutzer 15.11.: zeigen, dass die Gegenkathete dem Winkel GEGENÜBER liegt. Der Winkelbogen leuchtet auf, ein
     gestrichelter oranger Pfeil läuft vom Winkel quer durchs Dreieck zur gegenüberliegenden Seite, die dann leuchtet.
     w0, w1: Schenkel des Winkels in Grad (mathematisch), seite: die beiden Endpunkte der Gegenkathete; ab: Abstand vom
@@ -136,7 +138,7 @@ def hinweis_gegenueber(b, t, t0, A, w0, w1, seite, rb=48, c=SIN, dauer=2.8, ab=N
     if t < t0 or t > t0 + dauer + 0.6:
         return
     a = 1 - ein(t, t0 + dauer, 0.5)
-    bogen(b, A[0], A[1], rb, w0, w1, WINKEL, 14, 0.35 * puls(t, t0, 0.9) * a)
+    bogen(b, A[0], A[1], rb, w0, w1, pfeil, 14, 0.35 * puls(t, t0, 0.9) * a)
     m = math.radians((w0 + w1) / 2)
     d = (math.cos(m), -math.sin(m))
     Q = _schnitt(A, d, *seite)
@@ -145,12 +147,12 @@ def hinweis_gegenueber(b, t, t0, A, w0, w1, seite, rb=48, c=SIN, dauer=2.8, ab=N
     f = glatt(p(t, t0 + 0.25, 0.8))
     if f > 0 and s1 > s0:
         e = s0 + (s1 - s0) * f
-        gestrichelt(b, A[0] + d[0] * s0, A[1] + d[1] * s0, A[0] + d[0] * e, A[1] + d[1] * e, WINKEL, a,
+        gestrichelt(b, A[0] + d[0] * s0, A[1] + d[1] * s0, A[0] + d[0] * e, A[1] + d[1] * e, pfeil, a,
                     n=max(4, int((e - s0) / 9)), lw=3.5)
         hx, hy = A[0] + d[0] * (e + 6), A[1] + d[1] * (e + 6)
         nx, ny = -d[1], d[0]
         b.poly([(hx + d[0] * 6, hy + d[1] * 6), (hx - d[0] * 10 + nx * 8, hy - d[1] * 10 + ny * 8),
-                (hx - d[0] * 10 - nx * 8, hy - d[1] * 10 - ny * 8)], fill=WINKEL, alpha=a)
+                (hx - d[0] * 10 - nx * 8, hy - d[1] * 10 - ny * 8)], fill=pfeil, alpha=a)
     hl = math.sin(math.pi * klemm((t - (t0 + 0.9)) / 1.8))
     if hl > 0:
         b.linie(list(seite), c, 24, alpha=0.30 * hl * a)
@@ -174,6 +176,15 @@ def hypotenuse_leuchtet(b, t, t0, A, B, dauer=1.6):
     hl = math.sin(math.pi * klemm((t - t0) / dauer))
     if hl > 0:
         b.linie([A, B], WINKEL, 14, alpha=0.35 * hl)
+
+
+def etikett_teile(b, teile, x, y, g, a, anker='m'):
+    """Beschriftung aus mehreren Farben ohne Papierfeld; anker m, l oder r."""
+    if a <= 0:
+        return
+    w = sum(breite(s_, INTER_X, g) for s_, _ in teile)
+    x0 = x - w / 2 if anker == 'm' else (x if anker == 'l' else x - w)
+    zeile(b, teile, x0, y, g, INTER_X, alpha=a, anker='l')
 
 
 def zahlenstrahl(b, x0, x1, y, a, punkte):
@@ -244,7 +255,84 @@ def s_einstieg(b, sc, t):
     leiste(b, ein(t, 0.2, 0.5))
 
 
-# ---------------------------------------------------------------- 2 Leiter an der Wand
+# ---------------------------------------------------------------- 2 Regel: Sinus gegenüber, Kosinus am Winkel
+RA, RC, RB = (130, 590), (530, 590), (530, 290)            # 3-4-5-Dreieck: α bei A, rechter Winkel bei C
+RX_ = 1005                                                 # Mitte der rechten Spalte
+ALPHA_R = math.degrees(math.atan2(300, 400))               # 36,87°
+
+
+def s_regel(b, sc, t):
+    """Nutzer 15.11.: „Das Allerwichtigste: Sinus gegenüber vom Winkel, Kosinus am Winkel“ – eigene Szene vor den
+    Beispielen. Die Seiten bekommen ihren Namen nur aus der Lage zu α; am Ende wandert α in die andere Ecke und die
+    Rollen tauschen (Vorbereitung auf den Schiffskurs: nicht waagrecht/senkrecht entscheidet, sondern der Winkel)."""
+    w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
+    tW, tH, tGK = w('wo der Winkel'), w('Gegenüber vom rechten'), w('Gegenüber von Alpha')
+    tS, tAn, tAK = w('Für sie brauchst'), w('An Alpha liegen'), w('und die Ankathete')
+    tK, tKurz, tKg = w('Für die Ankathete'), w('Kurz:'), w('Kathete am Winkel')
+    tT, tPl = w('Sitzt Alpha'), w('die Plätze')
+    A, Cc, Bp = RA, RC, RB
+    f = glatt(p(t, tT + 0.4, 1.4))                         # Tausch: α wandert von A nach B
+    fG, fA = glatt(p(t, tGK + 0.6, 0.6)), glatt(p(t, tAK, 0.6))
+    # Dreieck, rechter Winkel
+    a0 = ein(t, 0.1, 0.5)
+    b.poly([A, Cc, Bp], fill=WINKEL, alpha=0.08 * a0)
+    c_bc = mischfarbe(mischfarbe(INK, SIN, fG), COS, f)    # erst schwarz, dann rot (gegenüber), nach dem Tausch blau
+    c_ac = mischfarbe(mischfarbe(INK, COS, fA), SIN, f)
+    w_bc, w_ac = 5 + 4 * fG, 5 + 4 * fA
+    b.linie([Cc, Bp], c_bc, w_bc, alpha=a0)
+    b.linie([A, Cc], c_ac, w_ac, alpha=a0)
+    b.linie([A, Bp], INK, 6, alpha=a0)
+    rechter_winkel(b, Cc[0], Cc[1], 90, a0, r=34, b1=w_bc, b2=w_ac)
+    # Winkel α: erst bei A, beim Tausch bei B
+    aw = ein(t, tW, 0.4)
+    bogen(b, A[0], A[1], 70, 0, ALPHA_R, WINKEL, 6, aw * (1 - f))
+    m = math.radians(ALPHA_R / 2)
+    b.text('α', A[0] + 104 * math.cos(m), A[1] - 104 * math.sin(m), 32, WINKEL, INTER_X, alpha=aw * (1 - f))
+    w0B = 180 + ALPHA_R
+    bogen(b, Bp[0], Bp[1], 70, w0B, 270, WINKEL, 6, f)
+    mB = math.radians((w0B + 270) / 2)
+    b.text('α', Bp[0] + 100 * math.cos(mB), Bp[1] - 100 * math.sin(mB), 32, WINKEL, INTER_X, alpha=f)
+    # Hypotenuse: gegenüber vom rechten Winkel (schwarzer Pfeil), Name gedreht entlang der Seite
+    hinweis_gegenueber(b, t, tH, Cc, 90, 180, (A, Bp), rb=34, c=INK, ab=56, pfeil=INK, dauer=2.4)
+    aH = ein(t, tH + 0.9)
+    ux, uy = (Bp[0] - A[0]) / 500, (Bp[1] - A[1]) / 500
+    nx, ny = uy, -ux                                       # Normale nach links oben (außerhalb)
+    mx_, my_ = (A[0] + Bp[0]) / 2, (A[1] + Bp[1]) / 2
+    b.text('Hypotenuse', mx_ + nx * 28, my_ + ny * 28, 28, INK, INTER_X, alpha=aH, dreh=ALPHA_R)
+    b.text('gegenüber vom rechten Winkel', mx_ + nx * 60, my_ + ny * 60, 18, GRAU, INTER_X, alpha=aH * (1 - ein(t, tAn, 0.4)),
+           dreh=ALPHA_R)
+    # Gegenkathete: gegenüber von α (oranger Pfeil), wird rot
+    hinweis_gegenueber(b, t, tGK, A, 0, ALPHA_R, (Cc, Bp), rb=70, ab=130, dauer=2.6)
+    aG = ein(t, tGK + 0.8)
+    for txt, gr, dy, c, al in (('Gegenkathete', 28, -14, SIN, aG * (1 - f)), ('gegenüber von α', 20, 20, GRAU, aG * (1 - f)),
+                               ('Ankathete', 28, -14, COS, f), ('an α', 20, 20, GRAU, f)):
+        etikett(b, txt, Cc[0] + 22, (Cc[1] + Bp[1]) / 2 + dy, gr, c, al, anker='l', grund=False)
+    # An α liegen zwei Seiten: die Hypotenuse und die Ankathete
+    hypotenuse_leuchtet(b, t, tAn + 0.5, A, Bp, 1.4)
+    hinweis_anliegend(b, t, tAK, A, Cc, 0, ALPHA_R, rb=70, dauer=2.4)
+    aA = ein(t, tAK + 0.6)
+    for txt, gr, dy, c, al in (('Ankathete', 28, 34, COS, aA * (1 - f)), ('an α', 20, 64, GRAU, aA * (1 - f)),
+                               ('Gegenkathete', 28, 34, SIN, f), ('gegenüber von α', 20, 64, GRAU, f)):
+        etikett(b, txt, (A[0] + Cc[0]) / 2, A[1] + dy, gr, c, al, grund=False)
+    # nach dem Tausch: Pfeil von der neuen Ecke zur neuen Gegenkathete (unten)
+    hinweis_gegenueber(b, t, tT + 1.6, Bp, w0B, 270, (A, Cc), rb=70, ab=124, dauer=2.4)
+    # rechte Spalte: die Regel
+    zz(b, t, 0.2, [('Sinus', SIN), (' oder ', INK), ('Kosinus', COS), ('?', INK)], RX_, 150, 44)
+    zz(b, t, tW, [('Das entscheidet die Lage zum Winkel ', GRAU), ('α', WINKEL), ('.', GRAU)], RX_, 204, 22, INTER)
+    for y, t0 in ((262, tS), (392, tK)):
+        hl = puls(t, tKurz + (0 if y == 262 else 1.6), 1.2)
+        if hl > 0:
+            band(b, RX_ - 235, y - 25, RX_ + 235, y + 25, TEAL, 0.14 * hl, r=14)
+    zz(b, t, tS, [('Kathete gegenüber', SIN), ('  →  ', GRAU), ('Sinus', SIN)], RX_, 262, 32)
+    zz(b, t, tS + 0.6, [('Gegenkathete', SIN), (' = Hypotenuse · ', INK), ('sin α', SIN)], RX_, 310, 26)
+    zz(b, t, tK, [('Kathete am Winkel', COS), ('  →  ', GRAU), ('Kosinus', COS)], RX_, 392, 32)
+    zz(b, t, tK + 0.6, [('Ankathete', COS), (' = Hypotenuse · ', INK), ('cos α', COS)], RX_, 440, 26)
+    zz(b, t, tT + 0.4, [('α', WINKEL), (' in der anderen Ecke: Rot und Blau tauschen', INK)], RX_, 530, 23)
+    zz(b, t, tPl, [('Es zählt die Lage zum Winkel,', GRAU)], RX_, 570, 20, INTER)
+    zz(b, t, tPl, [('nicht waagrecht oder senkrecht.', GRAU)], RX_, 598, 20, INTER)
+
+
+# ---------------------------------------------------------------- 3 Leiter an der Wand
 LM = 96                                                    # Bildpunkte je Meter
 FX, FY = 170, 610                                          # Leiterfuß (wie der Ursprung im Einheitskreis)
 WX = FX + 5 * math.cos(math.radians(70)) * LM              # Wand
@@ -255,11 +343,13 @@ LX = 920                                                   # Mitte der Rechenspa
 def s_leiter(b, sc, t):
     w = lambda s_, nach=None: C(sc, s_, nach)               # noqa: E731
     tL, tW_, tH = w('fünf Meter lang'), w('siebzig Grad'), w('Wie hoch')
-    tD, tHy, tG = w('rechtwinkliges Dreieck'), w('Die Leiter ist die Hypotenuse'), w('Gegenkathete durch')
+    tD, tHy, tG = w('rechtwinkliges Dreieck'), w('Die Leiter liegt gegenüber'), w('Gegenkathete durch')
+    tGg, tGgW, tMs = w('Die Höhe an der Wand'), w('gegenüber vom Siebzig'), w('Kathete gegenüber')
     tA, tM, tT1 = w('also Sinus siebzig'), w('Mal fünf Meter'), w('Der Taschenrechner')
     tW1, tZ01, tKa = w('ungefähr null Komma neun'), w('zwischen null und eins'), w('eine Kathete ist')
     tR1, tE1 = w('Fünf Meter mal null Komma'), w('sind vier Meter siebzig')
-    tK, tB, tT2 = w('Genauso ist der Kosinus'), w('Der Abstand zur Wand'), w('Kosinus siebzig Grad ist')
+    tK, tB, tT2 = w('Und der Abstand zur Wand'), w('Der Abstand ist also'), w('Kosinus siebzig Grad ist')
+    tAnW, tMk = w('am Siebzig-Grad-Winkel an'), w('Kathete am Winkel')
     tW2, tE2 = w('ungefähr null Komma drei'), w('das ergibt ein Meter')
     tEK = w('Es ist das Dreieck')
     tHy1, tAk = w('Hypotenuse'), w('Ankathete durch')
@@ -272,8 +362,8 @@ def s_leiter(b, sc, t):
     b.poly([(FX, FY), (WX, FY), (WX, TY)], fill=WINKEL, alpha=0.10 * aD)
     rechter_winkel(b, WX, FY, 90, aD, b1=8, b2=3.5 + 4.5 * glatt(p(t, tK, 0.7)))   # erst Bodenlinie, dann blaue Strecke
     # Höhe (rot, an der Wand) und Abstand (blau, am Boden)
-    strecke(b, WX, FY, WX, TY, SIN, 8 + 4 * puls(t, tG), glatt(p(t, tG, 0.7)))
-    strecke(b, FX, FY, WX, FY, COS, 8 + 4 * puls(t, tK), glatt(p(t, tK, 0.7)))
+    strecke(b, WX, FY, WX, TY, SIN, 8 + 4 * puls(t, tMs), glatt(p(t, tGg, 0.7)))
+    strecke(b, FX, FY, WX, FY, COS, 8 + 4 * puls(t, tMk), glatt(p(t, tK, 0.7)))
     # Leiter: wird angelehnt (wächst vom Fuß aus), mit Sprossen
     fl = glatt(p(t, 0.25, 1.0))
     strecke(b, FX, FY, WX, TY, INK, 6, fl)
@@ -285,26 +375,28 @@ def s_leiter(b, sc, t):
     E.winkel(b, 70 * glatt(p(t, tW_, 0.8)), ein(t, tW_, 0.3), text='70°' if t > tW_ + 0.6 else '', cx=FX, cy=FY)
     # Wo liegt was? (Nutzer 15.11.) Hypotenuse leuchtet, Gegenkathete gegenüber vom Winkel, Ankathete am Winkel
     hypotenuse_leuchtet(b, t, tHy1, (FX, FY), (WX, TY))
-    hinweis_gegenueber(b, t, tG, (FX, FY), 0, 70, ((WX, FY), (WX, TY)), ab=114)
-    hinweis_anliegend(b, t, tAk, (FX, FY), (WX, FY), 0, 70)
+    hinweis_gegenueber(b, t, tGgW, (FX, FY), 0, 70, ((WX, FY), (WX, TY)), ab=114)
+    hinweis_anliegend(b, t, tAnW, (FX, FY), (WX, FY), 0, 70)
     # Beschriftungen neben den Strecken, nie darauf
     aHy = ein(t, tHy)
     etikett(b, 'Hypotenuse', 232, 352 - 30 * aHy, 22, INK, aHy, anker='r', grund=False)
     etikett(b, '5 m', 232, 352 + 6 * aHy, 28, INK, ein(t, tL), anker='r', grund=False)
-    aF = ein(t, tH) * (1 - ein(t, tG, 0.3))                # Frage: wie hoch?
-    nah = ein(t, tG + 0.7, 0.4)                            # Maßlinie weicht der roten Strecke, die Schrift rückt heran
+    aF = ein(t, tH) * (1 - ein(t, tGg, 0.3))               # Frage: wie hoch?
+    nah = ein(t, tGg + 0.7, 0.4)                           # Maßlinie weicht der roten Strecke, die Schrift rückt heran
     masslinie(b, WX + 54, FY, WX + 54, TY, SIN, ein(t, tH) * (1 - nah), lw=2.5)
     etikett(b, '?', WX + 84, (FY + TY) / 2, 44, SIN, aF, grund=False)
     lx = WX + 70 - 26 * nah
-    aG = ein(t, tG) * (1 - ein(t, tE1, 0.3))
+    aG = ein(t, tGg) * (1 - ein(t, tE1, 0.3))
     etikett(b, 'Höhe', lx, (FY + TY) / 2 - 14, 28, SIN, aG, anker='l', grund=False)
-    etikett(b, 'Gegenkathete', lx, (FY + TY) / 2 + 20, 20, SIN, aG, anker='l', grund=False)
-    etikett(b, 'gegenüber vom Winkel', lx, (FY + TY) / 2 + 46, 18, GRAU, ein(t, tG + 0.8) * (1 - ein(t, tG + 3.6, 0.4)),
-            anker='l', grund=False)
+    aGK = ein(t, tGgW + 0.6) * (1 - ein(t, tE1, 0.3))
+    etikett(b, 'Gegenkathete', lx, (FY + TY) / 2 + 20, 20, SIN, aGK, anker='l', grund=False)
+    etikett_teile(b, [('gegenüber vom Winkel', GRAU), (' → ', GRAU), ('Sinus', SIN)], lx, (FY + TY) / 2 + 46, 18,
+                  ein(t, tMs) * (1 - ein(t, tE1, 0.3)), anker='l')
     etikett(b, '≈ 4,70 m', lx, (FY + TY) / 2, 30, SIN, ein(t, tE1 + 0.3), anker='l', grund=False)
     aAn = ein(t, tK) * (1 - ein(t, tE2, 0.3))
     etikett(b, 'Abstand (Ankathete)', (FX + WX) / 2, FY + 34, 20, COS, aAn, grund=False)
-    etikett(b, 'am Winkel', (FX + WX) / 2, FY + 58, 18, GRAU, ein(t, tAk + 0.6) * (1 - ein(t, tAk + 3.4, 0.4)), grund=False)
+    etikett_teile(b, [('am Winkel', GRAU), (' → ', GRAU), ('Kosinus', COS)], (FX + WX) / 2, FY + 58, 18,
+                  ein(t, tMk) * (1 - ein(t, tE2, 0.3)))
     etikett(b, '≈ 1,71 m', (FX + WX) / 2, FY + 36, 28, COS, ein(t, tE2 + 0.3), grund=False)
     # rechts zuerst, was gegeben und gesucht ist; dann die Rechnung Zeile für Zeile; am Ende der Einheitskreis
     vor = tG - 0.4
@@ -323,7 +415,7 @@ def s_leiter(b, sc, t):
     e1 = ein(t, tE1)
     zf(b, t, tR1, [T('Höhe', SIN), T(' ≈ 5 m · '), T('0,940', SIN), T(' = ', INK, e1), T('4,70 m', SIN, e1)],
        LX, 430 - 280 * hoch, g, weg)
-    zf(b, t, tK + 0.7, [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 236, g, weg)   # erst, wenn die Zeile oben ist
+    zf(b, t, max(tK + 0.7, tAk), [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 236, g, weg)
     zf(b, t, tB, [T('Abstand', COS), T(' = 5 m · '), T('cos 70°', COS)], LX, 316, g, weg)
     zf(b, t, tT2, [T('Taschenrechner:  ', GRAU), T('cos 70°', COS), T(' ≈ ', INK, ein(t, tW2)), T('0,342', COS, ein(t, tW2))],
        LX, 372, 26, weg)
@@ -437,7 +529,8 @@ def s_kurs(b, sc, t):
     tGN, tGO, tR = w('erst nach Norden'), w('dann nach Osten'), w('wieder ein rechtwinkliges')
     tGg, tO1, tT1 = w('gegenüber'), w('zehn Kilometer mal Sinus'), w('Sinus sechzig Grad ist')
     tW1, tZ01, tO2 = w('ungefähr null Komma acht'), w('wieder ein Wert'), w('Das ergibt ungefähr')
-    tAn, tN1, tT2 = w('liegt am Winkel an'), w('zehn Kilometer mal Kosinus'), w('Kosinus sechzig Grad ist')
+    tAn, tN1, tT2 = w('liegt am Kurswinkel an'), w('zehn Kilometer mal Kosinus'), w('Kosinus sechzig Grad ist')
+    tHyK, tMs, tMk, tZaehlt = w('Die Fahrstrecke ist'), w('Kathete gegenüber'), w('Kathete am'), w('Es zählt nicht')
     tW2, tN2 = w('genau null Komma fünf'), w('also fünf Kilometer')
     tAch = w('Achtung')
     seekarte(b, ein(t, 0.0, 0.4))
@@ -452,11 +545,11 @@ def s_kurs(b, sc, t):
     fs = glatt(p(t, tS, max(1.5, tI + 0.4 - tS)))
     strecke(b, HX, HY, ZX, ZY, INK, 5, fs)
     # Nord- und Oststrecke
-    strecke(b, HX, HY, ex, ey, COS, 8 + 4 * puls(t, tAn), glatt(p(t, tGN, 0.8)))
-    strecke(b, ex, ey, ZX, ZY, SIN, 8 + 4 * puls(t, tGg) + 4 * puls(t, tAch + 0.6), glatt(p(t, tGO, 0.9)))
+    strecke(b, HX, HY, ex, ey, COS, 8 + 4 * puls(t, tMk), glatt(p(t, tGN, 0.8)))
+    strecke(b, ex, ey, ZX, ZY, SIN, 8 + 4 * puls(t, tMs) + 4 * puls(t, tAch + 0.6), glatt(p(t, tGO, 0.9)))
     rechter_winkel(b, ex, ey, 270, aR, b1=8, b2=8)
     # Wo liegt was? (Nutzer 15.11.) wie bei der Leiter
-    hypotenuse_leuchtet(b, t, tR, (HX, HY), (ZX, ZY))
+    hypotenuse_leuchtet(b, t, tHyK, (HX, HY), (ZX, ZY))
     hinweis_gegenueber(b, t, tGg, (HX, HY), 30, 90, ((ex, ey), (ZX, ZY)), rb=62, ab=124)
     hinweis_anliegend(b, t, tAn, (HX, HY), (ex, ey), 30, 90, rb=62)
     # Kurswinkel: von der Nordlinie im Uhrzeigersinn bis zur Fahrstrecke
@@ -469,9 +562,12 @@ def s_kurs(b, sc, t):
     schiff(b, HX + (ZX - HX) * fs, HY + (ZY - HY) * fs, ein(t, tS - 0.3, 0.3) * (1 - ein(t, tGN - 0.5, 0.4)))
     # Beschriftungen neben den Strecken
     etikett(b, '10 km', HX + (ZX - HX) * 0.56 + 22, HY + (ZY - HY) * 0.56 + 34, 24, INK, ein(t, tI + 0.4), anker='l', grund=False)
-    etikett(b, 'Hypotenuse', HX + (ZX - HX) * 0.56 + 22, HY + (ZY - HY) * 0.56 + 60, 18, INK, ein(t, tR + 0.3), anker='l', grund=False)
-    etikett(b, 'gegenüber vom Winkel', (ex + ZX) / 2, ey - 52, 18, GRAU, ein(t, tGg + 0.8) * (1 - ein(t, tGg + 3.6, 0.4)), grund=False)
-    etikett(b, 'am Winkel', HX - 14, (HY + ey) / 2 + 24, 18, GRAU, ein(t, tAn + 0.6) * (1 - ein(t, tAn + 3.4, 0.4)), anker='r', grund=False)
+    etikett(b, 'Hypotenuse', HX + (ZX - HX) * 0.56 + 22, HY + (ZY - HY) * 0.56 + 60, 18, INK, ein(t, tHyK + 0.3), anker='l', grund=False)
+    etikett_teile(b, [('gegenüber vom Winkel', GRAU), (' → ', GRAU), ('Sinus', SIN)], (ex + ZX) / 2, ey - 52, 18,
+                  ein(t, tMs) * (1 - ein(t, tO2 + 0.6, 0.4)))
+    aKw = ein(t, tMk) * (1 - ein(t, tN2, 0.4))
+    # links neben der Nordstrecke ist kein Platz (Kartenrand, Küste): innen rechts daneben, unter dem rechten Winkel
+    etikett_teile(b, [('am Winkel', GRAU), (' → ', GRAU), ('Kosinus', COS)], HX + 14, ey + 62, 18, aKw, anker='l')
     aNo = ein(t, tGN + 0.5)
     hoch = 14 * ein(t, tN2)
     etikett(b, 'Norden', HX - 14, (HY + ey) / 2 - hoch, 22, COS, aNo, anker='r', grund=False)
@@ -501,10 +597,10 @@ def s_kurs(b, sc, t):
     zahlenstrahl(b, 740, 1180, 512, ein(t, tZ01 - 0.3), [(0.866, SIN, 'sin 60°', 1.0), (0.5, COS, 'cos 60°', ein(t, tW2))])
     aA = ein(t, tAch)
     if aA > 0:
-        band(b, 676, 566 + 10 * (1 - aA), 1240, 652 + 10 * (1 - aA), TEAL, 0.94 * aA, r=18)
-        b.text('Achtung: Der Winkel liegt an der Nordlinie.', KX, 592 + 10 * (1 - aA), 21, '#ffffff', INTER_X, alpha=aA)
-        a2 = ein(t, w('Hier gehört'))
-        b.text('Der Sinus gehört hier zur waagrechten Strecke.', KX, 626 + 10 * (1 - aA), 21, '#ffffff', INTER_X, alpha=aA * a2)
+        band(b, 662, 566 + 10 * (1 - aA), 1254, 652 + 10 * (1 - aA), TEAL, 0.94 * aA, r=18)
+        b.text('Achtung: Der Sinus gehört hier zur waagrechten Strecke.', KX, 592 + 10 * (1 - aA), 19, '#ffffff', INTER_X, alpha=aA)
+        a2 = ein(t, tZaehlt)
+        b.text('Es zählt nur, wo die Seite zum Winkel liegt.', KX, 626 + 10 * (1 - aA), 19, '#ffffff', INTER_X, alpha=aA * a2)
 
 
 # ---------------------------------------------------------------- 4 Riesenrad
@@ -562,6 +658,7 @@ def s_riesenrad(b, sc, t):
     tUe, tHo = w('Über der Achse'), w('Ihre Höhe')
     t30, t90, t210 = w('Bei dreißig Grad'), w('Bei neunzig Grad'), w('Bei zweihundertzehn')
     tD, tC0, tC1, tApp = w('Dreht sich das Rad'), w('dann ergibt die Höhe'), w('Probier es') + 0.4, w('Probier es')
+    tDr, tGeg, tMs = w('Auch hier steckt'), w('Die Höhe über der Achse'), w('Kathete gegenüber')
     g = rad_winkel(sc, t)
     gm = g % 360
     kurve = ein(t, tD, 0.5)                                # Rechnung weg, Kurve her
@@ -586,19 +683,19 @@ def s_riesenrad(b, sc, t):
             b.kreis(x, y, 7, TEAL, alpha=am)
             etikett(b, s_, x + ox, y + oy, 24, TEAL, am, grund=False)
     # Einmal (Nutzer 15.11.): das Dreieck im Rad – Winkel an der Achse, rechter Winkel, Gegenkathete gegenüber
-    aT = ein(t, tUe, 0.4) * (1 - ein(t, t30 - 0.5, 0.4))
+    aT = ein(t, tDr, 0.4) * (1 - ein(t, t30 - 0.5, 0.4))
     if aT > 0:
         b.poly([(NX, NY), (px, NY), (px, py)], fill=WINKEL, alpha=0.12 * aT)
         rechter_winkel(b, px, NY, 90, aT, r=20, b1=8, b2=2)
-        hypotenuse_leuchtet(b, t, tUe + 0.1, (NX, NY), (px, py), 1.4)
-        hinweis_gegenueber(b, t, tUe + 0.4, (NX, NY), 0, gm, ((px, NY), (px, py)), dauer=2.6, ab=102)
+        hypotenuse_leuchtet(b, t, tDr + 0.3, (NX, NY), (px, py), 1.4)
+        hinweis_gegenueber(b, t, tGeg + 0.6, (NX, NY), 0, gm, ((px, NY), (px, py)), dauer=2.6, ab=102)
         # wie im Einheitskreis-Video: der Name steht gedreht entlang der Hypotenuse (statt „30 m“, solange das Dreieck da ist)
         m = math.radians(gm)
         b.text('Hypotenuse = 30 m', (NX + px) / 2 - 22 * math.sin(m), (NY + py) / 2 - 22 * math.cos(m), 20, INK, INTER_X,
-               alpha=aT * ein(t, tUe + 0.1, 0.4), dreh=gm)
-    zz(b, t, tUe + 0.4, [('Gegenkathete', SIN), (' = Hypotenuse · ', INK), ('sin α', SIN)], QX, 96, 22, ende=t30 - 0.5)
+               alpha=aT * ein(t, tDr + 0.3, 0.4), dreh=gm)
+    zz(b, t, tMs, [('Kathete gegenüber', SIN), ('  →  ', GRAU), ('Sinus', SIN)], QX, 96, 24, ende=t30 - 0.5)
     # Zeiger, Winkel, Höhe über der Achse (rot)
-    aU = ein(t, tUe - 0.2, 0.4)
+    aU = ein(t, tDr - 0.2, 0.4)
     if aP > 0:
         b.linie([(NX, NY), (px, py)], INK, 4, alpha=aP)
     if aU > 0:
@@ -613,12 +710,12 @@ def s_riesenrad(b, sc, t):
         if t < tD:
             dx = 26 if px >= NX - 2 else -26
             b.text('P', px + dx, py + (-24 if py <= NY + 1 else 26), 28, INK, INTER_X, alpha=aP * (1 - ein(t, t30 - 0.4, 0.3)))
-    a30 = ein(t, tR30) * (1 - ein(t, tUe, 0.3))             # danach steht „Hypotenuse = 30 m“ entlang des Radius
+    a30 = ein(t, tR30) * (1 - ein(t, tDr, 0.3))             # danach steht „Hypotenuse = 30 m“ entlang des Radius
     if a30 > 0:
         m = math.radians(gm)
         etikett(b, '30 m', (NX + px) / 2 - 30 * math.sin(m), (NY + py) / 2 - 30 * math.cos(m), 22, INK, a30, grund=False)
     # rechts zuerst, was gegeben ist; dann die Rechnung
-    vor = tUe - 0.4
+    vor = tDr - 0.4
     zz(b, t, 0.2, [('Bis hier: ein Dreieck', GRAU)], QX, 150, 28, ende=vor)
     zz(b, t, w('ganzen Kreis'), [('Jetzt: der ganze Kreis', TEAL)], QX, 198, 32, ende=vor)
     zz(b, t, t60, [('Durchmesser: ', GRAU), ('60 m', INK)], QX, 300, 30, ende=vor)
@@ -714,26 +811,30 @@ def merkbilder(b):
 
 
 def merkzettel(b, sc, t, alle=False):
-    karte(b, 600, 96, 640, 424, alpha=1.0, r=22)
+    karte(b, 600, 96, 640, 480, alpha=1.0, r=22)
     mx = 920
-    b.text('Merke', mx, 130, 28, TEAL, INTER_X)
+    b.text('Merke', mx, 128, 28, TEAL, INTER_X)
     st = (lambda s_: 0) if alle else (lambda s_: C(sc, s_))  # noqa: E731
-    t1 = st('Mit Sinus')                                   # Merksatz-Fassung 1, vom Nutzer 15.11. abgenommen
-    a1, a2 = ein(t, t1), ein(t, st('Und wo sich'))
+    t1, t2 = st('Mit Sinus'), st('Für die Kathete')          # Merksatz 1 vom Nutzer 15.11. abgenommen; Satz 2 neu (15.11.)
+    a1, a2, aU = ein(t, t1), ein(t, t2), ein(t, st('Und wo sich'))
     a3 = [ein(t, st(s_)) for s_ in ('beim Riesenrad', 'beim Windrad', 'beim Pedal')]
-    z1 = [('Mit ', INK), ('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' rechnest du im', INK)]
-    z2 = [('rechtwinkligen Dreieck die fehlenden Seiten aus.', INK)]
-    zeile(b, z1, mx, 178 + 10 * (1 - a1), 23, INTER_X, alpha=a1)
-    zeile(b, z2, mx, 210 + 10 * (1 - a1), 23, INTER_X, alpha=a1)
-    aF = ein(t, t1 + (0 if alle else 1.6))
-    zeile(b, [('Gegenkathete', SIN), (' = Hypotenuse · ', INK), ('sin α', SIN)], mx, 264 + 10 * (1 - aF), 27, INTER_X, alpha=aF)
-    zeile(b, [('Ankathete', COS), (' = Hypotenuse · ', INK), ('cos α', COS)], mx, 306 + 10 * (1 - aF), 27, INTER_X, alpha=aF)
-    b.linie([(640, 348), (1200, 348)], HELL, 2, alpha=a2)
-    b.text('Und wo sich etwas gleichmäßig dreht,', mx, 384 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
-    b.text('beschreiben sie die Bewegung:', mx, 416 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
+    g = 22
+    zeile(b, [('Mit ', INK), ('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' rechnest du im', INK)], mx, 168 + 10 * (1 - a1),
+          g, INTER_X, alpha=a1)
+    zeile(b, [('rechtwinkligen Dreieck die fehlenden Seiten aus.', INK)], mx, 198 + 10 * (1 - a1), g, INTER_X, alpha=a1)
+    zeile(b, [('Für die Kathete ', INK), ('gegenüber', SIN), (' vom Winkel brauchst du', INK)],
+          mx, 242 + 10 * (1 - a2), g, INTER_X, alpha=a2)
+    zeile(b, [('den ', INK), ('Sinus', SIN), (', für die Kathete ', INK), ('am Winkel', COS), (' den ', INK), ('Kosinus', COS), ('.', INK)],
+          mx, 272 + 10 * (1 - a2), g, INTER_X, alpha=a2)
+    aF = ein(t, t2 + (0 if alle else 1.0))
+    zeile(b, [('Gegenkathete', SIN), (' = Hypotenuse · ', INK), ('sin α', SIN)], mx, 318 + 10 * (1 - aF), 26, INTER_X, alpha=aF)
+    zeile(b, [('Ankathete', COS), (' = Hypotenuse · ', INK), ('cos α', COS)], mx, 356 + 10 * (1 - aF), 26, INTER_X, alpha=aF)
+    b.linie([(640, 394), (1200, 394)], HELL, 2, alpha=aU)
+    b.text('Und wo sich etwas gleichmäßig dreht,', mx, 428 + 10 * (1 - aU), g, INK, INTER_X, alpha=aU)
+    b.text('beschreiben sie die Bewegung:', mx, 458 + 10 * (1 - aU), g, INK, INTER_X, alpha=aU)
     # Nutzer 15.11.: keine allgemeine Formel „Höhe = Höhe der Achse + Radius · sin α“ – im Video nie so gezeigt, verwirrt
-    zeile(b, [('beim Riesenrad, ', INK), ('beim Windrad,', INK)], mx, 456, 23, INTER_X, alphas=a3[:2])
-    zeile(b, [('beim Pedal am Fahrrad.', INK)], mx, 488, 23, INTER_X, alphas=a3[2:])
+    zeile(b, [('beim Riesenrad, ', INK), ('beim Windrad,', INK)], mx, 500, g, INTER_X, alphas=a3[:2])
+    zeile(b, [('beim Pedal am Fahrrad.', INK)], mx, 530, g, INTER_X, alphas=a3[2:])
 
 
 def s_merke(b, sc, t):
@@ -754,7 +855,7 @@ def s_schluss(b, sc, t):
         b.text(SPRUCH, 640, 655, 30, '#ffffff', INTER_X, alpha=a * klemm(w2 * 2 - 1))
 
 
-ZEICHNER = dict(einstieg=s_einstieg, leiter=s_leiter, kurs=s_kurs, riesenrad=s_riesenrad, merke=s_merke, schluss=s_schluss)
+ZEICHNER = dict(einstieg=s_einstieg, regel=s_regel, leiter=s_leiter, kurs=s_kurs, riesenrad=s_riesenrad, merke=s_merke, schluss=s_schluss)
 KLAENGE = {}                                               # Geräusche sparsam: keine
 MERKSAETZE = []
 

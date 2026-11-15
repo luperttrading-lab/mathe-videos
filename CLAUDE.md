@@ -35,8 +35,9 @@ nachziehen.
   [Einheitskreis · Vorschau](https://claude.ai/artifact/43jaMqCCrmXtqx6TYuqET3) (Slug `18ad2432-58ac-4411-acae-c3f12ae7e7da`),
   nach „passt“ auf `main`. Test: `node einheitskreis/tests/einheitskreis.mjs` muss „Alles grün“ melden.
 - `themen/mathe-sinus-anwendungen/` – Video 2 der Reihe „Mathe verstehen“: „Wofür braucht man Sinus und Kosinus?“
-  (14.11., 3:10; für den Sohn, Hessen Gymnasium Klasse 10; kein Kanal, kein Abspann, keine Physik-Aufgaben): Leiter,
-  Schiffskurs auf der Seekarte, Riesenrad. `sinus_anwendungen.py` (importiert regel.py und die Zeichenhilfen aus
+  (Stand 15.11.: 5:06; für den Sohn, Hessen Gymnasium Klasse 10; kein Kanal, kein Abspann, keine Physik-Aufgaben):
+  Regel „Kathete gegenüber → Sinus, Kathete am Winkel → Kosinus“ (Nutzer 15.11.: das Allerwichtigste), dann Leiter,
+  Schiffskurs auf der Seekarte, Riesenrad. Takes mit festem seed: `stimme_varianten.py`. `sinus_anwendungen.py` (importiert regel.py und die Zeichenhilfen aus
   einheitskreis.py), Sprechtext nur in `drehbuch.md`, Stand und Entscheidungen in `gliederung.md`, `pruefen.py`
   (Beschriftungs-Check), Auswahlblatt `beispiele.pdf`. Eigene Vorschau-Seite
   [Sinus-Anwendungen-Video · Vorschau](https://claude.ai/artifact/Rr7NxyPfPvNJSXyf89sZ7W)
