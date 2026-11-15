@@ -37,8 +37,8 @@ Ecke auf die neue Gegenkathete (unten). Die Regel hängt an der Lage zum Winkel,
 > bilden einen rechten Winkel. Mit der Leiter entsteht ein rechtwinkliges Dreieck. Die Leiter liegt gegenüber vom
 > rechten Winkel, sie ist die Hypotenuse.
 > Die Höhe an der Wand liegt gegenüber vom Siebzig-Grad-Winkel: Kathete gegenüber, also Sinus. Sinus ist
-> Gegenkathete durch Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Mal fünf Meter: Die Höhe ist
-> fünf Meter mal Sinus siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier
+> Gegenkathete durch Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Jetzt lösen wir nach der Höhe
+> auf und multiplizieren beide Seiten mit fünf Metern. Dann ist die Höhe fünf Meter mal Sinus siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier
 > null. Im rechtwinkligen Dreieck liegt dieser Wert immer zwischen null und eins: Strecken sind nie negativ, und eine
 > Kathete ist immer kürzer als die Hypotenuse. Fünf Meter mal null Komma neun vier null sind vier Meter siebzig. Und
 > der Abstand zur Wand? Er liegt am Siebzig-Grad-Winkel an: Kathete am Winkel, also Kosinus. Kosinus ist Ankathete
@@ -65,6 +65,10 @@ verwirrend – wo ist der rechte Winkel, an der Leiter?)** Jetzt zuerst „Wand 
 Wand und Boden leuchten an der Ecke kurz auf, das Zeichen für den rechten Winkel erscheint mit einem Puls; erst dann
 „Mit der Leiter entsteht ein rechtwinkliges Dreieck“ (Fläche). Bei „Die Leiter liegt gegenüber vom rechten Winkel“
 läuft wie in der Regel-Szene ein schwarzer Pfeil vom rechten Winkel zur Leiter.
+**Umformen (Nutzer 15.11.: „durch fünf Meter. Mal fünf Meter“ klang wie ein Rechenfehler – „was bedeutet das mal
+5 m?“):** Der Schritt ist das Auflösen nach der Höhe; jetzt so gesagt („Jetzt lösen wir nach der Höhe auf und
+multiplizieren beide Seiten mit fünf Metern.“) und im Bild als Umformungsstrich „| · 5 m“ rechts neben
+sin 70° = Höhe/5 m, wie im Heft. Ebenso (nur Bild) „| · 5 m“ beim Kosinus und „| · 10 km“ beim Schiffskurs.
 
 ## 4 kurs (≈ 50 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
 > Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich

@@ -97,6 +97,10 @@ Nutzer 15.11. abends: „Leiter, Wand und Boden bilden ein rechtwinkliges Dreiec
 Jetzt „Wand und Boden bilden einen rechten Winkel. Mit der Leiter entsteht ein rechtwinkliges Dreieck.“ mit Leuchten an
 der Ecke, pulsierendem Zeichen und Pfeil vom rechten Winkel zur Leiter. Schiff und Riesenrad: Zeichen pulsiert bei
 „rechtwinkliges Dreieck“ (Ton dort unverändert). Leiter neu vertont, ganzes Video 5:04.
+Nutzer 15.11. abends: „durch fünf Meter. Mal fünf Meter“ unklar („was bedeutet das mal 5 m?“). Jetzt gesprochen „Jetzt
+lösen wir nach der Höhe auf und multiplizieren beide Seiten mit fünf Metern. Dann ist die Höhe …“, im Bild der
+Umformungsstrich „| · 5 m“ neben sin 70° = Höhe/5 m; ebenso (nur Bild) „| · 5 m“ beim Kosinus und „| · 10 km“ beim
+Schiff. Leiter neu vertont, Video 5:11.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)

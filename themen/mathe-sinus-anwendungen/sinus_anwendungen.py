@@ -113,6 +113,17 @@ def zf(b, t, start, el, x, y, g=30, ende=None, anker='m'):
         formel(b, el, x - w / 2 if anker == 'm' else x, y + 12 * (1 - ein(t, start)), g, a)
 
 
+def umformung(b, t, start, el, x, y, g, schritt, ende=None):
+    """Umformungsstrich wie im Heft rechts neben einer Gleichung: „| · 5 m“ (Nutzer 15.11.: Auflösen zeigen, nicht nur
+    sagen). el, x, y, g wie bei der Gleichung (zentriert bei x), schritt z. B. '· 5 m'."""
+    a = ein(t, start) * (1 - (ein(t, ende, 0.4) if ende is not None else 0))
+    if a > 0:
+        w = formel(b, el, 0, 0, g, messen=True)
+        x0 = x + w / 2 + 28
+        b.linie([(x0, y - 0.95 * g), (x0, y + 0.95 * g)], GRAU, 2.5, alpha=a)   # so hoch wie der Bruch
+        b.text(schritt, x0 + 0.42 * g, y, g * 0.9, GRAU, INTER_X, anker='l', alpha=a)
+
+
 def T(s, c=INK, a=1.0):
     return ('t', s, c, a)
 
@@ -345,7 +356,8 @@ def s_leiter(b, sc, t):
     tL, tW_, tH = w('fünf Meter lang'), w('siebzig Grad'), w('Wie hoch')
     tD, tHy, tG = w('rechtwinkliges Dreieck'), w('Die Leiter liegt gegenüber'), w('Gegenkathete durch')
     tGg, tGgW, tMs = w('Die Höhe an der Wand'), w('gegenüber vom Siebzig'), w('Kathete gegenüber')
-    tA, tM, tT1 = w('also Sinus siebzig'), w('Mal fünf Meter'), w('Der Taschenrechner')
+    tA, tM, tT1 = w('also Sinus siebzig'), w('Dann ist die Höhe'), w('Der Taschenrechner')
+    tU1 = w('multiplizieren beide Seiten')
     tW1, tZ01, tKa = w('ungefähr null Komma neun'), w('zwischen null und eins'), w('eine Kathete ist')
     tR1, tE1 = w('Fünf Meter mal null Komma'), w('sind vier Meter siebzig')
     tK, tB, tT2 = w('Und der Abstand zur Wand'), w('Der Abstand ist also'), w('Kosinus siebzig Grad ist')
@@ -414,7 +426,9 @@ def s_leiter(b, sc, t):
     # weicht, das Ergebnis rückt nach oben, darunter derselbe Weg für den Abstand. Der Zahlenstrahl bleibt stehen.
     weg, g = tEK, 30
     zf(b, t, tG, [T('sin α', SIN), T(' = '), B([('Gegenkathete', SIN)], [('Hypotenuse', INK)])], LX, 150, g, tK - 0.2)
-    zf(b, t, tA, [T('sin 70°', SIN), T(' = '), B([('Höhe', SIN)], [('5 m', INK)])], LX, 236, g, tK - 0.2)
+    el_s = [T('sin 70°', SIN), T(' = '), B([('Höhe', SIN)], [('5 m', INK)])]
+    zf(b, t, tA, el_s, LX, 236, g, tK - 0.2)
+    umformung(b, t, tU1, el_s, LX, 236, g, '· 5 m', tK - 0.2)
     zf(b, t, tM, [T('Höhe', SIN), T(' = 5 m · '), T('sin 70°', SIN)], LX, 316, g, tK - 0.2)
     zf(b, t, tT1, [T('Taschenrechner:  ', GRAU), T('sin 70°', SIN), T(' ≈ ', INK, ein(t, tW1)), T('0,940', SIN, ein(t, tW1))],
        LX, 372, 26, tK - 0.2)
@@ -422,7 +436,9 @@ def s_leiter(b, sc, t):
     e1 = ein(t, tE1)
     zf(b, t, tR1, [T('Höhe', SIN), T(' ≈ 5 m · '), T('0,940', SIN), T(' = ', INK, e1), T('4,70 m', SIN, e1)],
        LX, 430 - 280 * hoch, g, weg)
-    zf(b, t, max(tK + 0.7, tAk), [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])], LX, 236, g, weg)
+    el_c = [T('cos 70°', COS), T(' = '), B([('Abstand', COS)], [('5 m', INK)])]
+    zf(b, t, max(tK + 0.7, tAk), el_c, LX, 236, g, weg)
+    umformung(b, t, tB, el_c, LX, 236, g, '· 5 m', weg)
     zf(b, t, tB, [T('Abstand', COS), T(' = 5 m · '), T('cos 70°', COS)], LX, 316, g, weg)
     zf(b, t, tT2, [T('Taschenrechner:  ', GRAU), T('cos 70°', COS), T(' ≈ ', INK, ein(t, tW2)), T('0,342', COS, ein(t, tW2))],
        LX, 372, 26, weg)
@@ -589,14 +605,18 @@ def s_kurs(b, sc, t):
     zz(b, t, tQ, [('Wie weit nach Osten? Wie weit nach Norden?', GRAU)], KX, 174, 21, INTER, ende=tAn - 0.2)
     # Teil 1 (Osten, Sinus), Teil 2 (Norden, Kosinus) ab tAn: wie bei der Leiter rückt das Ergebnis nach oben
     g, weg1 = 28, tAn - 0.2
-    zf(b, t, tGg, [T('sin 60°', SIN), T(' = '), B([('Osten', SIN)], [('10 km', INK)])], KX, 250, g, weg1)
+    el_o = [T('sin 60°', SIN), T(' = '), B([('Osten', SIN)], [('10 km', INK)])]
+    zf(b, t, tGg, el_o, KX, 250, g, weg1)
+    umformung(b, t, tO1, el_o, KX, 250, g, '· 10 km', weg1)
     zf(b, t, tO1, [T('Osten', SIN), T(' = 10 km · '), T('sin 60°', SIN)], KX, 326, g, weg1)
     zf(b, t, tT1, [T('Taschenrechner:  ', GRAU), T('sin 60°', SIN), T(' ≈ ', INK, ein(t, tW1)), T('0,866', SIN, ein(t, tW1))],
        KX, 378, 24, weg1)
     hoch = glatt(p(t, tAn, 0.7))
     o2 = ein(t, tO2 + 0.6)
     zf(b, t, tO2, [T('Osten', SIN), T(' ≈ 10 km · '), T('0,866', SIN), T(' = ', INK, o2), T('8,66 km', SIN, o2)], KX, 432 - 248 * hoch, g)
-    zf(b, t, tAn + 0.7, [T('cos 60°', COS), T(' = '), B([('Norden', COS)], [('10 km', INK)])], KX, 258, g)   # erst, wenn die Zeile oben ist
+    el_n = [T('cos 60°', COS), T(' = '), B([('Norden', COS)], [('10 km', INK)])]
+    zf(b, t, tAn + 0.7, el_n, KX, 258, g)                  # erst, wenn die Zeile oben ist
+    umformung(b, t, tN1, el_n, KX, 258, g, '· 10 km')
     zf(b, t, tN1, [T('Norden', COS), T(' = 10 km · '), T('cos 60°', COS)], KX, 332, g)
     zf(b, t, tT2, [T('cos 60°', COS), T(' = ', INK, ein(t, tW2)), T('0,5', COS, ein(t, tW2)), T('  (genau)', GRAU, ein(t, tW2))], KX, 382, 24)
     n2 = ein(t, tN2)
