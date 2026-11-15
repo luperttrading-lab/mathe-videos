@@ -74,6 +74,10 @@ Kosinus am Winkel“, beim Riesenrad „einmal, wo der Winkel ist und welche Str
 Gegenkathete + „gegenüber vom Winkel“, Leuchten vom Scheitel entlang der Ankathete + „am Winkel“; Riesenrad einmal das
 Dreieck mit „Hypotenuse = 30 m“ und „Gegenkathete = Hypotenuse · sin α“; rechter Winkel im Merkzettel-Kreis und im
 Einheitskreis-Vergleich der Leiter. Ganzes Video neu gerendert (3:40), 480p verschickt.
+Nutzer 15.11. nachmittags: Das Zeichen für den rechten Winkel wurde vom roten Balken zur Hälfte verdeckt (überall). Jetzt
+sitzt es in der inneren Ecke an der Kante der dicken Striche (`rechter_winkel(…, b1, b2)` mit den Strichbreiten).
+Dabei Winkelbögen in den kleinen Kreisen (Leiter-Vergleich, Merkzettel) verkleinert, damit sie das Zeichen nicht
+berühren. Neu gerendert, 480p verschickt.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)

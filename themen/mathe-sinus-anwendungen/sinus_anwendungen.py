@@ -61,10 +61,15 @@ def bogen(b, cx, cy, r, a0, a1, c, lw, a=1.0):
              for k in range(n + 1)], c, lw, alpha=a)
 
 
-def rechter_winkel(b, x, y, a0, a=1.0, r=28):
-    """Viertelbogen mit Punkt (deutsche Schulnotation); a0 = Richtung des ersten Schenkels, der zweite liegt 90° weiter."""
+def rechter_winkel(b, x, y, a0, a=1.0, r=28, b1=0.0, b2=0.0):
+    """Viertelbogen mit Punkt (deutsche Schulnotation); a0 = Richtung des ersten Schenkels, der zweite liegt 90° weiter.
+    b1, b2: Strichbreiten der beiden Schenkel. Der Bogen sitzt in der inneren Ecke, also an der Kante der dicken
+    Striche, nicht auf ihrer Mitte (Nutzer 15.11.: sonst verdeckt der rote Balken ein großes Stück des Zeichens)."""
     if a <= 0:
         return
+    u1 = (math.cos(math.radians(a0)), -math.sin(math.radians(a0)))
+    u2 = (math.cos(math.radians(a0 + 90)), -math.sin(math.radians(a0 + 90)))
+    x, y = x + u2[0] * b1 / 2 + u1[0] * b2 / 2, y + u2[1] * b1 / 2 + u1[1] * b2 / 2
     bogen(b, x, y, r, a0, a0 + 90, INK, 2.5, a)
     m = math.radians(a0 + 45)
     b.kreis(x + 0.45 * r * math.cos(m), y - 0.45 * r * math.sin(m), 3.5, INK, alpha=a)
@@ -229,7 +234,7 @@ def s_einstieg(b, sc, t):
         b.linie([A_, B_], COS, 10, alpha=f)
         b.linie([B_, C_], SIN, 10, alpha=f)
         b.linie([A_, C_], INK, 5 + f, alpha=f)
-        rechter_winkel(b, B_[0], B_[1], 90, ein(t, tD, 0.4), r=34)
+        rechter_winkel(b, B_[0], B_[1], 90, ein(t, tD, 0.4), r=34, b1=10, b2=10)
     b.text('Wofür braucht man', 640, 56 + 12 * (1 - ein(t, tW)), 44, INK, INTER_X, alpha=ein(t, tW))
     a2 = ein(t, tW + 0.35)
     zeile(b, [('Sinus', SIN), (' und ', INK), ('Kosinus', COS), ('?', INK)], 640, 112 + 12 * (1 - a2), 58, INTER_X, alpha=a2)
@@ -265,7 +270,7 @@ def s_leiter(b, sc, t):
     # Dreiecksfläche, rechter Winkel
     aD = ein(t, tD, 0.5)
     b.poly([(FX, FY), (WX, FY), (WX, TY)], fill=WINKEL, alpha=0.10 * aD)
-    rechter_winkel(b, WX, FY, 90, aD)
+    rechter_winkel(b, WX, FY, 90, aD, b1=8, b2=3.5 + 4.5 * glatt(p(t, tK, 0.7)))   # erst Bodenlinie, dann blaue Strecke
     # Höhe (rot, an der Wand) und Abstand (blau, am Boden)
     strecke(b, WX, FY, WX, TY, SIN, 8 + 4 * puls(t, tG), glatt(p(t, tG, 0.7)))
     strecke(b, FX, FY, WX, FY, COS, 8 + 4 * puls(t, tK), glatt(p(t, tK, 0.7)))
@@ -341,8 +346,9 @@ def s_leiter(b, sc, t):
         viertel = [(cx, cy)] + [E.punkt(90 * k / 30, cx, cy, r) for k in range(31)]
         b.poly(viertel, fill=TEAL, alpha=0.10 * aE)          # erstes Viertel: beide Werte zwischen 0 und 1
         b.poly([(cx, cy), (px, cy), (px, py)], fill=WINKEL, alpha=0.10 * aE)
-        E.winkel(b, 70, aE, text='', cx=cx, cy=cy)           # 70° ist zu schmal für eine Zahl im Winkel: steht rechts
-        rechter_winkel(b, px, cy, 90, aE, r=16)
+        # 70° ist zu schmal für eine Zahl im Winkel (steht rechts); Bogen klein, damit er den rechten Winkel nicht berührt
+        bogen(b, cx, cy, 26, 0, 70, WINKEL, 5, aE)
+        rechter_winkel(b, px, cy, 90, aE, r=16, b1=8, b2=8)
         b.linie([(cx, cy), (px, cy)], COS, 8, alpha=aE)
         b.linie([(px, cy), (px, py)], SIN, 8, alpha=aE)
         b.linie([(cx, cy), (px, py)], INK, 4, alpha=aE)
@@ -448,7 +454,7 @@ def s_kurs(b, sc, t):
     # Nord- und Oststrecke
     strecke(b, HX, HY, ex, ey, COS, 8 + 4 * puls(t, tAn), glatt(p(t, tGN, 0.8)))
     strecke(b, ex, ey, ZX, ZY, SIN, 8 + 4 * puls(t, tGg) + 4 * puls(t, tAch + 0.6), glatt(p(t, tGO, 0.9)))
-    rechter_winkel(b, ex, ey, 270, aR)
+    rechter_winkel(b, ex, ey, 270, aR, b1=8, b2=8)
     # Wo liegt was? (Nutzer 15.11.) wie bei der Leiter
     hypotenuse_leuchtet(b, t, tR, (HX, HY), (ZX, ZY))
     hinweis_gegenueber(b, t, tGg, (HX, HY), 30, 90, ((ex, ey), (ZX, ZY)), rb=62, ab=124)
@@ -583,7 +589,7 @@ def s_riesenrad(b, sc, t):
     aT = ein(t, tUe, 0.4) * (1 - ein(t, t30 - 0.5, 0.4))
     if aT > 0:
         b.poly([(NX, NY), (px, NY), (px, py)], fill=WINKEL, alpha=0.12 * aT)
-        rechter_winkel(b, px, NY, 90, aT, r=20)
+        rechter_winkel(b, px, NY, 90, aT, r=20, b1=8, b2=2)
         hypotenuse_leuchtet(b, t, tUe + 0.1, (NX, NY), (px, py), 1.4)
         hinweis_gegenueber(b, t, tUe + 0.4, (NX, NY), 0, gm, ((px, NY), (px, py)), dauer=2.6, ab=102)
         # wie im Einheitskreis-Video: der Name steht gedreht entlang der Hypotenuse (statt „30 m“, solange das Dreieck da ist)
@@ -687,7 +693,7 @@ def merkbilder(b):
     b.linie([(ax, ay), (bx, ay)], COS, 8)
     b.linie([(bx, ay), (bx, cy_)], SIN, 8)
     b.linie([(ax, ay), (bx, cy_)], INK, 4)
-    rechter_winkel(b, bx, ay, 90, r=24)
+    rechter_winkel(b, bx, ay, 90, r=24, b1=8, b2=8)
     b.text('α', ax + 66, ay - 22, 22, WINKEL, INTER_X)
     etikett(b, 'Gegenkathete', bx + 16, (ay + cy_) / 2, 20, SIN, anker='l', grund=False)
     etikett(b, 'Ankathete', (ax + bx) / 2, ay + 26, 20, COS, grund=False)
@@ -696,13 +702,13 @@ def merkbilder(b):
     b.linie([(cx - r - 26, cy), (cx + r + 26, cy)], GRAU, 2.5)
     E.kreislinie(b, cx=cx, cy=cy, r=r)
     px, py = E.punkt(50, cx, cy, r)
-    bogen(b, cx, cy, 34, 0, 50, WINKEL, 5)
-    rechter_winkel(b, px, cy, 90, 0.8, r=16)               # Nutzer 15.11.: rechten Winkel leicht andeuten
+    bogen(b, cx, cy, 28, 0, 50, WINKEL, 5)                # klein: zwischen Bogen und rechtem Winkel steht α
+    rechter_winkel(b, px, cy, 90, 0.8, r=16, b1=8, b2=2.5)   # Nutzer 15.11.: rechten Winkel leicht andeuten
     b.linie([(px, cy), (px, py)], SIN, 8)
     b.linie([(cx, cy), (px, py)], INK, 4)
     b.kreis(px, py, 9, INK)
     b.kreis(cx, cy, 6, INK)
-    b.text('α', cx + 43, cy - 18, 22, WINKEL, INTER_X)
+    b.text('α', cx + 39, cy - 19, 22, WINKEL, INTER_X)
     etikett(b, 'Radius', (cx + px) / 2 - 24, (cy + py) / 2 - 24, 20, INK, anker='r', grund=False)
     etikett(b, 'Radius · sin α', cx + r + 16, (cy + py) / 2, 20, SIN, anker='l', grund=False)
 
