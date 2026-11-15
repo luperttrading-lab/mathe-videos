@@ -629,7 +629,7 @@ def merkbilder(b):
 
 
 def merkzettel(b, sc, t, alle=False):
-    karte(b, 600, 96, 640, 512, alpha=1.0, r=22)
+    karte(b, 600, 96, 640, 424, alpha=1.0, r=22)
     mx = 920
     b.text('Merke', mx, 130, 28, TEAL, INTER_X)
     st = (lambda s_: 0) if alle else (lambda s_: C(sc, s_))  # noqa: E731
@@ -650,9 +650,9 @@ def merkzettel(b, sc, t, alle=False):
     b.linie([(640, 348), (1200, 348)], HELL, 2, alpha=a2)
     b.text('Und wo sich etwas gleichmäßig dreht,', mx, 384 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
     b.text('beschreiben sie die Bewegung:', mx, 416 + 10 * (1 - a2), 23, INK, INTER_X, alpha=a2)
-    aG = ein(t, st('Und wo sich') + (0 if alle else 1.8))
-    zeile(b, [('Höhe = Höhe der Achse + ', INK), ('Radius · sin α', SIN)], mx, 470 + 10 * (1 - aG), 25, INTER_X, alpha=aG)
-    zeile(b, [('beim Riesenrad, ', INK), ('beim Windrad, ', INK), ('beim Pedal am Fahrrad.', INK)], mx, 540, 20, INTER_X, alphas=a3)
+    # Nutzer 15.11.: keine allgemeine Formel „Höhe = Höhe der Achse + Radius · sin α“ – im Video nie so gezeigt, verwirrt
+    zeile(b, [('beim Riesenrad, ', INK), ('beim Windrad,', INK)], mx, 456, 23, INTER_X, alphas=a3[:2])
+    zeile(b, [('beim Pedal am Fahrrad.', INK)], mx, 488, 23, INTER_X, alphas=a3[2:])
 
 
 def s_merke(b, sc, t):

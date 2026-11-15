@@ -76,7 +76,8 @@ Karte mit QR-Code der Einheitskreis-App und Play-Zeichen.
 > gleichmäßig dreht, beschreiben sie die Bewegung: beim Riesenrad, beim Windrad, beim Pedal am Fahrrad.
 
 Merkzettel zeigt genau die gesprochenen Sätze, dazu die Gleichungen aus dem Video: Gegenkathete = Hypotenuse · sin α,
-Ankathete = Hypotenuse · cos α, Höhe = Höhe der Achse + Radius · sin α.
+Ankathete = Hypotenuse · cos α. Nicht mehr „Höhe = Höhe der Achse + Radius · sin α“ (Nutzer 15.11.: verwirrend, diese
+allgemeine Form kam im Video nirgends vor; der Merkzettel fasst nur zusammen).
 
 Betonung (Nutzer 14.11.: „fehlende Seiten“ war auf „fehlende“ betont, muss auf „Seiten“ liegen). Gemessen mit
 `betonung.py`: Ohne Artikel hebt die Stimme „fehlende“ heraus (131 Hz, 200 ms; „Seiten“ 82–93 Hz), egal in welcher
