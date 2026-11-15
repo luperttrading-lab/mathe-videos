@@ -7,3 +7,4 @@ render.log
 *_bild_*.png
 **/hoerprobe/
 **/vorschau/videos/
+**/tts_cache/**/*.mp3
