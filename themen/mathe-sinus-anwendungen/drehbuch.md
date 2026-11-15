@@ -33,8 +33,9 @@ der anderen Ecke“ wandert α in die obere Ecke, Rot und Blau tauschen mit ihre
 Ecke auf die neue Gegenkathete (unten). Die Regel hängt an der Lage zum Winkel, nicht an waagrecht/senkrecht.
 
 ## 3 leiter (≈ 45 s)
-> Eine Leiter ist fünf Meter lang und steht im Winkel von siebzig Grad zum Boden. Wie hoch reicht sie? Leiter, Wand
-> und Boden bilden ein rechtwinkliges Dreieck. Die Leiter liegt gegenüber vom rechten Winkel, sie ist die Hypotenuse.
+> Eine Leiter ist fünf Meter lang und steht im Winkel von siebzig Grad zum Boden. Wie hoch reicht sie? Wand und Boden
+> bilden einen rechten Winkel. Mit der Leiter entsteht ein rechtwinkliges Dreieck. Die Leiter liegt gegenüber vom
+> rechten Winkel, sie ist die Hypotenuse.
 > Die Höhe an der Wand liegt gegenüber vom Siebzig-Grad-Winkel: Kathete gegenüber, also Sinus. Sinus ist
 > Gegenkathete durch Hypotenuse, also Sinus siebzig Grad gleich Höhe durch fünf Meter. Mal fünf Meter: Die Höhe ist
 > fünf Meter mal Sinus siebzig Grad. Der Taschenrechner zeigt für Sinus siebzig Grad ungefähr null Komma neun vier
@@ -59,6 +60,11 @@ rechnen). Zum Schluss rechts der Einheitskreis mit P bei 70° im ersten Viertel 
 gestrichelter oranger Pfeil läuft vom Winkel quer durchs Dreieck zur Wand, die rote Strecke leuchtet, darunter „gegenüber
 vom Winkel“; bei „Ankathete“ leuchtet der Bogen, ein blaues Leuchten läuft vom Scheitel am Boden entlang, „am Winkel“.
 Im Einheitskreis-Vergleich am Ende der rechte Winkel.
+**Wo ist der rechte Winkel? (Nutzer 15.11.: „Leiter, Wand und Boden bilden ein rechtwinkliges Dreieck“ war
+verwirrend – wo ist der rechte Winkel, an der Leiter?)** Jetzt zuerst „Wand und Boden bilden einen rechten Winkel“:
+Wand und Boden leuchten an der Ecke kurz auf, das Zeichen für den rechten Winkel erscheint mit einem Puls; erst dann
+„Mit der Leiter entsteht ein rechtwinkliges Dreieck“ (Fläche). Bei „Die Leiter liegt gegenüber vom rechten Winkel“
+läuft wie in der Regel-Szene ein schwarzer Pfeil vom rechten Winkel zur Leiter.
 
 ## 4 kurs (≈ 50 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
 > Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich

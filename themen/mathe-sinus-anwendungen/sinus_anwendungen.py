@@ -350,6 +350,7 @@ def s_leiter(b, sc, t):
     tR1, tE1 = w('Fünf Meter mal null Komma'), w('sind vier Meter siebzig')
     tK, tB, tT2 = w('Und der Abstand zur Wand'), w('Der Abstand ist also'), w('Kosinus siebzig Grad ist')
     tAnW, tMk = w('am Siebzig-Grad-Winkel an'), w('Kathete am Winkel')
+    tRW = w('Wand und Boden bilden')                       # Nutzer 15.11.: zuerst sagen und zeigen, wo der rechte Winkel ist
     tW2, tE2 = w('ungefähr null Komma drei'), w('das ergibt ein Meter')
     tEK = w('Es ist das Dreieck')
     tHy1, tAk = w('Hypotenuse'), w('Ankathete durch')
@@ -360,7 +361,12 @@ def s_leiter(b, sc, t):
     # Dreiecksfläche, rechter Winkel
     aD = ein(t, tD, 0.5)
     b.poly([(FX, FY), (WX, FY), (WX, TY)], fill=WINKEL, alpha=0.10 * aD)
-    rechter_winkel(b, WX, FY, 90, aD, b1=8, b2=3.5 + 4.5 * glatt(p(t, tK, 0.7)))   # erst Bodenlinie, dann blaue Strecke
+    aRW = ein(t, tRW + 0.4, 0.4)
+    hl = puls(t, tRW + 0.2, 1.8)                           # Wand und Boden leuchten an der Ecke auf
+    if hl > 0:
+        b.linie([(WX - 150, FY), (WX, FY), (WX, FY - 150)], INK, 16, alpha=0.18 * hl)
+    rechter_winkel(b, WX, FY, 90, aRW, r=28 + 10 * puls(t, tRW + 0.5, 1.0),
+                   b1=8, b2=3.5 + 4.5 * glatt(p(t, tK, 0.7)))   # erst Bodenlinie, dann blaue Strecke
     # Höhe (rot, an der Wand) und Abstand (blau, am Boden)
     strecke(b, WX, FY, WX, TY, SIN, 8 + 4 * puls(t, tMs), glatt(p(t, tGg, 0.7)))
     strecke(b, FX, FY, WX, FY, COS, 8 + 4 * puls(t, tMk), glatt(p(t, tK, 0.7)))
@@ -375,6 +381,7 @@ def s_leiter(b, sc, t):
     E.winkel(b, 70 * glatt(p(t, tW_, 0.8)), ein(t, tW_, 0.3), text='70°' if t > tW_ + 0.6 else '', cx=FX, cy=FY)
     # Wo liegt was? (Nutzer 15.11.) Hypotenuse leuchtet, Gegenkathete gegenüber vom Winkel, Ankathete am Winkel
     hypotenuse_leuchtet(b, t, tHy1, (FX, FY), (WX, TY))
+    hinweis_gegenueber(b, t, tHy, (WX, FY), 90, 180, ((FX, FY), (WX, TY)), rb=28, c=INK, ab=40, pfeil=INK, dauer=2.4)
     hinweis_gegenueber(b, t, tGgW, (FX, FY), 0, 70, ((WX, FY), (WX, TY)), ab=114)
     hinweis_anliegend(b, t, tAnW, (FX, FY), (WX, FY), 0, 70)
     # Beschriftungen neben den Strecken, nie darauf
@@ -547,7 +554,7 @@ def s_kurs(b, sc, t):
     # Nord- und Oststrecke
     strecke(b, HX, HY, ex, ey, COS, 8 + 4 * puls(t, tMk), glatt(p(t, tGN, 0.8)))
     strecke(b, ex, ey, ZX, ZY, SIN, 8 + 4 * puls(t, tMs) + 4 * puls(t, tAch + 0.6), glatt(p(t, tGO, 0.9)))
-    rechter_winkel(b, ex, ey, 270, aR, b1=8, b2=8)
+    rechter_winkel(b, ex, ey, 270, aR, r=28 + 10 * puls(t, tR + 0.3, 1.0), b1=8, b2=8)
     # Wo liegt was? (Nutzer 15.11.) wie bei der Leiter
     hypotenuse_leuchtet(b, t, tHyK, (HX, HY), (ZX, ZY))
     hinweis_gegenueber(b, t, tGg, (HX, HY), 30, 90, ((ex, ey), (ZX, ZY)), rb=62, ab=124)
@@ -686,7 +693,7 @@ def s_riesenrad(b, sc, t):
     aT = ein(t, tDr, 0.4) * (1 - ein(t, t30 - 0.5, 0.4))
     if aT > 0:
         b.poly([(NX, NY), (px, NY), (px, py)], fill=WINKEL, alpha=0.12 * aT)
-        rechter_winkel(b, px, NY, 90, aT, r=20, b1=8, b2=2)
+        rechter_winkel(b, px, NY, 90, aT, r=20 + 8 * puls(t, tDr + 0.6, 1.0), b1=8, b2=2)
         hypotenuse_leuchtet(b, t, tDr + 0.3, (NX, NY), (px, py), 1.4)
         hinweis_gegenueber(b, t, tGeg + 0.6, (NX, NY), 0, gm, ((px, NY), (px, py)), dauer=2.6, ab=102)
         # wie im Einheitskreis-Video: der Name steht gedreht entlang der Hypotenuse (statt „30 m“, solange das Dreieck da ist)

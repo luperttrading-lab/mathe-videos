@@ -93,6 +93,10 @@ Optisch besser ausarbeiten und besser besprechen, auch wenn die Aufnahmen geänd
   Fassung). Takes in `tts_cache/varianten/`.
 - Länge damit 5:06 (688 Wörter) statt 3:40 – über der ursprünglichen Obergrenze von 4 min. Kürzungsvorschläge an den
   Nutzer, noch nicht entschieden.
+Nutzer 15.11. abends: „Leiter, Wand und Boden bilden ein rechtwinkliges Dreieck“ verwirrt (wo ist der rechte Winkel?).
+Jetzt „Wand und Boden bilden einen rechten Winkel. Mit der Leiter entsteht ein rechtwinkliges Dreieck.“ mit Leuchten an
+der Ecke, pulsierendem Zeichen und Pfeil vom rechten Winkel zur Leiter. Schiff und Riesenrad: Zeichen pulsiert bei
+„rechtwinkliges Dreieck“ (Ton dort unverändert). Leiter neu vertont, ganzes Video 5:04.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)
