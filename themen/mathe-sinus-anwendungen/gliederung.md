@@ -59,6 +59,10 @@ Fassung 1 „Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die feh
 Vorschlag), Fassung 2 „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
 (`MERKE_FASSUNG=2`). Nach der Wahl: Schalter entfernen bzw. Drehbuch anpassen, ganzes Video neu rendern.
 `.claude/settings.json` (Nutzer, main afb5c6d: publish_files und declare_capabilities erlaubt) per Cherry-Pick im Zweig.
+Nutzer 15.11.: „aktuelle Fassung schicken, 480p reicht“ → ganzes Video mit Merksatz Fassung 1 neu gerendert (3:40),
+480p-Datei in den Chat geschickt. Die Vorschau-Seite zeigt noch den Stand vom 14.11. (zwei Merksatz-Hörproben, altes
+Gesamtvideo); nicht neu veröffentlicht, um eine Rückfrage zu sparen. Offen: Wahl des Merksatzes (Fassung 1 oder 2) nach
+Gehör, Abnahme des ganzen Videos, Länge 3:40 (Ziel war 2–3 min), Verweis in Video 1 auf Video 2.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)
