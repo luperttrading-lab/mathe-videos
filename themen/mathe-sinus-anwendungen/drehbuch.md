@@ -36,6 +36,11 @@ cos 70° ≈ 0,342 → Abstand ≈ 5 m · 0,342 = 1,71 m. **Zwischenschritt mit 
 von 0 bis 1 mit sin 70° (rot) und cos 70° (blau), „im rechtwinkligen Dreieck: immer zwischen 0 und 1“. Drei
 Nachkommastellen, weil 5 · 0,34 = 1,70 nicht zum Ergebnis 1,71 passt (nicht mit zu grob gerundeten Zwischenwerten
 rechnen). Zum Schluss rechts der Einheitskreis mit P bei 70° im ersten Viertel und „mal 5“.
+**Wo liegt was? (Nutzer 15.11.: „besser animieren, dass Sinus gegenüber vom Winkel liegt und Kosinus am Winkel“):** bei
+„Hypotenuse“ leuchtet die Leiter auf (wie im Einheitskreis-Video); bei „Gegenkathete“ leuchtet der Winkelbogen, ein
+gestrichelter oranger Pfeil läuft vom Winkel quer durchs Dreieck zur Wand, die rote Strecke leuchtet, darunter „gegenüber
+vom Winkel“; bei „Ankathete“ leuchtet der Bogen, ein blaues Leuchten läuft vom Scheitel am Boden entlang, „am Winkel“.
+Im Einheitskreis-Vergleich am Ende der rechte Winkel.
 
 ## 3 kurs (≈ 42 s) – mit Seekarte (Nutzer 14.11.: „mit Karte, nicht nur mit Dreieck“)
 > Ein Schiff fährt vom Hafen zehn Kilometer auf Kurs sechzig Grad zu einer Insel. Wie weit liegt die Insel östlich
@@ -52,6 +57,9 @@ links, Insel mit Leuchtturm. Das Schiff fährt die Strecke ab (10 km). Kurswinke
 wenn er erklärt wird. Nordstrecke blau (Ankathete, 5 km), Oststrecke rot (Gegenkathete, ≈ 8,66 km): Die Farbe folgt
 der Funktion (Sinus rot, Kosinus blau), nicht der Richtung – das ist die Pointe. Rechts die Rechnung mit echten
 Brüchen und dem Zwischenschritt sin 60° ≈ 0,866 bzw. cos 60° = 0,5 (Zahlenstrahl 0 bis 1 wie bei der Leiter).
+**Wo liegt was?** wie bei der Leiter: bei „rechtwinkliges Dreieck“ leuchtet die Fahrstrecke, darunter „Hypotenuse“;
+bei „gegenüber“ Pfeil vom Kurswinkel zur Oststrecke, „gegenüber vom Winkel“; bei „am Winkel an“ läuft das Leuchten
+vom Hafen die Nordstrecke hinauf, „am Winkel“.
 
 ## 4 riesenrad (≈ 65 s)
 > Bis hier hat ein Dreieck gereicht. Jetzt dreht sich etwas, und dann brauchst du den ganzen Kreis. Ein Riesenrad hat
@@ -70,13 +78,18 @@ dann je Winkel eine Zeile (30°, 90°, 210°) mit echtem Bruch, bei 210° der Hi
 der Achse“ (Gegenstück zu „zwischen 0 und 1“ im Dreieck); am Rad bleiben die drei Stellen mit Höhe stehen. Danach
 läuft P zwei Runden, rechts entsteht die Höhe über der Zeit (Achse 0/2/32/62 m, „1 Runde“, „2 Runden“). Zum Schluss
 Karte mit QR-Code der Einheitskreis-App und Play-Zeichen.
+**Einmal das Dreieck im Rad (Nutzer 15.11.: „wo der Winkel ist und welche Strecke wir berechnen, einmal reicht“):** bei
+„Über der Achse“ (P bei 50°) Dreieck Achse–Fußpunkt–P hell gefüllt, rechter Winkel am Fußpunkt, „Hypotenuse = 30 m“
+gedreht entlang des Radius, Pfeil vom Winkel zur roten Strecke, oben rechts „Gegenkathete = Hypotenuse · sin α“; bei
+„Bei dreißig Grad“ verschwindet es wieder.
 
 ## 5 merke (≈ 14 s)
 > Merke: Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus. Und wo sich etwas
 > gleichmäßig dreht, beschreiben sie die Bewegung: beim Riesenrad, beim Windrad, beim Pedal am Fahrrad.
 
 Merkzettel zeigt genau die gesprochenen Sätze, dazu die Gleichungen aus dem Video: Gegenkathete = Hypotenuse · sin α,
-Ankathete = Hypotenuse · cos α. Nicht mehr „Höhe = Höhe der Achse + Radius · sin α“ (Nutzer 15.11.: verwirrend, diese
+Ankathete = Hypotenuse · cos α. Im kleinen Kreis links der rechte Winkel leicht angedeutet (Nutzer 15.11.). Nicht
+mehr „Höhe = Höhe der Achse + Radius · sin α“ (Nutzer 15.11.: verwirrend, diese
 allgemeine Form kam im Video nirgends vor; der Merkzettel fasst nur zusammen).
 
 Betonung (Nutzer 14.11.: „fehlende Seiten“ war auf „fehlende“ betont, muss auf „Seiten“ liegen). Gemessen mit

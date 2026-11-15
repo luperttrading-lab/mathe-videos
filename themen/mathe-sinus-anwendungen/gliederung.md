@@ -68,6 +68,12 @@ Video so nirgends vor). Nur Bild, Ton unverändert. Beispielzeile jetzt zweizeil
 Nutzer 15.11. nachmittags: „Ja“ → Merksatz Fassung 1 abgenommen, neu gerendert und als 480p verschickt (Annahmen:
 „Radius · sin α“ links am Kreis bleibt, Länge 3:40 bleibt). Verweis in Video 1 auf Video 2: vorerst nicht; später
 vielleicht wie bei den Gesundheitsvideos am Ende auf zwei andere Videos verweisen (in CLAUDE.md vermerkt).
+Nutzer 15.11. mittags (zu Leiter/Schiff/Riesenrad/Merke): „besser animieren, dass Sinus gegenüber vom Winkel liegt und
+Kosinus am Winkel“, beim Riesenrad „einmal, wo der Winkel ist und welche Strecke wir berechnen“, im Merkzettel-Kreis
+„den rechten Winkel leicht andeuten“. Gebaut (nur Bild, Ton unverändert): Hypotenuse leuchtet, Pfeil vom Winkel zur
+Gegenkathete + „gegenüber vom Winkel“, Leuchten vom Scheitel entlang der Ankathete + „am Winkel“; Riesenrad einmal das
+Dreieck mit „Hypotenuse = 30 m“ und „Gegenkathete = Hypotenuse · sin α“; rechter Winkel im Merkzettel-Kreis und im
+Einheitskreis-Vergleich der Leiter. Ganzes Video neu gerendert (3:40), 480p verschickt.
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)
