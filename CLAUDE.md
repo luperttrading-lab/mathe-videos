@@ -41,6 +41,9 @@ nachziehen.
   (Beschriftungs-Check), Auswahlblatt `beispiele.pdf`. Eigene Vorschau-Seite
   [Sinus-Anwendungen-Video · Vorschau](https://claude.ai/artifact/Rr7NxyPfPvNJSXyf89sZ7W)
   (Slug `c936b41e-56df-414b-a0c6-0a264d78df29`, `vorschau.json` dort).
+- **Verweise zwischen den Videos der Reihe „Mathe verstehen“** (Nutzer 15.11.): vorerst keine (kein Satz in Video 1 auf
+  Video 2). Im Hinterkopf: Wenn die Videos fertig sind, vielleicht wie bei den Gesundheitsvideos am Ende auf zwei
+  andere Videos verweisen.
 
 ## Antworten an den Nutzer
 - Kurz halten und Bilder zeigen statt viel Text (Kontaktbogen, Stichbilder, Vorher/nachher).
@@ -84,6 +87,9 @@ nachziehen.
   (≈ 4,14 Silben/s; bei 1,00 langsamer als alle gemessenen deutschen Erklärvideos).
 - Tonaufbereitung in `werkzeug/render.py` (Rauschunterdrückung, De-Esser, lineare Verstärkung auf −16 LUFS).
 - Antworten (JSON mit Audio und Zeitmarken) in `tts_cache/` einchecken, dann kosten Neu-Renders nichts.
+- **Betonung** (Messung 14.11., `themen/mathe-sinus-anwendungen/betonung.py`, Praat): Ein Adjektiv ohne Artikel vor
+  dem Nomen hebt Christian oft heraus („fehlende Seiten“ → Akzent auf „fehlende“). Großschreibung („SEITEN“) hilft
+  nicht; mit Artikel („die fehlenden Seiten“) und dem Nomen am Satzende liegt der Akzent richtig.
 
 ## Mathe-Videos (Format ohne Ampel)
 - Vorlage: `themen/mathe-einmaleins/regel.py` (Bilder ganz per Code, Formeln nie per KI-Bild; Einblendungen hängen an

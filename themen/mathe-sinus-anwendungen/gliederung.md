@@ -65,6 +65,9 @@ Gesamtvideo); nicht neu veröffentlicht, um eine Rückfrage zu sparen. Offen: Wa
 Gehör, Abnahme des ganzen Videos, Länge 3:40 (Ziel war 2–3 min), Verweis in Video 1 auf Video 2.
 Nutzer 15.11. mittags: Formel „Höhe = Höhe der Achse + Radius · sin α“ vom Merkzettel entfernt (verwirrend, kam im
 Video so nirgends vor). Nur Bild, Ton unverändert. Beispielzeile jetzt zweizeilig, Karte kürzer. Noch nicht neu gerendert.
+Nutzer 15.11. nachmittags: „Ja“ → Merksatz Fassung 1 abgenommen, neu gerendert und als 480p verschickt (Annahmen:
+„Radius · sin α“ links am Kreis bleibt, Länge 3:40 bleibt). Verweis in Video 1 auf Video 2: vorerst nicht; später
+vielleicht wie bei den Gesundheitsvideos am Ende auf zwei andere Videos verweisen (in CLAUDE.md vermerkt).
 Veröffentlichen (Hinweis der Hauptsitzung 14.11. abends, nicht vom Nutzer selbst): Die settings.json hebt die
 Rückfrage beim Veröffentlichen nicht auf (Regel des Artifact-Servers). Darum je Runde höchstens eine Veröffentlichung
 (alles sammeln, ein `publish_files`), die bestehende Seite weiterverwenden (`declare_capabilities` nur beim Anlegen)

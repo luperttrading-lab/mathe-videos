@@ -83,8 +83,8 @@ Betonung (Nutzer 14.11.: „fehlende Seiten“ war auf „fehlende“ betont, mu
 `betonung.py`: Ohne Artikel hebt die Stimme „fehlende“ heraus (131 Hz, 200 ms; „Seiten“ 82–93 Hz), egal in welcher
 Satzstellung; Großschreibung „SEITEN“ hilft nicht. Mit Artikel („die fehlenden Seiten“) fällt die Hervorhebung weg.
 Fassung 1 (hier im Drehbuch): Satz umgestellt, „die fehlenden Seiten“ steht am Ende im Fokus – „Sei“ ist die längste
-Silbe (220 ms), die Tonhöhe fällt auf dem Wort (104 → 79 Hz). Fassung 2 (zur Wahl, `MERKE_FASSUNG=2`): alte
-Reihenfolge „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
+Silbe (220 ms), die Tonhöhe fällt auf dem Wort (104 → 79 Hz). Vom Nutzer 15.11. abgenommen („Ja“). Verworfen:
+Fassung 2 mit alter Reihenfolge „Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.“
 
 ## 6 schluss (≈ 8 s)
 > Klingt nach viel? Am Anfang ganz normal. Rechne die Leiter einfach selbst einmal nach. Das kann jeder lernen.

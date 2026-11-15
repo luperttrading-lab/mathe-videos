@@ -49,13 +49,6 @@ for s in SZENEN:
         s['pause'] = 2.5                                   # Karte mit QR-Code länger stehen lassen
     if s['id'] == 'leiter':
         s['pause'] = 1.6                                   # Vergleich mit dem Einheitskreis kurz stehen lassen
-# Merksatz zur Wahl per Hörprobe (14.11., Betonung „Seiten“): Fassung 1 steht im Drehbuch, Fassung 2 = alte Reihenfolge
-MERKE_2 = os.environ.get('MERKE_FASSUNG') == '2'
-if MERKE_2:
-    _m = next(s for s in SZENEN if s['id'] == 'merke')
-    _m['text'] = _m['text'].replace('Mit Sinus und Kosinus rechnest du im rechtwinkligen Dreieck die fehlenden Seiten aus.',
-                                    'Im rechtwinkligen Dreieck rechnest du mit Sinus und Kosinus die fehlenden Seiten aus.')
-    assert 'Im rechtwinkligen Dreieck rechnest' in _m['text']
 
 
 # ---------------------------------------------------------------- Zeichenhilfen
@@ -633,15 +626,11 @@ def merkzettel(b, sc, t, alle=False):
     mx = 920
     b.text('Merke', mx, 130, 28, TEAL, INTER_X)
     st = (lambda s_: 0) if alle else (lambda s_: C(sc, s_))  # noqa: E731
-    t1 = st('Im rechtwinkligen' if MERKE_2 else 'Mit Sinus')
+    t1 = st('Mit Sinus')                                   # Merksatz-Fassung 1, vom Nutzer 15.11. abgenommen
     a1, a2 = ein(t, t1), ein(t, st('Und wo sich'))
     a3 = [ein(t, st(s_)) for s_ in ('beim Riesenrad', 'beim Windrad', 'beim Pedal')]
-    if MERKE_2:
-        z1 = [('Im rechtwinkligen Dreieck rechnest du mit', INK)]
-        z2 = [('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' die fehlenden Seiten aus.', INK)]
-    else:
-        z1 = [('Mit ', INK), ('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' rechnest du im', INK)]
-        z2 = [('rechtwinkligen Dreieck die fehlenden Seiten aus.', INK)]
+    z1 = [('Mit ', INK), ('Sinus', SIN), (' und ', INK), ('Kosinus', COS), (' rechnest du im', INK)]
+    z2 = [('rechtwinkligen Dreieck die fehlenden Seiten aus.', INK)]
     zeile(b, z1, mx, 178 + 10 * (1 - a1), 23, INTER_X, alpha=a1)
     zeile(b, z2, mx, 210 + 10 * (1 - a1), 23, INTER_X, alpha=a1)
     aF = ein(t, t1 + (0 if alle else 1.6))
