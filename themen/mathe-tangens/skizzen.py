@@ -80,33 +80,39 @@ def s1(b):
 
 
 def s2(b):
-    kopf(b, 3, 'Vom Winkel zur Seite: Wie hoch ist der Mast?', '≈ 45 s')
-    A, C, Bp = (110, 580), (510, 580), (510, 300)             # 20 m = 400 px, 14 m = 280 px → 35°
-    b.linie([(60, 580 + D / 2 + 2), (640, 580 + D / 2 + 2)], GRAU, 3)   # Boden
+    kopf(b, 3, 'Vom Winkel zur Seite: Wie hoch ist der Kirchturm?', '≈ 45 s')
+    A, C, Bp = (110, 580), (510, 580), (510, 300)             # 60 m = 400 px, 42 m = 280 px → 35°
+    b.linie([(60, 580 + D / 2 + 2), (680, 580 + D / 2 + 2)], GRAU, 3)   # Boden
     ux, uy = 400 / math.hypot(400, 280), -280 / math.hypot(400, 280)
-    S = (Bp[0] + 200 * ux, Bp[1] + 200 * uy)
+    S = (Bp[0] + 190 * ux, Bp[1] + 190 * uy)
     gestrichelt(b, A[0], A[1], S[0] - 34 * ux, S[1] - 34 * uy, WINKEL, 1.0, n=30, lw=3)
     b.kreis(S[0], S[1], 26, '#ffbe0b')
     b.text('Sonne', S[0], S[1] - 44, 20, GRAU, INTER)
     b.poly([A, C, Bp], fill=WINKEL, alpha=0.08)
+    # Kirchturm: 9 m breit, Mauer 26 m, Helm bis 42 m; die Höhe wird in der Turmmitte gemessen
+    ty = 580 - 26 * 400 / 60
+    b.poly([(480, 580), (540, 580), (540, ty), (480, ty)], fill='#d9d2c3', outline=INK, lw=3)
+    b.poly([(474, ty), (546, ty), Bp], fill='#8d99ae', outline=INK, lw=3)
+    b.poly([(498, ty + 26), (522, ty + 26), (522, ty + 62), (498, ty + 62)], fill=INK, alpha=0.55)   # Schallfenster
     b.linie([C, Bp], SIN, D)
     b.linie([A, C], COS, D)
-    b.poly([(Bp[0] + 6, Bp[1] + 6), (Bp[0] + 62, Bp[1] + 22), (Bp[0] + 6, Bp[1] + 40)], fill=TAN)   # Fahne
-    rechter_winkel(b, C[0], C[1], 90, 1.0, r=34, b1=D, b2=D)
+    rechter_winkel(b, C[0], C[1], 90, 1.0, r=30, b1=D, b2=D)
     winkel(b, A, 35, 80, '35°', 28, ab=128)
-    b.text('Höhe = ?', C[0] + 24, 470, 28, SIN, INTER_X, anker='l')
-    b.text('Schatten = 20 m', 310, 622, 28, COS, INTER_X)
-    b.text('gegenüber vom Winkel', C[0] + 24, 504, 18, GRAU, INTER, anker='l')
-    b.text('am Winkel', 310, 654, 18, GRAU, INTER)
-    g = 30
-    el = [T('tan 35°', TAN), T(' = '), B([('Höhe', SIN)], [('20 m', COS)])]
-    f(b, el, 170, g)
-    strich(b, el, 170, g, '· 20 m')
-    f(b, [T('Höhe', SIN), T(' = '), T('20 m', COS), T(' · '), T('tan 35°', TAN)], 270, g)
-    z(b, [('Taschenrechner:', GRAU)], 350, 21, INTER)
-    f(b, [T('tan 35°', TAN), T(' ≈ 0,700')], 392, g)
-    band(b, RX - 225, 462, RX + 225, 522, TAN, 0.14, r=14)
-    f(b, [T('Höhe', SIN), T(' ≈ '), T('20 m', COS), T(' · 0,700 = '), T('14,0 m', SIN)], 492, g)
+    b.text('Höhe = ?', 562, 440, 28, SIN, INTER_X, anker='l')
+    b.text('gegenüber vom Winkel', 562, 474, 18, GRAU, INTER, anker='l')
+    b.text('Schatten = 60 m', 290, 622, 28, COS, INTER_X)
+    b.text('am Winkel · bis unter die Turmspitze', 290, 654, 18, GRAU, INTER)
+    g, x = 30, 1010
+    el = [T('tan 35°', TAN), T(' = '), B([('Höhe', SIN)], [('60 m', COS)])]
+    w = f(b, el, 170, g, x)
+    x0 = x + w / 2 + 28
+    b.linie([(x0, 170 - 0.95 * g), (x0, 170 + 0.95 * g)], GRAU, 2.5)
+    b.text('· 60 m', x0 + 0.42 * g, 170, g * 0.9, GRAU, INTER_X, anker='l')
+    f(b, [T('Höhe', SIN), T(' = '), T('60 m', COS), T(' · '), T('tan 35°', TAN)], 270, g, x)
+    z(b, [('Taschenrechner:', GRAU)], 350, 21, INTER, x)
+    f(b, [T('tan 35°', TAN), T(' ≈ 0,700')], 392, g, x)
+    band(b, x - 225, 532, x + 225, 592, TAN, 0.14, r=14)
+    f(b, [T('Höhe', SIN), T(' ≈ '), T('60 m', COS), T(' · 0,700 = '), T('42,0 m', SIN)], 562, g, x)
 
 
 def schild(b, x, y, s, text):
