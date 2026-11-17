@@ -65,3 +65,6 @@ Eigene Vorschau-Seite erst mit dem ersten Clip anlegen (eine Veröffentlichung j
 Nutzer 17.11.: „noch mal mit ein paar Bildern, die wir als Grafiken verwenden würden, dass ich sehe, was gerechnet
 wird“, bevor das Video gebaut wird. `skizzen.py <ordner>` zeichnet sechs Standbilder (Regel, Mast, 12 %, 100 % = 45°,
 Gerade, Einheitskreis) mit dem Baukasten der Reihe; an den Nutzer geschickt, Antwort offen.
+Nutzer 17.11.: **Kirchturm** statt Fahnenmast; **Schatten lassen**; „lieber in der App dann den Sonnenwinkel berechnen
+lassen, das ist aktuell die zeitgemäße Variante“ – verstanden als: die 35° kommen aus einer Sonnenstand-App auf dem Handy
+statt vom Winkelmesser (Deutung, beim Nutzer rückgefragt). `drehbuch.md` als Entwurf geschrieben, nicht vertont.
