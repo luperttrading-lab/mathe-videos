@@ -5,68 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Steigung messen</title>
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#f6f1e7">
+<meta name="theme-color" content="#cfe6e1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Steigung">
 <style>
-/* Wie App „Einheitskreis“ und die Videos: Papiergrund; Gegenkathete rot, Ankathete blau, Winkel orange, Tangens grün */
-:root { --grund:#f6f1e7; --karte:#fff; --ink:#2b2d42; --grau:#6f7380; --hell:#e6dfd2;
-  --sin:#e63946; --cos:#3a86ff; --tan:#0f766e; --bogen:#ff9f1c; }
-* { box-sizing: border-box; }
+/* Nur quer (Nutzer 17.11.), alles auf einem Bildschirm, Hintergrund: Landschaft mit ansteigender Straße.
+   Farben wie die Videos: Gegenkathete rot, Ankathete blau, Winkel orange, Tangens grün. */
+:root { --ink:#2b2d42; --grau:#5f6472; --hell:#e6dfd2; --sin:#e63946; --cos:#3a86ff; --tan:#0f766e; --bogen:#ff9f1c;
+  --glas:rgba(255,253,248,.80); }
+* { box-sizing: border-box; min-width: 0; }
+html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
 html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
-body { margin: 0; background: var(--grund); color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-variant-numeric: tabular-nums;
-  background-image: radial-gradient(rgba(120,100,70,.13) 1.2px, transparent 1.3px); background-size: 24px 24px;
-  padding: max(env(safe-area-inset-top), 14px) max(env(safe-area-inset-right), 16px)
-           max(env(safe-area-inset-bottom), 18px) max(env(safe-area-inset-left), 16px); }
-main { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-h1 { margin: 4px 0 0; font-size: 26px; font-weight: 900; letter-spacing: -.01em; }
-.unter { margin: 2px 0 0; color: var(--grau); font-size: 15px; font-weight: 600; }
-.karte { background: var(--karte); border-radius: 18px; padding: 14px; box-shadow: 0 1px 0 var(--hell), 0 6px 18px rgba(60,50,30,.07); }
-svg { display: block; width: 100%; height: auto; }
-.werte { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.feld { display: flex; flex-direction: column; gap: 4px; }
-.feld span { font-size: 14px; font-weight: 700; color: var(--grau); }
-.feld input { width: 100%; font: inherit; font-size: clamp(30px, 10vw, 42px); font-weight: 900; padding: 6px 10px;
+body { color: var(--ink); background: #cfe6e1;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-variant-numeric: tabular-nums; }
+#landschaft { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+main { position: relative; z-index: 1; height: 100dvh; display: grid; grid-template-columns: 1.15fr 1fr; align-items: center;
+  gap: clamp(8px, 2vw, 16px);
+  padding: max(env(safe-area-inset-top), 10px) max(env(safe-area-inset-right), 14px)
+           max(env(safe-area-inset-bottom), 10px) max(env(safe-area-inset-left), 14px); }
+.karte { background: var(--glas); border-radius: 20px; box-shadow: 0 8px 28px rgba(30,60,55,.16);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.links, .rechts { max-height: 100%; }
+.links { display: flex; flex-direction: column; padding: clamp(8px, 2vh, 14px) 12px; }
+.links h1 { margin: 0 0 0 4px; font-size: clamp(18px, 5.2vh, 24px); font-weight: 900; letter-spacing: -.01em; }
+.links .bild { min-height: 0; display: flex; align-items: center; }
+svg#bild { display: block; width: 100%; height: auto; max-height: calc(100dvh - 90px); }
+.rechts { display: flex; flex-direction: column; gap: clamp(8px, 3vh, 18px);
+  padding: clamp(8px, 2vh, 14px); }
+.werte { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.feld { display: flex; flex-direction: column; gap: 2px; }
+.feld span { font-size: clamp(12px, 3.4vh, 14px); font-weight: 700; color: var(--grau); white-space: nowrap; }
+.feld input { width: 100%; font: inherit; font-size: clamp(24px, 9vh, 38px); font-weight: 900; padding: 2px 10px;
   border: 2px solid var(--hell); border-radius: 14px; background: #fffdf8; text-align: right; }
 .feld input:focus { outline: none; border-color: currentColor; }
 #grad { color: var(--bogen); } #prozent { color: var(--tan); }
-.formel { margin: 10px 0 0; font-size: 16px; font-weight: 700; line-height: 1.5; text-align: center; }
+.formel { margin: 0; font-size: clamp(13px, 3.9vh, 16px); font-weight: 700; line-height: 1.4; text-align: center; }
 .formel .t { color: var(--tan); } .formel .w { color: var(--bogen); } .formel .r { color: var(--sin); } .formel .b { color: var(--cos); }
-.knopf { width: 100%; min-height: 54px; border: 0; border-radius: 16px; font: inherit; font-size: 19px; font-weight: 800;
-  background: var(--tan); color: #fff; box-shadow: 0 4px 0 #0a524c; cursor: pointer; }
+.zeile { display: flex; gap: 8px; }
+.knopf { flex: 1; min-height: clamp(42px, 12vh, 52px); border: 0; border-radius: 16px; font: inherit; font-size: clamp(16px, 4.6vh, 19px);
+  font-weight: 800; background: var(--tan); color: #fff; box-shadow: 0 4px 0 #0a524c; cursor: pointer; }
 .knopf:active { transform: translateY(2px); box-shadow: 0 2px 0 #0a524c; }
 .knopf.aus { background: #fff; color: var(--tan); border: 2px solid var(--tan); box-shadow: none; }
-#lage { margin: 0; text-align: center; font-size: 15px; font-weight: 700; color: var(--grau); min-height: 1.5em; }
+.info { flex: none; width: clamp(42px, 12vh, 52px); min-height: clamp(42px, 12vh, 52px); border-radius: 16px; border: 2px solid var(--tan);
+  background: #fff; color: var(--tan); font: inherit; font-size: 22px; font-weight: 900; cursor: pointer; }
+#lage { margin: 0; text-align: center; font-size: clamp(12px, 3.6vh, 14px); font-weight: 700; color: var(--grau); min-height: 1.3em; }
 #lage button { font: inherit; color: var(--tan); background: none; border: 0; text-decoration: underline; padding: 0 2px; cursor: pointer; }
-.tipp { margin: 0; font-size: 15px; color: var(--grau); line-height: 1.45; }
-.tipp b { color: var(--ink); }
-.fuss { font-size: 12px; color: var(--grau); text-align: center; }
+#hilfe { position: fixed; inset: 0; z-index: 3; display: none; align-items: center; justify-content: center; background: rgba(20,40,38,.35); }
+#hilfe.offen { display: flex; }
+#hilfe .karte { max-width: 560px; margin: 16px; padding: 18px 20px; font-size: 16px; line-height: 1.45; background: #fffdf8; }
+#hilfe p { margin: 0 0 8px; } #hilfe b { color: var(--tan); }
+#hilfe .klein { font-size: 13px; color: var(--grau); margin: 10px 0 0; }
+/* Hochformat: Bitte drehen; beim Messen bleiben die Werte groß sichtbar (iOS dreht bei steilen Winkeln mit) */
+#drehen { position: fixed; inset: 0; z-index: 2; display: none; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; text-align: center; padding: 24px; }
+#drehen p { margin: 0; font-size: 20px; font-weight: 800; }
+#drehen .klein { font-size: 15px; font-weight: 600; color: var(--grau); max-width: 300px; }
+#drehen .gross { display: none; font-size: 52px; font-weight: 900; line-height: 1.1; }
+#drehen.messen .gross { display: block; }
+#drehen svg { width: 120px; height: 120px; }
+@media (orientation: portrait) { main { display: none; } #drehen { display: flex; } }
+@media (prefers-reduced-motion: no-preference) { #drehen .handy { animation: kipp 2.4s ease-in-out infinite; transform-origin: 60px 60px; } }
+@keyframes kipp { 0%, 25% { transform: rotate(0); } 55%, 85% { transform: rotate(-90deg); } 100% { transform: rotate(0); } }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <h1>Steigung messen</h1>
-    <p class="unter">Grad in Prozent und zurück, mit dem Handy gemessen oder eingetippt</p>
-  </header>
+<svg id="landschaft" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="himmel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d8dc"/><stop offset=".62" stop-color="#e9f2e9"/><stop offset="1" stop-color="#f6f1e7"/></linearGradient>
+    <radialGradient id="sonne"><stop offset="0" stop-color="#ffe9a8"/><stop offset=".35" stop-color="#ffd166" stop-opacity=".9"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#himmel)"/>
+  <circle cx="1280" cy="190" r="190" fill="url(#sonne)"/>
+  <circle cx="1280" cy="190" r="58" fill="#ffd166"/>
+  <path d="M0 560 C220 470 380 520 560 450 C760 370 900 430 1080 380 C1260 330 1420 380 1600 340 V900 H0Z" fill="#c4dccf"/>
+  <path d="M0 650 C260 590 420 640 640 570 C860 500 1040 560 1240 500 C1400 455 1500 470 1600 450 V900 H0Z" fill="#9cc5b0"/>
+  <path d="M0 760 C300 720 560 760 820 700 C1080 640 1300 690 1600 620 V900 H0Z" fill="#6fa58f"/>
+  <path d="M-20 900 L1600 520 L1600 590 L60 900Z" fill="#59606e"/>
+  <path d="M30 900 L1600 556" stroke="#f6f1e7" stroke-width="7" stroke-dasharray="46 38" fill="none"/>
+  <g transform="translate(1180 470)"><rect x="-4" y="0" width="8" height="120" fill="#59606e"/>
+    <path d="M0 -70 L64 40 H-64Z" fill="#fff" stroke="#d62828" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M-30 26 H30 V2Z" fill="#2b2d42"/></g>
+</svg>
 
-  <section class="karte">
-    <svg id="bild" viewBox="0 0 340 190" aria-label="Steigungsdreieck"></svg>
+<main>
+  <section class="karte links">
+    <h1>Steigung messen</h1>
+    <div class="bild"><svg id="bild" viewBox="0 0 340 190" aria-label="Steigungsdreieck"></svg></div>
+  </section>
+  <section class="karte rechts">
     <div class="werte">
-      <label class="feld"><span>Winkel in Grad</span><input id="grad" inputmode="decimal" autocomplete="off" value="6,8"></label>
-      <label class="feld"><span>Steigung in Prozent</span><input id="prozent" inputmode="decimal" autocomplete="off" value="12"></label>
+      <label class="feld"><span>Winkel in °</span><input id="grad" inputmode="decimal" autocomplete="off" value="6,8"></label>
+      <label class="feld"><span>Steigung in %</span><input id="prozent" inputmode="decimal" autocomplete="off" value="12"></label>
     </div>
     <p class="formel" id="formel"></p>
+    <div>
+      <div class="zeile"><button class="knopf" id="live">Messen</button><button class="info" id="infoknopf" aria-label="So misst du">?</button></div>
+      <p id="lage"></p>
+    </div>
   </section>
-
-  <button class="knopf" id="live">Mit dem Handy messen</button>
-  <p id="lage"></p>
-
-  <section class="karte">
-    <p class="tipp"><b>So misst du:</b> Leg das Handy flach auf die Schräge, zum Beispiel auf eine Rampe. Oder stell es mit
-      der langen Kante auf die Schräge, so wie die Wasserwaage im iPhone. Tippst du in ein Feld, hält die Messung an.</p>
-  </section>
-  <p class="fuss">Steigung in Prozent = Höhe : waagrechte Strecke · 100 · v0.1</p>
 </main>
+
+<div id="drehen">
+  <svg viewBox="0 0 120 120" aria-hidden="true"><g class="handy"><rect x="38" y="14" width="44" height="92" rx="9" fill="#fff" stroke="#2b2d42" stroke-width="5"/>
+    <rect x="52" y="20" width="16" height="4" rx="2" fill="#2b2d42"/></g></svg>
+  <p>Dreh das Handy quer.</p>
+  <div class="gross"><span id="dg" style="color:#ff9f1c"></span><br><span id="dp" style="color:#0f766e"></span></div>
+  <p class="klein">Dreht sich die Seite nicht mit? Dann die Ausrichtungssperre im Kontrollzentrum ausschalten.</p>
+</div>
+
+<div id="hilfe"><div class="karte">
+  <p><b>Messen:</b> Handy flach auf die Schräge legen, zum Beispiel auf eine Rampe. Oder quer mit der langen Kante auf die
+    Schräge stellen, so wie die Wasserwaage im iPhone.</p>
+  <p><b>Umrechnen:</b> Tippst du Grad oder Prozent ein, rechnet die App das andere aus. Die Messung hält dann an.</p>
+  <p class="klein">Steigung in Prozent = Höhe : waagrechte Strecke · 100 = tan α · 100 · Tippen schließt · v0.2</p>
+</div></div>
 
 <script>
 {
@@ -87,6 +140,7 @@ svg { display: block; width: 100%; height: auto; }
     if (quelle !== 'grad') grad.value = de(a, 1);
     if (quelle !== 'prozent') prozent.value = prozentText(a);
     zeichne(a);
+    $('dg').textContent = de(a, 1) + '°'; $('dp').textContent = prozentText(a) + ' %';
     const t = Math.tan(a * RAD);
     $('formel').innerHTML = a >= 89.95
       ? '<span class="t">tan 90°</span> gibt es nicht: waagrecht 0 m, Teilen durch null.'
@@ -133,7 +187,7 @@ svg { display: block; width: 100%; height: auto; }
   // Flach: Neigung der Bildschirmfläche gegen waagrecht. Auf der Kante: Neigung der Kante in der Bildschirmebene
   // (wie die iPhone-Wasserwaage). Umschalten mit Abstand (30° / 60°), damit die Anzeige nicht springt.
   let live = false, g = null, modus = null, kante = null, letzte = 0, wartet = null;
-  function halt() { if (live) { live = false; knopf.textContent = 'Weiter messen'; knopf.classList.remove('aus'); lage.textContent = 'Angehalten.'; } }
+  function halt() { if (live) { live = false; $('drehen').classList.remove('messen'); knopf.textContent = 'Weiter messen'; knopf.classList.remove('aus'); lage.textContent = 'Angehalten.'; } }
   function bewegung(e) {
     const q = e.accelerationIncludingGravity;
     if (!q || q.x == null) return;
@@ -167,13 +221,15 @@ svg { display: block; width: 100%; height: auto; }
     } catch (e) { lage.textContent = 'Der Sensor lässt sich hier nicht einschalten.'; return; }
     window.addEventListener('devicemotion', bewegung);
     document.activeElement && document.activeElement.blur();
-    live = true; g = null; modus = null; kante = null;
+    live = true; $('drehen').classList.add('messen'); g = null; modus = null; kante = null;
     knopf.textContent = 'Anhalten'; knopf.classList.add('aus'); lage.textContent = 'Messe …';
     clearTimeout(wartet);
     const start = performance.now();
     wartet = setTimeout(() => { if (live && letzte < start) lage.textContent = 'Kein Lagesensor gefunden. Tippe die Werte ein.'; }, 2000);
   }
   knopf.addEventListener('click', starten);
+  $('infoknopf').addEventListener('click', () => $('hilfe').classList.add('offen'));
+  $('hilfe').addEventListener('click', () => $('hilfe').classList.remove('offen'));
   zeige(Math.atan(.12) / RAD, 'prozent');
 }
 </script>
