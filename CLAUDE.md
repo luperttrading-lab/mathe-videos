@@ -47,6 +47,12 @@ nachziehen.
   andere Videos verweisen.
 
 ## Antworten an den Nutzer
+- **Veröffentlichen kostet ein Tippen** (gemessen 14.11.): `publish_files` und `declare_capabilities` des Artifact-Dienstes
+  fragen den Nutzer jedes Mal („Einmal erlauben“), auch im Modus Auto und trotz Freigabe in `.claude/settings.json` (Regel
+  des Servers, von uns nicht abschaltbar). Deshalb: je Runde höchstens **eine** Veröffentlichung mit allen Änderungen;
+  bestehende Seiten wiederverwenden, `declare_capabilities` nur beim allerersten Anlegen einer Seite; „erledigt“ in der
+  Hörprobe nur nachziehen, wenn ohnehin veröffentlicht wird; vor dem Veröffentlichen im Chat ankündigen, dass gleich eine
+  Rückfrage kommt.
 - Kurz halten und Bilder zeigen statt viel Text (Kontaktbogen, Stichbilder, Vorher/nachher).
 - **Videos nie als Datei in den Chat** (landen auf dem Handy, belegen Speicher, spielen dort stumm). Stattdessen die
   Vorschau-Seite: `python3 ../../werkzeug/vorschau.py vorschau.json vorschau` in `themen/mathe-stilprobe/`, als Artifact
@@ -59,6 +65,8 @@ nachziehen.
      Zahl der Stellen. Nie nur „bitte abnehmen“. Nichts offen: kein Aufgabenblock.
   3. **Nur der Link, den der Nutzer gerade braucht** (Nutzer 13.11.: „alle Links weglassen, nur den aktuellen Link“),
      nicht mehr alle drei festen Links (unten) in jeder Antwort.
+     Links zu einer App immer mit dem Wort „App“ beschriften (Nutzer 13.11.), z. B. „App: Einheitskreis“,
+     „App: Kopfrechnen üben“, „App-Vorschau: Einheitskreis“.
   4. Kostenzeile: `python3 tools/kosten.py` ausführen, Ausgabe wörtlich als letzte Zeile.
 - **Jeder offene Punkt mit eigenem Link:** Vergleichsbilder als Eintrag auf die Vorschau-Seite (Standbild als kurzes
   Video, „passt“ = übernehmen). Nie ein Kürzel („Variante D“) ohne Bild und Link. Reine Textentscheidungen (z. B. Titel)
