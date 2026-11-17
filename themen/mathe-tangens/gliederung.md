@@ -60,3 +60,8 @@ Summe ≈ 4:00.
 (`rechter_winkel`, `hinweis_gegenueber`, `hinweis_anliegend`, `umformung`, `zz`, `zf`, `B`, `T`); `pruefen.py` und
 `startbild.py` kopieren und anpassen. Ordner der Videos 1 und 2 und `einheitskreis/` (App) nicht ändern.
 Eigene Vorschau-Seite erst mit dem ersten Clip anlegen (eine Veröffentlichung je Runde, vorher ankündigen).
+
+## Skizzen (17.11.)
+Nutzer 17.11.: „noch mal mit ein paar Bildern, die wir als Grafiken verwenden würden, dass ich sehe, was gerechnet
+wird“, bevor das Video gebaut wird. `skizzen.py <ordner>` zeichnet sechs Standbilder (Regel, Mast, 12 %, 100 % = 45°,
+Gerade, Einheitskreis) mit dem Baukasten der Reihe; an den Nutzer geschickt, Antwort offen.
