@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steigung messen</title>
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f1e7">
+<style>
+/* Wie App „Einheitskreis“ und die Videos: Papiergrund; Gegenkathete rot, Ankathete blau, Winkel orange, Tangens grün */
+:root { --grund:#f6f1e7; --karte:#fff; --ink:#2b2d42; --grau:#6f7380; --hell:#e6dfd2;
+  --sin:#e63946; --cos:#3a86ff; --tan:#0f766e; --bogen:#ff9f1c; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+body { margin: 0; background: var(--grund); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-variant-numeric: tabular-nums;
+  background-image: radial-gradient(rgba(120,100,70,.13) 1.2px, transparent 1.3px); background-size: 24px 24px;
+  padding: max(env(safe-area-inset-top), 14px) max(env(safe-area-inset-right), 16px)
+           max(env(safe-area-inset-bottom), 18px) max(env(safe-area-inset-left), 16px); }
+main { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+h1 { margin: 4px 0 0; font-size: 26px; font-weight: 900; letter-spacing: -.01em; }
+.unter { margin: 2px 0 0; color: var(--grau); font-size: 15px; font-weight: 600; }
+.karte { background: var(--karte); border-radius: 18px; padding: 14px; box-shadow: 0 1px 0 var(--hell), 0 6px 18px rgba(60,50,30,.07); }
+svg { display: block; width: 100%; height: auto; }
+.werte { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feld { display: flex; flex-direction: column; gap: 4px; }
+.feld span { font-size: 14px; font-weight: 700; color: var(--grau); }
+.feld input { width: 100%; font: inherit; font-size: clamp(30px, 10vw, 42px); font-weight: 900; padding: 6px 10px;
+  border: 2px solid var(--hell); border-radius: 14px; background: #fffdf8; text-align: right; }
+.feld input:focus { outline: none; border-color: currentColor; }
+#grad { color: var(--bogen); } #prozent { color: var(--tan); }
+.formel { margin: 10px 0 0; font-size: 16px; font-weight: 700; line-height: 1.5; text-align: center; }
+.formel .t { color: var(--tan); } .formel .w { color: var(--bogen); } .formel .r { color: var(--sin); } .formel .b { color: var(--cos); }
+.knopf { width: 100%; min-height: 54px; border: 0; border-radius: 16px; font: inherit; font-size: 19px; font-weight: 800;
+  background: var(--tan); color: #fff; box-shadow: 0 4px 0 #0a524c; cursor: pointer; }
+.knopf:active { transform: translateY(2px); box-shadow: 0 2px 0 #0a524c; }
+.knopf.aus { background: #fff; color: var(--tan); border: 2px solid var(--tan); box-shadow: none; }
+#lage { margin: 0; text-align: center; font-size: 15px; font-weight: 700; color: var(--grau); min-height: 1.5em; }
+#lage button { font: inherit; color: var(--tan); background: none; border: 0; text-decoration: underline; padding: 0 2px; cursor: pointer; }
+.tipp { margin: 0; font-size: 15px; color: var(--grau); line-height: 1.45; }
+.tipp b { color: var(--ink); }
+.fuss { font-size: 12px; color: var(--grau); text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Steigung messen</h1>
+    <p class="unter">Grad in Prozent und zurück, mit dem Handy gemessen oder eingetippt</p>
+  </header>
+
+  <section class="karte">
+    <svg id="bild" viewBox="0 0 340 190" aria-label="Steigungsdreieck"></svg>
+    <div class="werte">
+      <label class="feld"><span>Winkel in Grad</span><input id="grad" inputmode="decimal" autocomplete="off" value="6,8"></label>
+      <label class="feld"><span>Steigung in Prozent</span><input id="prozent" inputmode="decimal" autocomplete="off" value="12"></label>
+    </div>
+    <p class="formel" id="formel"></p>
+  </section>
+
+  <button class="knopf" id="live">Mit dem Handy messen</button>
+  <p id="lage"></p>
+
+  <section class="karte">
+    <p class="tipp"><b>So misst du:</b> Leg das Handy flach auf die Schräge, zum Beispiel auf eine Rampe. Oder stell es mit
+      der langen Kante auf die Schräge, so wie die Wasserwaage im iPhone. Tippst du in ein Feld, hält die Messung an.</p>
+  </section>
+  <p class="fuss">Steigung in Prozent = Höhe : waagrechte Strecke · 100 · v0.1</p>
+</main>
+
+<script>
+{
+  const $ = id => document.getElementById(id);
+  const grad = $('grad'), prozent = $('prozent'), knopf = $('live'), lage = $('lage');
+  const RAD = Math.PI / 180;
+  const zahl = s => parseFloat(String(s).replace(',', '.').replace(/[^0-9.\-]/g, ''));
+  const de = (x, n) => x.toLocaleString('de-DE', { minimumFractionDigits: n, maximumFractionDigits: n });
+
+  // ---------- Umrechnen: Prozent = tan(α) · 100, α = tan⁻¹(Prozent : 100) ----------
+  function prozentText(a) {
+    if (a >= 89.95) return '–';
+    const p = Math.tan(a * RAD) * 100;
+    return p >= 1000 ? de(p, 0) : de(p, 1);
+  }
+  function zeige(a, quelle) {
+    a = Math.max(0, Math.min(90, a));
+    if (quelle !== 'grad') grad.value = de(a, 1);
+    if (quelle !== 'prozent') prozent.value = prozentText(a);
+    zeichne(a);
+    const t = Math.tan(a * RAD);
+    $('formel').innerHTML = a >= 89.95
+      ? '<span class="t">tan 90°</span> gibt es nicht: waagrecht 0 m, Teilen durch null.'
+      : `<span class="t">tan</span> <span class="w">${de(a, 1)}°</span> ≈ ${de(t, 3)} → ${prozentText(a)} %<br>`
+        + `auf <span class="b">100 m</span> waagrecht <span class="r">${t * 100 >= 1000 ? de(t * 100, 0) : de(t * 100, 1)} m</span> hoch`;
+  }
+  grad.addEventListener('input', () => { halt(); const a = zahl(grad.value); if (isFinite(a)) zeige(a, 'grad'); });
+  prozent.addEventListener('input', () => {
+    halt(); const p = zahl(prozent.value);
+    if (isFinite(p)) zeige(Math.atan(Math.max(0, p) / 100) / RAD, 'prozent');
+  });
+  for (const f of [grad, prozent]) f.addEventListener('focus', () => { halt(); f.select(); });
+
+  // ---------- Steigungsdreieck ----------
+  function zeichne(a) {
+    const t = a >= 89.95 ? 1e6 : Math.tan(a * RAD);
+    let L = 230, h = L * t;                                     // waagrecht L, hoch h; passend skalieren
+    const hmax = 140; if (h > hmax) { L = Math.max(hmax / t, 0); h = hmax; }
+    const x0 = a > 55 ? 110 : 40, y0 = 160, x1 = x0 + L, y1 = y0 - h;
+    const r = a < 20 ? Math.min(90, L * .5) : Math.min(46, Math.max(L * .45, 18));
+    const bx = x0 + r * Math.cos(a * RAD), by = y0 - r * Math.sin(a * RAD);
+    const la = (a / 2) * RAD, lr = r + 36;
+    // Winkelzahl nie auf einer Linie: flach über der Hypotenuse, mittel im Bogen, steil links neben dem Scheitel
+    let wx, wy, wa;
+    if (a < 20) { wx = x0 + r + 14; wy = y0 - (r + 14) * Math.tan(a * RAD) - 14; wa = 'start'; }
+    else if (a <= 55) { wx = x0 + lr * Math.cos(la); wy = y0 - lr * Math.sin(la) + 6; wa = 'middle'; }
+    else { wx = x0 - 8; wy = y0 - 14; wa = 'end'; }
+    const rw = Math.min(14, L * .3, h * .45);
+    $('bild').innerHTML = `
+      <polygon points="${x0},${y0} ${x1},${y0} ${x1},${y1}" fill="#ff9f1c" fill-opacity=".1"/>
+      <line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#2b2d42" stroke-width="4" stroke-linecap="round"/>
+      <line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#3a86ff" stroke-width="7" stroke-linecap="round"/>
+      ${h > 1 ? `<line x1="${x1}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#e63946" stroke-width="7" stroke-linecap="round"/>` : ''}
+      ${rw > 5 ? `<path d="M${x1 - rw},${y0 - 4} A${rw},${rw} 0 0 1 ${x1 - 4},${y0 - rw}" fill="none" stroke="#2b2d42" stroke-width="1.8"/>
+        <circle cx="${x1 - rw * .5}" cy="${y0 - rw * .5}" r="1.8" fill="#2b2d42"/>` : ''}
+      ${a > .3 ? `<path d="M${x0 + r},${y0} A${r},${r} 0 0 0 ${bx},${by}" fill="none" stroke="#ff9f1c" stroke-width="4"/>` : ''}
+      <text x="${wx}" y="${wy}" fill="#ff9f1c" font-size="17" font-weight="800" text-anchor="${wa}">${de(a, 1)}°</text>
+      <text x="${Math.max(x0 + L / 2, x0 + 66)}" y="${y0 + 24}" fill="#3a86ff" font-size="16" font-weight="800" text-anchor="middle">100 m waagrecht</text>
+      <text x="${Math.min(x1 + 10, 300)}" y="${Math.max((y0 + y1) / 2 + 6, 24)}" fill="#e63946" font-size="16" font-weight="800"
+        text-anchor="start">${a >= 89.95 ? '' : (t * 100 >= 1000 ? de(t * 100, 0) : de(t * 100, 1)) + ' m'}</text>`;
+  }
+
+  // ---------- Sensor: Schwerkraft im Handy ----------
+  // Flach: Neigung der Bildschirmfläche gegen waagrecht. Auf der Kante: Neigung der Kante in der Bildschirmebene
+  // (wie die iPhone-Wasserwaage). Umschalten mit Abstand (30° / 60°), damit die Anzeige nicht springt.
+  let live = false, g = null, modus = null, kante = null, letzte = 0, wartet = null;
+  function halt() { if (live) { live = false; knopf.textContent = 'Weiter messen'; knopf.classList.remove('aus'); lage.textContent = 'Angehalten.'; } }
+  function bewegung(e) {
+    const q = e.accelerationIncludingGravity;
+    if (!q || q.x == null) return;
+    letzte = performance.now();
+    if (!live) return;
+    const k = .15;                                              // glätten
+    g = g ? { x: g.x + k * (q.x - g.x), y: g.y + k * (q.y - g.y), z: g.z + k * (q.z - g.z) } : { x: q.x, y: q.y, z: q.z };
+    const ax = Math.abs(g.x), ay = Math.abs(g.y), az = Math.abs(g.z);
+    const kipp = Math.atan2(Math.hypot(ax, ay), az) / RAD;     // Bildschirm gegen waagrecht
+    if (modus === null) modus = kipp < 45 ? 'flach' : 'kante';
+    if (modus === 'flach' && kipp > 60) modus = 'kante';
+    if (modus === 'kante' && kipp < 30) { modus = 'flach'; kante = null; }
+    let a;
+    if (modus === 'flach') a = kipp;
+    else {
+      if (kante === null) kante = ax > ay ? 'lang' : 'kurz';   // Hochformat: kurze Kante unten; quer: lange Kante unten
+      a = kante === 'lang' ? Math.atan2(ay, ax) / RAD : Math.atan2(ax, ay) / RAD;
+    }
+    zeige(a);
+    lage.innerHTML = modus === 'flach' ? 'Das Handy liegt flach.'
+      : `Das Handy steht auf der <b>${kante === 'lang' ? 'langen' : 'kurzen'}</b> Kante. <button id="wechsel">Andere Kante</button>`;
+    const w = $('wechsel'); if (w) w.onclick = () => { kante = kante === 'lang' ? 'kurz' : 'lang'; };
+  }
+  async function starten() {
+    if (live) { halt(); return; }
+    try {
+      if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        const r = await DeviceMotionEvent.requestPermission();   // iPhone fragt einmal nach
+        if (r !== 'granted') { lage.textContent = 'Ohne Erlaubnis für Bewegung und Ausrichtung geht das Messen nicht.'; return; }
+      }
+    } catch (e) { lage.textContent = 'Der Sensor lässt sich hier nicht einschalten.'; return; }
+    window.addEventListener('devicemotion', bewegung);
+    document.activeElement && document.activeElement.blur();
+    live = true; g = null; modus = null; kante = null;
+    knopf.textContent = 'Anhalten'; knopf.classList.add('aus'); lage.textContent = 'Messe …';
+    clearTimeout(wartet);
+    const start = performance.now();
+    wartet = setTimeout(() => { if (live && letzte < start) lage.textContent = 'Kein Lagesensor gefunden. Tippe die Werte ein.'; }, 2000);
+  }
+  knopf.addEventListener('click', starten);
+  zeige(Math.atan(.12) / RAD, 'prozent');
+}
+</script>
+</body>
+</html>
